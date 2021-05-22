@@ -1,0 +1,65 @@
+#if !defined(CBOJ_VECTORV_H)
+#define CBOJ_VECTORV_H
+
+///////////////////////////////////////////////////////////////////////////////
+// can vector internals be commoned across all vectors in C?
+// yes, but still adds typing for each specialisation
+// and adds 2ptrs+a size_t for each instance.
+// and as 2 func ptrs are used, adds unsafeness as they are stored in ram for
+// the lifetime of the vector.
+// but, idea is to keep functions small so they'll be inlined so
+// the templated version should not appear as sep functions.
+typedef struct VectorV_ VectorV;
+typedef struct VectorVIter_ VectorVIter;
+typedef struct VectorVIterMut_ VectorVIterMut;
+
+#include "cobj_defs.h" // WARN_RESULT
+
+#include <inttypes.h> // uint8_t
+#include <stddef.h> // size_t
+#include <stdbool.h>
+
+
+struct VectorV_ {
+    uint8_t *buf;
+    size_t alloc;     // in items
+    size_t len;       // in items
+};
+
+void VectorV_destroy(VectorV *const self, size_t elem_size, void (*elem_destroy)(void *const));
+void VectorV_move(VectorV *const self, VectorV *const src);
+void VectorV_new(VectorV *const self, uint8_t *const arr, size_t len);
+bool VectorV_is_empty(VectorV const *const self);
+void VectorV_clear(VectorV *const self, size_t elem_size, void (*elem_destroy)(void * const));
+size_t VectorV_len(VectorV const *self);
+bool WARN_RESULT VectorV_push_back(VectorV *self, void *elem, size_t elem_size, void (*elem_move)(void * const, void * const));
+bool WARN_RESULT VectorV_pop_back(VectorV *self, void *elem, size_t elem_size, void (*elem_move)(void * const, void * const));
+void *VectorV_get_item_mut(VectorV *self, Index pos, size_t elem_size );
+void const *VectorV_get_item(VectorV *self, Index pos, size_t elem_size);
+void VectorV_iter(VectorV const *const self, VectorVIter *const it);
+void VectorV_iter_mut(VectorV const *const self, VectorVIterMut *const it);
+
+
+struct VectorVIter_ {
+    VectorV const *vec;
+    uint8_t const *it;
+    // size_t pos;
+};
+void VectorVIter_destroy(VectorVIter *const self);
+void VectorVIter_move(VectorVIter *const self, VectorVIter *const src);
+void VectorVIter_new(VectorVIter *const self, VectorV const *const vec);
+void const *VectorVIter_next(VectorVIter *const self, size_t elem_size);
+
+
+struct VectorVIterMut_ {
+    VectorV *vec;
+    uint8_t *it;
+    // size_t pos;
+};
+void VectorVIterMut_destroy(VectorVIterMut *const self);
+void VectorVIterMut_move(VectorVIterMut *const self, VectorVIterMut *const src);
+void VectorVIterMut_new(VectorVIterMut *const self, VectorV const *const vec);
+void *VectorVIterMut_next(VectorVIterMut *const self, size_t elem_size);
+
+
+#endif//!defined(CBOJ_VECTORV_H)
