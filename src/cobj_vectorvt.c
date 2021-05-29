@@ -1,5 +1,7 @@
 #include "cobj_vectorvt.h"
 
+#include "cobj_memory.h" // STRUCTWIPE
+
 
 static void VectorVT_move_elem(void *const self, void *const src) {
     T_move((T *)self, (T *)src);
@@ -11,9 +13,9 @@ static void VectorVT_destroy_elem(void *const self) {
 }
 
 
-static void VectorVT_wipe(VectorVT *const self) {
-    STRUCTWIPE(self);
-}
+// static void VectorVT_wipe(VectorVT *const self) {
+//     STRUCTWIPE(self);
+// }
 
 
 void VectorVT_destroy(VectorVT *const self) {
@@ -29,7 +31,7 @@ void VectorVT_move(VectorVT *const self, VectorVT *const src) {
 
 
 void VectorVT_new(VectorVT *const self,  T *const arr, size_t const len) {
-    VectorV_new(&self->inner, (uint8_t *)arr, len);
+    VectorV_new(&self->inner, (uint8_t *)arr, (uint8_t *)(arr + len));
 }
 
 
@@ -38,22 +40,22 @@ bool VectorVT_is_empty(VectorVT const *const self) {
 }
 
 
-void VectorT_clear(VectorVT const *const self) {
+void VectorVT_clear(VectorVT *const self) {
     VectorV_clear(&self->inner, sizeof(T), VectorVT_destroy_elem);
 }
 
 
-size_t VectorT_len(VectorVT const *const self) {
-    return VectorV_len(&self->inner);
+size_t VectorVT_len(VectorVT const *const self) {
+    return VectorV_len(&self->inner, sizeof(T));
 }
 
 
-bool WARN_RESULT VectorVT_push_back(VectorVT *const self, T *const elem) {
+bool WARN_UNUSED_RESULT VectorVT_push_back(VectorVT *const self, T *const elem) {
     return VectorV_push_back(&self->inner, elem, sizeof(T), VectorVT_move_elem);
 }
 
 
-bool WARN_RESULT VectorVT_pop_back(VectorVT *const self, T *const elem) {
+bool WARN_UNUSED_RESULT VectorVT_pop_back(VectorVT *const self, T *const elem) {
     return VectorV_pop_back(&self->inner, elem, sizeof(T), VectorVT_move_elem);
 }
 
@@ -70,9 +72,9 @@ T const *VectorVT_get_item_at(VectorVT *const self, Index const pos) {
 
 //===========================================================================
 
-static void VectorVTIter_wipe(VectorVTIter *const self) {
-    STRUCTWIPE(self);
-}
+// static void VectorVTIter_wipe(VectorVTIter *const self) {
+//     STRUCTWIPE(self);
+// }
 
 
 void VectorVTIter_destroy(VectorVTIter *const self) {
@@ -92,15 +94,15 @@ void VectorVTIter_new(VectorVTIter *const self, VectorVT const *const vec) {
 }
 
 
-T const *VectorVTIter_next(VectorVTIter *const self) {
+T const *WARN_UNUSED_RESULT VectorVTIter_next(VectorVTIter *const self) {
     return (T const *)VectorVIter_next(&self->inner, sizeof(T));
 }
 
 
 // ========================================================================
-static void VectorVTIterMut_wipe(VectorVTIterMut *const self) {
-    STRUCTWIPE(self);
-}
+// static void VectorVTIterMut_wipe(VectorVTIterMut *const self) {
+//     STRUCTWIPE(self);
+// }
 
 
 void VectorVTIterMut_destroy(VectorVTIterMut *const self) {
@@ -115,11 +117,11 @@ void VectorVTIterMut_move(VectorVTIterMut *const self, VectorVTIterMut *const sr
 }
 
 
-void VectorVTIterMut_new(VectorVTIterMut *const self, VectorVT const *const vec) {
+void VectorVTIterMut_new(VectorVTIterMut *const self, VectorVT *const vec) {
     VectorVIterMut_new(&self->inner, &vec->inner);
 }
 
 
-T *VectorVTIterMut_next(VectorVTIterMut *const self) {
+T *WARN_UNUSED_RESULT VectorVTIterMut_next(VectorVTIterMut *const self) {
     return (T *)VectorVIterMut_next(&self->inner, sizeof(T));
 }

@@ -1,4 +1,8 @@
-#include "cobj_rcbox.h"
+#include "cobj_rcboxt.h"
+
+#include "cobj_memory.h"  // STRUCTWIPE
+
+#include <stdlib.h> // malloc/free
 
 // shared internal node struct between box and RCBox
 // RCNode or SharedBox
@@ -74,8 +78,8 @@ static void RCBoxT_wipe(RCBoxT *const self) {
 
 
 void RCBoxT_destroy(RCBoxT *const self) {
-    if (!RCBoxNode_release(self->node)) {
-        RCBoxNode_destroy(self->node);
+    if (!RCNodeT_release(self->node)) {
+        RCNodeT_destroy(self->node);
     }
     RCBoxT_wipe(self);
 }
@@ -89,12 +93,12 @@ void RCBoxT_move(RCBoxT *const self, RCBoxT *const src) {
 
 bool RCBoxT_try_copy(RCBoxT *const self, RCBoxT const *const src) {
     *self = *src;
-    RCBoxNode_grab(self->node);
+    RCNodeT_grab(self->node);
     return true;
 }
 
 
-T const *RCBoxT_deref(RCBoxT *const self) {
+T const *RCBoxT_deref(RCBoxT const *const self) {
     return RCNodeT_deref(self->node);
 }
 
@@ -104,11 +108,12 @@ T *RCBoxT_deref_mut(RCBoxT *const self) {
 }
 
 
-bool RCBoxT_try_new_int(RCBoxT *const self, int v, Error *const err) {
+bool WARN_UNUSED_RESULT RCBoxT_try_new_int(RCBoxT *const self, int v, Error *const err) {
     RCNodeT *p = RCNodeT_malloc();
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);
     }
+
     RCNodeT_new_int(p, v);
     RCNodeT_grab(p);
     self->node = p;
@@ -116,11 +121,12 @@ bool RCBoxT_try_new_int(RCBoxT *const self, int v, Error *const err) {
 }
 
 
-bool RCBoxT_try_new_from_T(RCBoxT *const self, T *const v, Error *const err) {
+bool WARN_UNUSED_RESULT RCBoxT_try_new_from_T(RCBoxT *const self, T *const v, Error *const err) {
     RCNodeT *p = RCNodeT_malloc();
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);
     }
+
     T_move(RCNodeT_deref_mut(p), v);
     RCNodeT_grab(p);
     self->node = p;
@@ -129,23 +135,22 @@ bool RCBoxT_try_new_from_T(RCBoxT *const self, T *const v, Error *const err) {
 
 
 // new_copy variant? copy direct into dest without intermed storage?
-bool RCBoxT_try_new_copy_T(RCBoxT *const self, T const *const v, Error *const err) {
+bool WARN_UNUSED_RESULT RCBoxT_try_new_copy_T(RCBoxT *const self, T const *const v, Error *const err) {
     RCNodeT *p = RCNodeT_malloc();
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);
     }
+
     bool ok;
     ok = T_try_copy(RCNodeT_deref_mut(p), v, err);
     if (!ok) {
-        // no destroy as node is not initialised and destroy wants it
-        // initialised.
         free(p);
         return false;
-    } else {
-        RCNodeT_grab(p);
-        self->node = p;
-        return true;
     }
+
+    RCNodeT_grab(p);
+    self->node = p;
+    return true;
 }
 
 

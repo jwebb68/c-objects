@@ -12,6 +12,7 @@ typedef enum ErrCode_ {
 typedef struct Error_ Error;
 
 //includes
+#include "cobj_defs.h" // WARN_UNUSED_RESULT
 #include <stddef.h> // size_t
 #include <stdbool.h>
 
@@ -22,10 +23,9 @@ struct Error_ {
     char const *filen;
 };
 
-void Error_wipe(Error *const self);
 void Error_destroy(Error *const self);
-void Error_new_(Error *const self, ErrorCode code, size_t line, char const *filen);
-bool Error_raise(Error *const self, ErrorCode code, size_t line, char const *filen);
+void Error_new(Error *const self, ErrorCode code, size_t line, char const *filen);
+bool WARN_UNUSED_RESULT Error_raise(Error *const self, ErrorCode code, size_t line, char const *filen);
 
 #define ERROR_RAISE(self, code) Error_raise(self, code, __LINE__, __FILE__)
 

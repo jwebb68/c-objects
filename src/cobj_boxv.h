@@ -2,24 +2,34 @@
 #define COBJ_BOXV_H
 
 //forward declares
-typedef struct BoxVMut_ BoxVMut;
+typedef struct BoxV_ BoxV;
 
 
 // includes
+#include "cobj_error.h"
+
+#include <stdbool.h>
+#include <stddef.h> // size_t
 
 //defines
 
-struct BoxVMut_ {
+struct BoxV_ {
     void *elem;
 };
-void BoxVMut_destroy(BoxVMut *const self, void (*elem_destroy)(void *const elem));
-void BoxVMut_move(BoxVMut *const self, BoxVMut *const src);
-void *BoxVMut_deref(BoxVMut const *const self);
+
+void BoxV_destroy(BoxV *const self, void (*elem_destroy)(void *const elem));
+void BoxV_move(BoxV *const self, BoxV *const src);
+bool WARN_UNUSED_RESULT BoxV_try_copy(BoxV *const self, BoxV const *const v, Error *err, size_t elem_size, bool (*elem_try_copy)(void *elem, void const *elem_src, Error *err));
+
+void const*BoxV_deref(BoxV const *const self);
+void *BoxV_deref_mut(BoxV  *const self);
 
 // create and take ownsership of existing heap obj
 // no disown as that is an implicit destroy.
-void BoxVMut_new_own(BoxVMut *const self, void *const p);
-//void BoxVMut_new_(BoxVMut_ *const self, ...);
+void BoxV_new_own(BoxV *const self, void *const p);
+//void BoxV_new_(BoxV_ *const self, ...);
+
+bool WARN_UNUSED_RESULT BoxV_try_new_from(BoxV *const self, void *const elem, Error *const err, size_t elem_size, void (*elem_move)(void *elem, void *src));
 
 // hmm, using the void * as implementation would prevent debug lookups.
 // also, the two implementations look the same so won't get any code size reductions.

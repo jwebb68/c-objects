@@ -2,21 +2,32 @@
 #define COBJ_BOXVT_H
 
 // forward declares
-typedef struct BoxVTMut_ BoxVTMut;
+typedef struct BoxVT_ BoxVT;
 
 // includes
 #include "t.h"
 #include "cobj_boxv.h"
+#include "cobj_error.h"
+
+#include <stdbool.h>
+#include <stddef.h> // size_t
 
 // defines
-struct BoxVTMut_ {
-    BoxVMut inner;
+struct BoxVT_ {
+    BoxV inner;
 };
-void BoxVTMut_destroy(BoxVTMut *const self);
-void BoxVTMut_move(BoxVTMut *const self, BoxVTMut *const src);
-T *BoxVTMut_deref(BoxVTMut const *const self);
-void BoxVTMut_new_own(BoxVTMut *const self, T *const p);
-//void BoxVTMut_new_(BoxVTMut_ *const self, ...);
+
+void BoxVT_destroy(BoxVT *const self);
+void BoxVT_move(BoxVT *const self, BoxVT *const src);
+bool WARN_UNUSED_RESULT BoxVT_try_copy(BoxVT *const self, BoxVT const *const v, Error *err);
+
+T const *BoxVT_deref(BoxVT const *const self);
+T *BoxVT_deref_mut(BoxVT *const self);
+
+void BoxVT_new_own(BoxVT *const self, T *const p);
+//void BoxVT_new_(BoxVT_ *const self, ...);
+
+bool WARN_UNUSED_RESULT BoxVT_try_new_from_T(BoxVT *const self, T *const v, Error *err);
 
 
 #endif//!defined(COBJ_BOXVT_H)

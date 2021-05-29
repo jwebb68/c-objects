@@ -22,12 +22,14 @@ void VectorVT_destroy(VectorVT *const self);
 void VectorVT_move(VectorVT *const self, VectorVT *const src);
 void VectorVT_new(VectorVT *const self,  T *const arr, size_t const len);
 bool VectorVT_is_empty(VectorVT const *const self);
-void VectorT_clear(VectorVT const *const self);
-size_t VectorT_len(VectorVT const *const self);
-bool WARN_RESULT VectorVT_push_back(VectorVT *const self, T *const elem);
-bool WARN_RESULT VectorVT_pop_back(VectorVT *const self, T *const elem);
+void VectorVT_clear(VectorVT *const self);
+size_t VectorVT_len(VectorVT const *const self);
+bool WARN_UNUSED_RESULT VectorVT_push_back(VectorVT *const self, T *const elem);
+bool WARN_UNUSED_RESULT VectorVT_pop_back(VectorVT *const self, T *const elem);
 T *VectorVT_get_item_at_mut(VectorVT *const self, Index const pos);
 T const *VectorVT_get_item_at(VectorVT *const self, Index const pos);
+void VectorVT_iter(VectorVT const *const self, VectorVTIter *const it);
+void VectorVT_iter_mut(VectorVT *const self, VectorVTIterMut *const it);
 
 
 struct VectorVTIter_ {
@@ -37,7 +39,7 @@ struct VectorVTIter_ {
 void VectorVTIter_destroy(VectorVTIter *const self);
 void VectorVTIter_move(VectorVTIter *const self, VectorVTIter *const src);
 void VectorVTIter_new(VectorVTIter *const self, VectorVT const *const vec);
-T const *VectorVTIter_next(VectorVTIter *const self);
+T const *WARN_UNUSED_RESULT VectorVTIter_next(VectorVTIter *const self);
 
 
 struct VectorVTIterMut_ {
@@ -45,8 +47,8 @@ struct VectorVTIterMut_ {
 };
 void VectorVTIterMut_destroy(VectorVTIterMut *const self);
 void VectorVTIterMut_move(VectorVTIterMut *const self, VectorVTIterMut *const src);
-void VectorVTIterMut_new(VectorVTIterMut *const self, VectorVT const *const vec);
-T *VectorVTIterMut_next(VectorVTIterMut *const self);
+void VectorVTIterMut_new(VectorVTIterMut *const self, VectorVT *const vec);
+T *WARN_UNUSED_RESULT VectorVTIterMut_next(VectorVTIterMut *const self);
 
 // the V/T2 style means that I wouldn't see T in the debugger for the struct.
 // Is there a way of keeping VectorT struct and using VectorV for functions?

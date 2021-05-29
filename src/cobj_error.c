@@ -12,14 +12,14 @@ void Error_destroy(Error *const self) {
 }
 
 
-void Error_new_(Error *const self, ErrorCode code, size_t line, char const *filen) {
+void Error_new(Error *const self, ErrorCode code, size_t line, char const *filen) {
     self->code = code;
     self->line = line;
     self->filen = filen;
 }
 
 
-bool Error_raise(Error *const self, ErrorCode code, size_t line, char const *filen) {
+bool WARN_UNUSED_RESULT Error_raise(Error *const self, ErrorCode code, size_t line, char const *filen) {
     Error_new(self, code, line, filen);
     return true;
 }

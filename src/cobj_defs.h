@@ -9,4 +9,8 @@
 // so need to prevent assignment/comparision etc.
 typedef size_t Index;
 
+#define UNUSED_ARG(x) do{((void)(x));}while(0)
+
+#define WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+
 #endif//!defined(COBJ_DEFS_H)
