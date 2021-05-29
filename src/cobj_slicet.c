@@ -137,11 +137,12 @@ bool WARN_UNUSED_RESULT SliceTIter_try_copy(SliceTIter *const self, SliceTIter c
 
 T const *SliceTIter_next(SliceTIter *const self)
 {
-    if (self->p != self->e) {
+    T const *p = self->p;
+    if (p == self->e) {
         return NULL;
     }
     self->p += 1;
-    return self->p;
+    return p;
 }
 
 void SliceTIter_new(SliceTIter *const self, T const *const b, T const *const e)
@@ -309,11 +310,12 @@ bool WARN_UNUSED_RESULT SliceTMutIter_try_copy(SliceTMutIter *const self,
 
 T *SliceTMutIter_next(SliceTMutIter *const self)
 {
-    if (self->p != self->e) {
+    T *p = self->p;
+    if (p == self->e) {
         return NULL;
     }
     self->p += 1;
-    return self->p;
+    return p;
 }
 
 void SliceTMutIter_new(SliceTMutIter *const self, T *const b, T *const e)

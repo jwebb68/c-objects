@@ -100,12 +100,12 @@ void const *VectorV_get_item_at(VectorV *self, Index pos, size_t elem_size)
 
 void VectorV_iter(VectorV const *const self, VectorVIter *const it)
 {
-    VectorVIter_new(it, self->buf, self->buf_end);
+    VectorVIter_new(it, self->buf, self->buf_pos);
 }
 
 void VectorV_iter_mut(VectorV const *const self, VectorVIterMut *const it)
 {
-    VectorVIterMut_new(it, self->buf, self->buf_end);
+    VectorVIterMut_new(it, self->buf, self->buf_pos);
 }
 
 // ==========================================================================
@@ -128,11 +128,12 @@ void VectorVIter_move(VectorVIter *const self, VectorVIter *const src)
 
 void const *WARN_UNUSED_RESULT VectorVIter_next(VectorVIter *const self, size_t elem_size)
 {
-    if (self->p >= self->e) {
+    uint8_t const *const p = self->p;
+    if (p >= self->e) {
         return NULL;
     }
     self->p += elem_size;
-    return self->p;
+    return p;
 }
 
 void VectorVIter_new(VectorVIter *const self, void const *const b, void const *const e)
@@ -161,11 +162,12 @@ void VectorVIterMut_move(VectorVIterMut *const self, VectorVIterMut *const src)
 
 void *WARN_UNUSED_RESULT VectorVIterMut_next(VectorVIterMut *const self, size_t elem_size)
 {
-    if (self->p >= self->e) {
+    uint8_t *const p = self->p;
+    if (p >= self->e) {
         return NULL;
     }
     self->p += elem_size;
-    return self->p;
+    return p;
 }
 
 void VectorVIterMut_new(VectorVIterMut *const self, void *const b, void *const e)
