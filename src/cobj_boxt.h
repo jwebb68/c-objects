@@ -1,5 +1,5 @@
 #if !defined(COBJ_BOX_H)
-#define COBJ_BOX_H
+#    define COBJ_BOX_H
 
 // Box, object created and managed on the heap
 // and not shared (use RCT for shared objects).
@@ -7,13 +7,13 @@
 
 // forward declares;
 typedef struct BoxT_ BoxT;
-//typedef struct BoxTMut_ BoxTMut;
+// typedef struct BoxTMut_ BoxTMut;
 
-//includes
-#include "t.h"
-#include "cobj_error.h"
+// includes
+#    include "cobj_error.h"
+#    include "t.h"
 
-#include <stdbool.h>
+#    include <stdbool.h>
 
 // defines
 struct BoxT_ {
@@ -36,7 +36,6 @@ bool WARN_UNUSED_RESULT BoxT_try_new_copy_T(BoxT *const self, T const *const v, 
 T const *BoxT_deref(BoxT const *const self);
 T *BoxT_deref_mut(BoxT *const self);
 
-
 // comparisons
 bool BoxT_is_eq(BoxT const *const self, BoxT const *const b);
 bool BoxT_is_ne(BoxT const *const self, BoxT const *const b);
@@ -49,11 +48,9 @@ bool BoxT_is_gt(BoxT const *const self, BoxT const *const b);
 void BoxT_new_own(BoxT *const self, T *const p);
 
 // can box ever be null?
-//bool BoxT_is_none(BoxT const *const self);
-
+// bool BoxT_is_none(BoxT const *const self);
 
 // hmm, BoxT look like unique_ptr implementation
 // but without the release
 
-
-#endif//!defined(COBJ_BOX_H)
+#endif //! defined(COBJ_BOX_H)

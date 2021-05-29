@@ -1,9 +1,8 @@
 #if !defined(COBJ_T_H)
-#define COBJ_T_H
+#    define COBJ_T_H
 /**
  * @file
  */
-
 
 // design notes:
 /**
@@ -55,21 +54,19 @@
  * A struct is allocated on the heap/on the stack/in global memory.
  * In this state it is allocated but not initialised.
  * it requires initialisation to be initialised, usually by setting values into it's members,
- * either by init-list initialisation, by assignment or setting members directly. Sometimes, as a hack, memset
- * is used.
- * There are 4+ ways to init:
- * Move an already initialised value into it, de-initing the src struct.
- * Copy an already initialised value into it, not de-initing the src struct, but may fail as it requires resource allocation
- * Create from new with default values.
+ * either by init-list initialisation, by assignment or setting members directly. Sometimes, as a
+ * hack, memset is used. There are 4+ ways to init: Move an already initialised value into it,
+ * de-initing the src struct. Copy an already initialised value into it, not de-initing the src
+ * struct, but may fail as it requires resource allocation Create from new with default values.
  * Create from new with parameterised values.
  *
  * Moving
  * ------
- * As copying/cloning requires a resource allocation (if struct has such), then it's safer to move than copy.
- * But move is not the default in C, copy (and bitwise copy at that) is.
- * C does not have the concept of struct initialised or not, so an assignment just copies (assumes the LHS is uninitialised)
- * but then does not mark the RHS as uninitialised, so non-shared pointers are a problem.
- * and moving is implemented using the assignment operation.
+ * As copying/cloning requires a resource allocation (if struct has such), then it's safer to move
+ * than copy. But move is not the default in C, copy (and bitwise copy at that) is. C does not have
+ * the concept of struct initialised or not, so an assignment just copies (assumes the LHS is
+ * uninitialised) but then does not mark the RHS as uninitialised, so non-shared pointers are a
+ * problem. and moving is implemented using the assignment operation.
  *
  * Care must also be taken when moving into a struct that is already initialised,
  * the dest needs destroying first.
@@ -102,11 +99,11 @@
 typedef struct T_ T;
 
 // includes
-#include "cobj_defs.h"  // WARN_RESULT
-#include "cobj_error.h"
+#    include "cobj_defs.h" // WARN_RESULT
+#    include "cobj_error.h"
 
-#include <stdbool.h>
-#include <stddef.h> //size_t
+#    include <stdbool.h>
+#    include <stddef.h> //size_t
 
 // defines
 
@@ -116,7 +113,6 @@ struct T_ {
     // use own as needed
     int dummy;
 };
-
 
 /**
  * Destroy/de-initialise the struct.
@@ -134,7 +130,6 @@ struct T_ {
  * @warning UB if self is not initialised.
  */
 void T_destroy(T *const self);
-
 
 /**
  * Move the value of the struct from one memory location to another.
@@ -156,7 +151,6 @@ void T_destroy(T *const self);
  * @warning UB if src is not initialised.
  */
 void T_move(T *const self, T *const src);
-
 
 /**
  * Copy/clone the value of the struct.
@@ -190,7 +184,6 @@ void T_move(T *const self, T *const src);
 bool WARN_UNUSED_RESULT T_try_copy(T *const self, T const *const src, Error *const err);
 // using WARN_RESULT for force callers to handle the status.
 
-
 /**
  * Determines if self is equal by value to another.
  *
@@ -212,9 +205,7 @@ bool WARN_UNUSED_RESULT T_try_copy(T *const self, T const *const src, Error *con
  */
 bool T_is_eq(T const *const self, T const *const b);
 
-
 bool T_is_ne(T const *const self, T const *const b);
-
 
 /**
  * Determines if self is less than by value to another.
@@ -237,7 +228,6 @@ bool T_is_ne(T const *const self, T const *const b);
  */
 bool T_is_lt(T const *const self, T const *const b);
 
-
 /**
  * Determines if self is greater than by value to another.
  *
@@ -259,7 +249,6 @@ bool T_is_lt(T const *const self, T const *const b);
  */
 bool T_is_gt(T const *const self, T const *const b);
 
-
 /**
  * initialisers,
  * used to initialise the struct, usually from another
@@ -278,7 +267,6 @@ bool T_is_gt(T const *const self, T const *const b);
  */
 void T_new_int(T *const self, int v);
 
-
 /**
  * Initialise the struct using default values.
  *
@@ -290,7 +278,6 @@ void T_new_int(T *const self, int v);
  * @warning UB if self is initialised.
  */
 void T_new_default(T *const self);
-
 
 /**
  * Allocate but don't initialise a struct on the main system heap.
@@ -321,12 +308,11 @@ void T_new_default(T *const self);
 // void ArrayT_destroy_t(T *const arr, size_t len);
 // void ArrayT_destroy_p(T *const arr, T *const arr_e);
 // void ArrayT_move(T *const arr, T *const src, size_t len);
-// bool WARN_UNUSED_RESULT ArrayT_try_copy(T *const arr, T const *const src, size_t len, Error *const err);
-// void ArrayT_new_default_i(T *const arr, size_t len);
-// void ArrayT_new_default_p(T *const arr, T *const arr_e);
+// bool WARN_UNUSED_RESULT ArrayT_try_copy(T *const arr, T const *const src, size_t len, Error
+// *const err); void ArrayT_new_default_i(T *const arr, size_t len); void ArrayT_new_default_p(T
+// *const arr, T *const arr_e);
 
 // Slice ?
 // Iter/IterMut ?
 
-
-#endif//defined(COBJ_T_H)
+#endif // defined(COBJ_T_H)

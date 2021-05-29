@@ -1,5 +1,5 @@
 #if !defined(COBJ_ERROR_H)
-#define COBJ_ERROR_H
+#    define COBJ_ERROR_H
 
 // forward declares
 typedef enum ErrCode_ {
@@ -11,10 +11,11 @@ typedef enum ErrCode_ {
 
 typedef struct Error_ Error;
 
-//includes
-#include "cobj_defs.h" // WARN_UNUSED_RESULT
-#include <stddef.h> // size_t
-#include <stdbool.h>
+// includes
+#    include "cobj_defs.h" // WARN_UNUSED_RESULT
+
+#    include <stdbool.h>
+#    include <stddef.h> // size_t
 
 // defines
 struct Error_ {
@@ -25,9 +26,11 @@ struct Error_ {
 
 void Error_destroy(Error *const self);
 void Error_new(Error *const self, ErrorCode code, size_t line, char const *filen);
-bool WARN_UNUSED_RESULT Error_raise(Error *const self, ErrorCode code, size_t line, char const *filen);
+bool WARN_UNUSED_RESULT Error_raise(Error *const self,
+                                    ErrorCode code,
+                                    size_t line,
+                                    char const *filen);
 
-#define ERROR_RAISE(self, code) Error_raise(self, code, __LINE__, __FILE__)
+#    define ERROR_RAISE(self, code) Error_raise(self, code, __LINE__, __FILE__)
 
-
-#endif//!defined(COBJ_ERROR_H)
+#endif //! defined(COBJ_ERROR_H)

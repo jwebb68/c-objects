@@ -1,20 +1,20 @@
 #if !defined(COBJ_VECTORT_H)
-#define COBJ_VECTORT_H
+#    define COBJ_VECTORT_H
 
 /**
  * A Vector 'pattern' for C
-*/
+ */
 
-//forward declares
+// forward declares
 typedef struct VectorT_ VectorT;
 typedef struct VectorTIter_ VectorTIter;
 typedef struct VectorTIterMut_ VectorTIterMut;
 
 // includes
-#include "t.h"
-#include "cobj_slicet.h"
+#    include "cobj_slicet.h"
+#    include "t.h"
 
-#include <stddef.h> // size_t
+#    include <stddef.h> // size_t
 
 // defines
 typedef size_t Index;
@@ -80,5 +80,4 @@ void VectorT_iter_mut(VectorT *const self, SliceTMutIter *const it);
 // // annoyingly, it's 2 compares per call + 1 in the caller in the for-loop
 // // 3 ifs..
 
-
-#endif//!defined(COBJ_VECTORT_H)
+#endif //! defined(COBJ_VECTORT_H)

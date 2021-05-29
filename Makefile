@@ -611,7 +611,7 @@ distclean:
 .PHONY: format
 format:
 	astyle --project -I -n  $(allsrc) $(allhdr)
-	#env -u NIX_CFLAGS_COMPILE clang-format -style=file -i $(allsrc) $(allhdr)
+	env -u NIX_CFLAGS_COMPILE clang-format -style=file -i $(allsrc) $(allhdr)
 
 # make deps if clean or distclean not given
 # and should be the only target given

@@ -1,22 +1,24 @@
 #if !defined(COBJ_ARRAYT_H)
-#define COBJ_ARRAYT_H
+#    define COBJ_ARRAYT_H
 
 // no structs as intended to work with normal carrays
 typedef struct ArrayTIter_ ArrayTIter;
 typedef struct ArrayTIterMut_ ArrayTIterMut;
 
-#include "t.h"
-#include "cobj_slicet.h"
-#include "cobj_defs.h" // WARN_UNUSED_RESULT
-#include "cobj_error.h"
+#    include "cobj_defs.h" // WARN_UNUSED_RESULT
+#    include "cobj_error.h"
+#    include "cobj_slicet.h"
+#    include "t.h"
 
-#include <stddef.h>  // size_t
-#include <stdbool.h>
-
+#    include <stdbool.h>
+#    include <stddef.h> // size_t
 
 void ArrayT_destroy_p(T *const arr, T *const end);
 void ArrayT_move_p(T *const arr, T *const src, T *const src_end);
-bool WARN_UNUSED_RESULT ArrayT_try_copy_p(T *const arr, T const *const src, T const *const src_end, Error *err);
+bool WARN_UNUSED_RESULT ArrayT_try_copy_p(T *const arr,
+                                          T const *const src,
+                                          T const *const src_end,
+                                          Error *err);
 
 void ArrayT_new_default_p(T *const arr, T *const end);
 
@@ -47,7 +49,6 @@ void ArrayT_iter_mut(T *const arr, size_t len, SliceTMutIter *const it);
 // T const *ArrayTIter_next(ArrayTIter *const self);
 // void ArrayTIter_new(ArrayTIter *const self, T const *const arr, size_t len);
 
-
 // struct ArrayTIterMut_ {
 //     T *arr;
 //     T *end;
@@ -60,4 +61,4 @@ void ArrayT_iter_mut(T *const arr, size_t len, SliceTMutIter *const it);
 // T *ArrayTIterMut_next(ArrayTIterMut *const self);
 // void ArrayTIterMut_new(ArrayTIterMut *const self, T *const arr, size_t len);
 
-#endif//!defined(COBJ_ARRAYT_H)
+#endif //! defined(COBJ_ARRAYT_H)

@@ -1,63 +1,67 @@
 #include "cobj_slicet.h"
 
-#include "cobj_memory.h"
 #include "cobj_defs.h" // UNUSED_ARG
+#include "cobj_memory.h"
 
 #include <memory.h> // memmove
 
-
-void SliceT_destroy(SliceT *const self) {
+void SliceT_destroy(SliceT *const self)
+{
     STRUCTWIPE(self);
 }
 
-
-void SliceT_move(SliceT *const self, SliceT *const src) {
+void SliceT_move(SliceT *const self, SliceT *const src)
+{
     *self = *src;
     STRUCTWIPE(src);
 }
 
-
-bool WARN_UNUSED_RESULT SliceT_try_copy(SliceT *self, SliceT const *const src, Error *err) {
+bool WARN_UNUSED_RESULT SliceT_try_copy(SliceT *self, SliceT const *const src, Error *err)
+{
     UNUSED_ARG(err);
     *self = *src;
     return true;
 }
 
-
-void SliceT_new(SliceT *const self, T const *arr, size_t len) {
+void SliceT_new(SliceT *const self, T const *arr, size_t len)
+{
     self->arr = arr;
     self->arr_end = arr + len;
 }
-
 
 // T const *SliceT_ptr(SliceT const *const self) {
 //     return self->arr;
 // }
 
-
 // static T const *SliceT_end(SliceT const *const self) {
 //     return self->arr_end;
 // }
 
-
-size_t SliceT_len(SliceT const *const self) {
+size_t SliceT_len(SliceT const *const self)
+{
     return self->arr_end - self->arr;
 }
 
-
-bool SliceT_is_empty(SliceT const *const self) {
+bool SliceT_is_empty(SliceT const *const self)
+{
     return self->arr_end == self->arr;
 }
 
-
-T const *SliceT_get_item_at(SliceT const *const self, size_t pos) {
+T const *SliceT_get_item_at(SliceT const *const self, size_t pos)
+{
     T const *p = self->arr + pos;
-    if (p >= self->arr_end) { return NULL; }
+    if (p >= self->arr_end) {
+        return NULL;
+    }
     return p;
 }
 
-
-bool SliceT_try_subslice(SliceT const *const self, size_t b, size_t e, SliceT *const dest, Error *err) {
+bool SliceT_try_subslice(SliceT const *const self,
+                         size_t b,
+                         size_t e,
+                         SliceT *const dest,
+                         Error *err)
+{
     if (b > e) {
         return ERROR_RAISE(err, Error_EFAIL);
     }
@@ -67,13 +71,13 @@ bool SliceT_try_subslice(SliceT const *const self, size_t b, size_t e, SliceT *c
     if (e > SliceT_len(self)) {
         return ERROR_RAISE(err, Error_EFAIL);
     }
-    SliceT_new(dest, self->arr + b, e-b);
+    SliceT_new(dest, self->arr + b, e - b);
     return true;
 }
 
-
 // bool WARN_UNUSED_RESULT SliceT_try_move_from(SliceT *const self, SliceT *const src, Error *err) {
-//     // move contents of one slice into another, both structs must be initialised., what structs refer to must be initialised?
+//     // move contents of one slice into another, both structs must be initialised., what structs
+//     refer to must be initialised?
 //     // or dest must not be initialised.
 //     if (SliceT_len(self) != SliceT_len(src)) {
 //         return ERROR_RAISE(err, Error_EFAIL);
@@ -86,8 +90,10 @@ bool SliceT_try_subslice(SliceT const *const self, size_t b, size_t e, SliceT *c
 //     memwipe(src->arr, SliceT_len(src));
 // }
 
-// bool WARN_UNUSED_RESULT SliceT_try_copy_from(SliceT *const self, SliceT const *const src, Error *err) {
-//     // copy contents of one slice into another, both structs must be initialised., what structs refer to must be initialised?
+// bool WARN_UNUSED_RESULT SliceT_try_copy_from(SliceT *const self, SliceT const *const src, Error
+// *err) {
+//     // copy contents of one slice into another, both structs must be initialised., what structs
+//     refer to must be initialised?
 //     // or dest must not be initialised.
 //     if (SliceT_len(self) != SliceT_len(src)) {
 //         return ERROR_RAISE(err, Error_EFAIL);
@@ -107,91 +113,91 @@ bool SliceT_try_subslice(SliceT const *const self, size_t b, size_t e, SliceT *c
 //     return ok;
 // }
 
-
-void SliceT_iter(SliceT const *const self, SliceTIter *const it) {
+void SliceT_iter(SliceT const *const self, SliceTIter *const it)
+{
     SliceTIter_new(it, self->arr, self->arr_end);
 }
 
-
-
-
-void SliceTIter_destroy(SliceTIter *const self) {
+void SliceTIter_destroy(SliceTIter *const self)
+{
     STRUCTWIPE(self);
 }
 
-
-void SliceTIter_move(SliceTIter *const self, SliceTIter *const src) {
+void SliceTIter_move(SliceTIter *const self, SliceTIter *const src)
+{
     *self = *src;
     STRUCTWIPE(src);
 }
 
-
-bool WARN_UNUSED_RESULT SliceTIter_try_copy(SliceTIter *const self, SliceTIter const *const src) {
+bool WARN_UNUSED_RESULT SliceTIter_try_copy(SliceTIter *const self, SliceTIter const *const src)
+{
     *self = *src;
     return true;
 }
 
-
-T const *SliceTIter_next(SliceTIter *const self) {
-    if (self->p != self->e) { return NULL; }
+T const *SliceTIter_next(SliceTIter *const self)
+{
+    if (self->p != self->e) {
+        return NULL;
+    }
     self->p += 1;
     return self->p;
 }
 
-
-void SliceTIter_new(SliceTIter *const self, T const * const b, T const * const e) {
+void SliceTIter_new(SliceTIter *const self, T const *const b, T const *const e)
+{
     self->p = b;
     self->e = e;
 }
 
-
-
-
-void SliceTMut_destroy(SliceTMut *const self) {
+void SliceTMut_destroy(SliceTMut *const self)
+{
     STRUCTWIPE(self);
 }
 
-
-void SliceTMut_move(SliceTMut *const self, SliceTMut *const src) {
+void SliceTMut_move(SliceTMut *const self, SliceTMut *const src)
+{
     *self = *src;
     STRUCTWIPE(src);
 }
 
-
-bool WARN_UNUSED_RESULT SliceTMut_try_copy(SliceTMut *self, SliceTMut const *const src, Error *err) {
+bool WARN_UNUSED_RESULT SliceTMut_try_copy(SliceTMut *self, SliceTMut const *const src, Error *err)
+{
     UNUSED_ARG(err);
     *self = *src;
     return true;
 }
 
-
-void SliceTMut_new(SliceTMut *const self, T *arr, size_t len) {
+void SliceTMut_new(SliceTMut *const self, T *arr, size_t len)
+{
     self->arr = arr;
     self->arr_end = arr + len;
 }
-
 
 // T *SliceTMut_ptr(SliceTMut const *const self) {
 //     return self->arr;
 // }
 
-
 // static T *SliceTMut_end(SliceTMut const *const self) {
 //     return self->arr_end;
 // }
 
-
-size_t SliceTMut_len(SliceTMut const *const self) {
+size_t SliceTMut_len(SliceTMut const *const self)
+{
     return self->arr_end - self->arr;
 }
 
-
-bool SliceTMut_is_empty(SliceTMut const *const self) {
+bool SliceTMut_is_empty(SliceTMut const *const self)
+{
     return self->arr_end == self->arr;
 }
 
-
-bool SliceTMut_try_subslice(SliceTMut const *const self, size_t b, size_t e, SliceTMut *const dest, Error *err) {
+bool SliceTMut_try_subslice(SliceTMut const *const self,
+                            size_t b,
+                            size_t e,
+                            SliceTMut *const dest,
+                            Error *err)
+{
     if (b > e) {
         return ERROR_RAISE(err, Error_EFAIL);
     }
@@ -201,20 +207,22 @@ bool SliceTMut_try_subslice(SliceTMut const *const self, size_t b, size_t e, Sli
     if (e > SliceTMut_len(self)) {
         return ERROR_RAISE(err, Error_EFAIL);
     }
-    SliceTMut_new(dest, self->arr+b, e-b);
+    SliceTMut_new(dest, self->arr + b, e - b);
     return true;
 }
 
-
-void SliceTMut_as_slice(SliceTMut const *const self, SliceT *const s) {
+void SliceTMut_as_slice(SliceTMut const *const self, SliceT *const s)
+{
     s->arr = self->arr;
     s->arr_end = self->arr_end;
 }
 
-
-bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self, SliceTMut const *const src, Error *err) {
-    // move contents of one slice into another, both structs must be initialised., what structs refer to must be initialised?
-    // or dest must not be initialised.
+bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self,
+                                                SliceTMut const *const src,
+                                                Error *err)
+{
+    // move contents of one slice into another, both structs must be initialised., what structs
+    // refer to must be initialised? or dest must not be initialised.
     if (SliceTMut_len(self) != SliceTMut_len(src)) {
         return ERROR_RAISE(err, Error_EFAIL);
     }
@@ -236,10 +244,12 @@ bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self, SliceTMut
     return true;
 }
 
-
-bool WARN_UNUSED_RESULT SliceTMut_try_copy_from(SliceTMut *const self, SliceT const *const src, Error *err) {
-    // copy contents of one slice into another, both structs must be initialised., what structs refer to must be initialised?
-    // or dest must not be initialised.
+bool WARN_UNUSED_RESULT SliceTMut_try_copy_from(SliceTMut *const self,
+                                                SliceT const *const src,
+                                                Error *err)
+{
+    // copy contents of one slice into another, both structs must be initialised., what structs
+    // refer to must be initialised? or dest must not be initialised.
     if (SliceTMut_len(self) != SliceT_len(src)) {
         return ERROR_RAISE(err, Error_EFAIL);
     }
@@ -257,7 +267,9 @@ bool WARN_UNUSED_RESULT SliceTMut_try_copy_from(SliceTMut *const self, SliceT co
     T *d_it = self->arr;
     for (T const *s_it = src->arr; d_it != self->arr_end; ++d_it, ++s_it) {
         ok = T_try_copy(d_it, s_it, err);
-        if (!ok) { break; }
+        if (!ok) {
+            break;
+        }
     }
     if (!ok) {
         for (T *it = self->arr; it != d_it; ++it) {
@@ -267,44 +279,45 @@ bool WARN_UNUSED_RESULT SliceTMut_try_copy_from(SliceTMut *const self, SliceT co
     return ok;
 }
 
-
-void SliceTMut_iter(SliceTMut const *const self, SliceTIter *const it) {
+void SliceTMut_iter(SliceTMut const *const self, SliceTIter *const it)
+{
     SliceTIter_new(it, self->arr, self->arr_end);
 }
 
-
-void SliceTMut_iter_mut(SliceTMut const *const self, SliceTMutIter *const it) {
+void SliceTMut_iter_mut(SliceTMut const *const self, SliceTMutIter *const it)
+{
     SliceTMutIter_new(it, self->arr, self->arr_end);
 }
 
-
-
-
-void SliceTMutIter_destroy(SliceTMutIter *const self) {
+void SliceTMutIter_destroy(SliceTMutIter *const self)
+{
     STRUCTWIPE(self);
 }
 
-
-void SliceTMutIter_move(SliceTMutIter *const self, SliceTMutIter *const src) {
+void SliceTMutIter_move(SliceTMutIter *const self, SliceTMutIter *const src)
+{
     *self = *src;
     STRUCTWIPE(src);
 }
 
-
-bool WARN_UNUSED_RESULT SliceTMutIter_try_copy(SliceTMutIter *const self, SliceTMutIter const *const src) {
+bool WARN_UNUSED_RESULT SliceTMutIter_try_copy(SliceTMutIter *const self,
+                                               SliceTMutIter const *const src)
+{
     *self = *src;
     return true;
 }
 
-
-T *SliceTMutIter_next(SliceTMutIter *const self) {
-    if (self->p != self->e) { return NULL; }
+T *SliceTMutIter_next(SliceTMutIter *const self)
+{
+    if (self->p != self->e) {
+        return NULL;
+    }
     self->p += 1;
     return self->p;
 }
 
-
-void SliceTMutIter_new(SliceTMutIter *const self, T * const b, T * const e) {
+void SliceTMutIter_new(SliceTMutIter *const self, T *const b, T *const e)
+{
     self->p = b;
     self->e = e;
 }

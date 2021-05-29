@@ -1,28 +1,35 @@
 #include "cobj_boxv.h"
-#include "cobj_memory.h"  // STRUCTWIPE
 
-#include <stddef.h>  // NULL
+#include "cobj_memory.h" // STRUCTWIPE
+
+#include <stddef.h> // NULL
 #include <stdlib.h> // malloc/free
 
-
-static void BoxV_wipe(BoxV *const self) {
+static void BoxV_wipe(BoxV *const self)
+{
     STRUCTWIPE(self);
 }
 
-
-void BoxV_destroy(BoxV *const self, void (*elem_destroy)(void *const elem)) {
+void BoxV_destroy(BoxV *const self, void (*elem_destroy)(void *const elem))
+{
     elem_destroy(&self->elem);
     BoxV_wipe(self);
 }
 
-
-void BoxV_move(BoxV *const self, BoxV *const src) {
+void BoxV_move(BoxV *const self, BoxV *const src)
+{
     *self = *src;
     BoxV_wipe(src);
 }
 
-
-bool WARN_UNUSED_RESULT BoxV_try_copy(BoxV *const self, BoxV const *const v, Error *err, size_t elem_size, bool (*elem_try_copy)(void *elem, void const *elem_src, Error *err)) {
+bool WARN_UNUSED_RESULT BoxV_try_copy(BoxV *const self,
+                                      BoxV const *const v,
+                                      Error *err,
+                                      size_t elem_size,
+                                      bool (*elem_try_copy)(void *elem,
+                                                            void const *elem_src,
+                                                            Error *err))
+{
     void *p = malloc(elem_size);
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);
@@ -39,30 +46,33 @@ bool WARN_UNUSED_RESULT BoxV_try_copy(BoxV *const self, BoxV const *const v, Err
     return true;
 }
 
-
-
-void const *BoxV_deref(BoxV const *const self) {
+void const *BoxV_deref(BoxV const *const self)
+{
     return self->elem;
 }
 
-void *BoxV_deref_mut(BoxV *const self) {
+void *BoxV_deref_mut(BoxV *const self)
+{
     return self->elem;
 }
-
 
 // create and take ownsership of existing heap obj
 // no disown as that is an implicit destroy.
-void BoxV_new_own(BoxV *const self, void *const p) {
+void BoxV_new_own(BoxV *const self, void *const p)
+{
     self->elem = p;
 }
 
-
-//void BoxV_new_(BoxV_ *const self, ...) {
+// void BoxV_new_(BoxV_ *const self, ...) {
 //  T_new(&self->elem, ...);
 //}
 
-
-bool WARN_UNUSED_RESULT BoxV_try_new_from(BoxV *const self, void *const elem, Error *const err, size_t elem_size, void (*elem_move)(void *elem, void *src)) {
+bool WARN_UNUSED_RESULT BoxV_try_new_from(BoxV *const self,
+                                          void *const elem,
+                                          Error *const err,
+                                          size_t elem_size,
+                                          void (*elem_move)(void *elem, void *src))
+{
     void *p = malloc(elem_size);
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);

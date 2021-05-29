@@ -2,6 +2,7 @@
 // {
 //     return 0;
 // }
-int libmain(void) {
+int libmain(void)
+{
     return 0;
 }

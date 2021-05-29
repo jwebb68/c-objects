@@ -1,6 +1,6 @@
 #include "cobj_rcboxt.h"
 
-#include "cobj_memory.h"  // STRUCTWIPE
+#include "cobj_memory.h" // STRUCTWIPE
 
 #include <stdlib.h> // malloc/free
 
@@ -14,101 +14,102 @@ struct RCNodeT_ {
     size_t rc;
 };
 
-
-void RCNodeT_wipe(RCNodeT *const self) {
+void RCNodeT_wipe(RCNodeT *const self)
+{
     STRUCTWIPE(self);
 }
 
-
-void RCNodeT_destroy(RCNodeT *const self) {
+void RCNodeT_destroy(RCNodeT *const self)
+{
     T_destroy(&self->val);
     RCNodeT_wipe(self);
 }
 
-
-void RCNodeT_grab(RCNodeT *const self) {
+void RCNodeT_grab(RCNodeT *const self)
+{
     self->rc += 1;
 }
 
-
-bool RCNodeT_release(RCNodeT *const self) {
+bool RCNodeT_release(RCNodeT *const self)
+{
     self->rc -= 1;
     return (self->rc != 0);
 }
 
-
-T const *RCNodeT_deref(RCNodeT const *const self) {
+T const *RCNodeT_deref(RCNodeT const *const self)
+{
     return &self->val;
 }
 
-
-T *RCNodeT_deref_mut(RCNodeT *const self) {
+T *RCNodeT_deref_mut(RCNodeT *const self)
+{
     return &self->val;
 }
 
-
-RCNodeT *RCNodeT_malloc(void) {
+RCNodeT *RCNodeT_malloc(void)
+{
     RCNodeT *p = malloc(sizeof(RCNodeT));
     return p;
 }
 
-
-void RCNodeT_new_int(RCNodeT *const self, int v) {
+void RCNodeT_new_int(RCNodeT *const self, int v)
+{
     self->rc = 0;
     T_new_int(&self->val, v);
 }
 
-
-void RCNodeT_new_from_T(RCNodeT *const self, T *const src) {
+void RCNodeT_new_from_T(RCNodeT *const self, T *const src)
+{
     self->rc = 0;
     T_move(&self->val, src);
 }
 
-
-bool RCNodeT_try_new_copy_T(RCNodeT *const self, T const *const src, Error *const err) {
+bool RCNodeT_try_new_copy_T(RCNodeT *const self, T const *const src, Error *const err)
+{
     self->rc = 0;
     return T_try_copy(&self->val, src, err);
 }
 
 // ==========================================================================
 
-static void RCBoxT_wipe(RCBoxT *const self) {
+static void RCBoxT_wipe(RCBoxT *const self)
+{
     STRUCTWIPE(self);
 }
 
-
-void RCBoxT_destroy(RCBoxT *const self) {
+void RCBoxT_destroy(RCBoxT *const self)
+{
     if (!RCNodeT_release(self->node)) {
         RCNodeT_destroy(self->node);
     }
     RCBoxT_wipe(self);
 }
 
-
-void RCBoxT_move(RCBoxT *const self, RCBoxT *const src) {
+void RCBoxT_move(RCBoxT *const self, RCBoxT *const src)
+{
     *self = *src;
     RCBoxT_wipe(src);
 }
 
-
-bool RCBoxT_try_copy(RCBoxT *const self, RCBoxT const *const src) {
+bool RCBoxT_try_copy(RCBoxT *const self, RCBoxT const *const src)
+{
     *self = *src;
     RCNodeT_grab(self->node);
     return true;
 }
 
-
-T const *RCBoxT_deref(RCBoxT const *const self) {
+T const *RCBoxT_deref(RCBoxT const *const self)
+{
     return RCNodeT_deref(self->node);
 }
 
-
-T *RCBoxT_deref_mut(RCBoxT *const self) {
+T *RCBoxT_deref_mut(RCBoxT *const self)
+{
     return RCNodeT_deref_mut(self->node);
 }
 
-
-bool WARN_UNUSED_RESULT RCBoxT_try_new_int(RCBoxT *const self, int v, Error *const err) {
+bool WARN_UNUSED_RESULT RCBoxT_try_new_int(RCBoxT *const self, int v, Error *const err)
+{
     RCNodeT *p = RCNodeT_malloc();
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);
@@ -120,8 +121,8 @@ bool WARN_UNUSED_RESULT RCBoxT_try_new_int(RCBoxT *const self, int v, Error *con
     return true;
 }
 
-
-bool WARN_UNUSED_RESULT RCBoxT_try_new_from_T(RCBoxT *const self, T *const v, Error *const err) {
+bool WARN_UNUSED_RESULT RCBoxT_try_new_from_T(RCBoxT *const self, T *const v, Error *const err)
+{
     RCNodeT *p = RCNodeT_malloc();
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);
@@ -133,9 +134,11 @@ bool WARN_UNUSED_RESULT RCBoxT_try_new_from_T(RCBoxT *const self, T *const v, Er
     return true;
 }
 
-
 // new_copy variant? copy direct into dest without intermed storage?
-bool WARN_UNUSED_RESULT RCBoxT_try_new_copy_T(RCBoxT *const self, T const *const v, Error *const err) {
+bool WARN_UNUSED_RESULT RCBoxT_try_new_copy_T(RCBoxT *const self,
+                                              T const *const v,
+                                              Error *const err)
+{
     RCNodeT *p = RCNodeT_malloc();
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);
@@ -153,18 +156,18 @@ bool WARN_UNUSED_RESULT RCBoxT_try_new_copy_T(RCBoxT *const self, T const *const
     return true;
 }
 
-
-bool RCBoxT_is_eq(RCBoxT const *const self, RCBoxT const *const b) {
+bool RCBoxT_is_eq(RCBoxT const *const self, RCBoxT const *const b)
+{
     return T_is_eq(RCBoxT_deref(self), RCBoxT_deref(b));
 }
 
-
-bool RCBoxT_is_lt(RCBoxT const *const self, RCBoxT const *const b) {
+bool RCBoxT_is_lt(RCBoxT const *const self, RCBoxT const *const b)
+{
     return T_is_lt(RCBoxT_deref(self), RCBoxT_deref(b));
 }
 
-
-bool RCBoxT_is_gt(RCBoxT const *const self, RCBoxT const *const b) {
+bool RCBoxT_is_gt(RCBoxT const *const self, RCBoxT const *const b)
+{
     return T_is_gt(RCBoxT_deref(self), RCBoxT_deref(b));
 }
 

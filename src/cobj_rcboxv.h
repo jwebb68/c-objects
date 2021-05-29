@@ -1,15 +1,15 @@
 #if !defined(COBJ_RCBOXV_H)
-#define COBJ_RCBOXV_H
+#    define COBJ_RCBOXV_H
 
-//forward declares
+// forward declares
 typedef struct RCNodeV_ RCNodeV;
 typedef struct RCBoxV_ RCBoxV;
 
 // includes
-#include "t.h"
-#include "cobj_error.h"
+#    include "cobj_error.h"
+#    include "t.h"
 
-#include <stdbool.h>
+#    include <stdbool.h>
 
 // defines
 struct RCBoxV_ {
@@ -24,10 +24,17 @@ void const *RCBoxV_deref(RCBoxV const *const self);
 void *RCBoxV_deref_mut(RCBoxV *const self);
 
 // bool WARN_UNUSED_RESULT RCBoxV_try_new_int(RCBoxV *const self, int v, Error *const err);
-bool WARN_UNUSED_RESULT RCBoxV_try_new_from(RCBoxV *const self, void *const v, Error *const err, size_t elem_size, bool (*elem_try_copy)(void *elem, void const *src, Error *err));
+bool WARN_UNUSED_RESULT RCBoxV_try_new_from(RCBoxV *const self,
+                                            void *const v,
+                                            Error *const err,
+                                            size_t elem_size,
+                                            bool (*elem_try_copy)(void *elem,
+                                                                  void const *src,
+                                                                  Error *err));
 
 // // new_copy variant? copy direct into dest without intermed storage?
-// bool WARN_UNUSED_RESULT RCBoxV_try_new_copy_T(RCBoxV *const self, T const *const v, Error *const err);
+// bool WARN_UNUSED_RESULT RCBoxV_try_new_copy_T(RCBoxV *const self, T const *const v, Error *const
+// err);
 
 // bool RCBoxV_is_eq(RCBoxV const *const self, RCBoxV const *const b);
 // bool RCBoxV_is_lt(RCBoxV const *const self, RCBoxV const *const b);
@@ -37,4 +44,4 @@ bool WARN_UNUSED_RESULT RCBoxV_try_new_from(RCBoxV *const self, void *const v, E
 // no own of value: that's a new_default + T_destroy + T_move
 // no disown of value: that requires only 1 ref so would be a try_disown, and also required as move.
 
-#endif//!defined(COBJ_RCBOXV_H)
+#endif //! defined(COBJ_RCBOXV_H)

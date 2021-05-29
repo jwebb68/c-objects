@@ -1,9 +1,9 @@
-#include <check.h>
-
 #include "cobj_boxt.h"
 
-START_TEST(test_try_new_from_T) {
+#include <check.h>
 
+START_TEST(test_try_new_from_T)
+{
     // create a T, so we can move it in
     T t1, t2;
     T_new_default(&t1);
@@ -20,13 +20,14 @@ START_TEST(test_try_new_from_T) {
     ck_assert(T_is_ne(&t1, BoxT_deref(&bt)));
 
     BoxT_destroy(&bt);
-    //no destroy of t1, it was moved into bt;
+    // no destroy of t1, it was moved into bt;
     // was destroyed in bt
     T_destroy(&t2);
-} END_TEST
+}
+END_TEST
 
-
-Suite *boxt_suite(void) {
+Suite *boxt_suite(void)
+{
     Suite *s;
     TCase *tc;
     s = suite_create("BoxT");
@@ -35,7 +36,6 @@ Suite *boxt_suite(void) {
     suite_add_tcase(s, tc);
     return s;
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -52,5 +52,5 @@ int main(int argc, char *argv[])
     n_failed = srunner_ntests_failed(r);
     srunner_free(r);
 
-    return (n_failed == 0)?0: 1;
+    return (n_failed == 0) ? 0 : 1;
 }
