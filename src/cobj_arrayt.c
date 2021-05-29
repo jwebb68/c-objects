@@ -18,8 +18,8 @@ void ArrayT_destroy_i(T *const arr, size_t len)
 
 void ArrayT_move(T *const arr, T *const src, size_t len)
 {
-    memmove(arr, src, len);
-    memwipe(src, len);
+    memmove(arr, src, len * sizeof(T));
+    memwipe(src, len * sizeof(T));
 }
 
 bool WARN_UNUSED_RESULT ArrayT_try_copy(T *const arr, T const *const src, size_t len, Error *err)
