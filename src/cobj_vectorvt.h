@@ -26,8 +26,8 @@ void VectorVT_clear(VectorVT *const self);
 size_t VectorVT_len(VectorVT const *const self);
 bool WARN_UNUSED_RESULT VectorVT_push_back(VectorVT *const self, T *const elem);
 bool WARN_UNUSED_RESULT VectorVT_pop_back(VectorVT *const self, T *const elem);
-T *VectorVT_get_item_at_mut(VectorVT *const self, Index const pos);
-T const *VectorVT_get_item_at(VectorVT *const self, Index const pos);
+T *VectorVT_get_item_at_mut(VectorVT const *const self, Index const pos);
+T const *VectorVT_get_item_at(VectorVT const *const self, Index const pos);
 void VectorVT_iter(VectorVT const *const self, VectorVTIter *const it);
 void VectorVT_iter_mut(VectorVT const *const self, VectorVTIterMut *const it);
 

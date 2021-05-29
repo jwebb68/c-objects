@@ -27,7 +27,7 @@ void VectorV_move(VectorV *const self, VectorV *const src)
     VectorV_wipe(src);
 }
 
-void VectorV_new(VectorV *const self, uint8_t *const arr, uint8_t *arr_e)
+void VectorV_new(VectorV *const self, uint8_t *const arr, uint8_t *const arr_e)
 {
     self->buf = arr;
     self->buf_end = arr_e;
@@ -64,8 +64,8 @@ bool WARN_UNUSED_RESULT VectorV_push_back(VectorV *self,
     return true;
 }
 
-bool WARN_UNUSED_RESULT VectorV_pop_back(VectorV *self,
-                                         void *elem,
+bool WARN_UNUSED_RESULT VectorV_pop_back(VectorV *const self,
+                                         void *const elem,
                                          size_t elem_size,
                                          void (*elem_move)(void *const, void *const))
 {
@@ -78,7 +78,7 @@ bool WARN_UNUSED_RESULT VectorV_pop_back(VectorV *self,
     return true;
 }
 
-void *VectorV_get_item_at_mut(VectorV *self, Index pos, size_t elem_size)
+void *VectorV_get_item_at_mut(VectorV const *const self, Index pos, size_t elem_size)
 {
     // null if no item at pos
     uint8_t *p = self->buf + (pos * elem_size);
@@ -88,7 +88,7 @@ void *VectorV_get_item_at_mut(VectorV *self, Index pos, size_t elem_size)
     return p;
 }
 
-void const *VectorV_get_item_at(VectorV *self, Index pos, size_t elem_size)
+void const *VectorV_get_item_at(VectorV const *const self, Index pos, size_t elem_size)
 {
     // null if no item at pos
     uint8_t *p = self->buf + (pos * elem_size);

@@ -59,12 +59,12 @@ bool WARN_UNUSED_RESULT VectorVT_pop_back(VectorVT *const self, T *const elem)
     return VectorV_pop_back(&self->inner, elem, sizeof(T), VectorVT_move_elem);
 }
 
-T *VectorVT_get_item_at_mut(VectorVT *const self, Index const pos)
+T *VectorVT_get_item_at_mut(VectorVT const *const self, Index const pos)
 {
     return (T *)VectorV_get_item_at_mut(&self->inner, pos, sizeof(T));
 }
 
-T const *VectorVT_get_item_at(VectorVT *const self, Index const pos)
+T const *VectorVT_get_item_at(VectorVT const *const self, Index const pos)
 {
     return (T const *)VectorV_get_item_at(&self->inner, pos, sizeof(T));
 }
