@@ -617,6 +617,7 @@ format:
 # and should be the only target given
 ifeq ($(MAKECMDGOALS),clean)
 else ifeq ($(MAKECMDGOALS),distclean)
+else ifeq ($(MAKECMDGOALS),format)
 else
 -include $(dep)
 endif
