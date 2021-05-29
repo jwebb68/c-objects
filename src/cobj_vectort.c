@@ -117,7 +117,7 @@ void VectorT_iter(VectorT const *const self, SliceTIter *const it)
     SliceTIter_new(it, self->arr, self->arr_pos);
 }
 
-void VectorT_iter_mut(VectorT *const self, SliceTMutIter *const it)
+void VectorT_iter_mut(VectorT const *const self, SliceTMutIter *const it)
 {
     SliceTMutIter_new(it, self->arr, self->arr_pos);
 }

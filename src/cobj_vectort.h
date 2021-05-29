@@ -42,10 +42,7 @@ void VectorT_as_slice(VectorT const *const self, SliceT *const s);
 void VectorT_as_slice_mut(VectorT const *const self, SliceTMut *const s);
 
 void VectorT_iter(VectorT const *const self, SliceTIter *const it);
-void VectorT_iter_mut(VectorT *const self, SliceTMutIter *const it);
-
-// void VectorT_iter(VectorT const *const self, VectorTIter *const it);
-// void VectorT_iter_mut(VectorT *const self, VectorTIterMut *const it);
+void VectorT_iter_mut(VectorT const *const self, SliceTMutIter *const it);
 
 // maybe vector can take a private heap struct, (if private heap is needed elsewhere)
 // TODO: VectorT_malloc/VectorT_free/VectorT_malloc_new/VectorT_free_destroy.
