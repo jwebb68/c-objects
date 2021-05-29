@@ -2,6 +2,7 @@
 #    define COBJ_DEFS_H
 
 #    include <stddef.h> // size_t
+
 // an Index is not a size
 // so need to prevent assignment/comparision etc.
 typedef size_t Index;

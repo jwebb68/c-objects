@@ -171,6 +171,6 @@ bool RCBoxT_is_gt(RCBoxT const *const self, RCBoxT const *const b)
     return T_is_gt(RCBoxT_deref(self), RCBoxT_deref(b));
 }
 
-// no own of ptr: that leads to heap fragmentation
+// no own of just a ptr: that leads to heap fragmentation
 // no own of value: that's a new_default + T_destroy + T_move
 // no disown of value: that requires only 1 ref so would be a try_disown, and also required as move.

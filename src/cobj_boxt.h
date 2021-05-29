@@ -48,7 +48,6 @@ bool BoxT_is_gt(BoxT const *const self, BoxT const *const b);
 void BoxT_new_own(BoxT *const self, T *const p);
 
 // can box ever be null?
-// bool BoxT_is_none(BoxT const *const self);
 
 // hmm, BoxT look like unique_ptr implementation
 // but without the release

@@ -80,48 +80,12 @@ bool SliceT_try_subslice(SliceT const *const self,
     return true;
 }
 
-// bool WARN_UNUSED_RESULT SliceT_try_move_from(SliceT *const self, SliceT *const src, Error *err) {
-//     // move contents of one slice into another, both structs must be initialised., what structs
-//     refer to must be initialised?
-//     // or dest must not be initialised.
-//     if (SliceT_len(self) != SliceT_len(src)) {
-//         return ERROR_RAISE(err, Error_EFAIL);
-//     }
-
-//     // for (T const *d_it = self->arr, *s_it = src->arr; d_it != self->arr_end; ++d_it, ++s_it) {
-//     //     T_move(d_it, s_it);
-//     // }
-//     memmove(self->arr, src->arr, SliceT_len(self));
-//     memwipe(src->arr, SliceT_len(src));
-// }
-
-// bool WARN_UNUSED_RESULT SliceT_try_copy_from(SliceT *const self, SliceT const *const src, Error
-// *err) {
-//     // copy contents of one slice into another, both structs must be initialised., what structs
-//     refer to must be initialised?
-//     // or dest must not be initialised.
-//     if (SliceT_len(self) != SliceT_len(src)) {
-//         return ERROR_RAISE(err, Error_EFAIL);
-//     }
-
-//     bool ok = true;
-//     T const *d_it = self->arr;
-//     for (T const *s_it = src->arr; d_it != self->arr_end; ++d_it, ++s_it) {
-//         ok = T_try_copy(d_it, s_it, err);
-//         if (!ok) { break; }
-//     }
-//     if (!ok) {
-//         for (T const *it = self->arr; it != d_it; ++it) {
-//             T_destroy(it);
-//         }
-//     }
-//     return ok;
-// }
-
 void SliceT_iter(SliceT const *const self, SliceTIter *const it)
 {
     SliceTIter_new(it, self->arr, self->arr_end);
 }
+
+// =============================================================================
 
 static void SliceTIter_wipe(SliceTIter *const self)
 {
@@ -160,6 +124,8 @@ void SliceTIter_new(SliceTIter *const self, T const *const b, T const *const e)
     self->p = b;
     self->e = e;
 }
+
+//============================================================================
 
 void SliceTMut_wipe(SliceTMut *const self)
 {
@@ -250,7 +216,8 @@ bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self,
     // for (T *it = self->arr; it != self->arr_end; ++it) {
     //     T_destroy(it);
     // }
-    // for (T const *d_it = self->arr, *s_it = src->arr; d_it != self->arr_end; ++d_it, ++s_it) {
+    // for (T const *d_it = self->arr, *s_it = src->arr; d_it != self->arr_end; ++d_it, ++s_it)
+    // {
     //     T_move(d_it, s_it);
     // }
     // use memmove to move the bits en masse, for speed.
@@ -305,6 +272,7 @@ void SliceTMut_iter_mut(SliceTMut const *const self, SliceTMutIter *const it)
     SliceTMutIter_new(it, self->arr, self->arr_end);
 }
 
+// ============================================================================
 void SliceTMutIter_wipe(SliceTMutIter *const self)
 {
     STRUCTWIPE(self);

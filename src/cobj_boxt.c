@@ -56,10 +56,6 @@ T *BoxT_deref_mut(BoxT *const self)
     return self->elem;
 }
 
-// bool BoxT_is_none(BoxT const *const self) {
-//     return self->elem == NULL;
-// }
-
 bool BoxT_is_eq(BoxT const *const self, BoxT const *const b)
 {
     return T_is_eq(self->elem, b->elem);
@@ -105,6 +101,7 @@ bool WARN_UNUSED_RESULT BoxT_try_new_from_T(BoxT *const self, T *const v, Error 
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);
     }
+
     T_move(p, v);
     self->elem = p;
     return true;
@@ -116,42 +113,17 @@ bool WARN_UNUSED_RESULT BoxT_try_new_copy_T(BoxT *const self, T const *const v, 
     if (p == NULL) {
         return ERROR_RAISE(err, Error_ENOMEM);
     }
+
     bool ok;
     ok = T_try_copy(p, v, err);
     if (!ok) {
         free(p);
         return false;
     }
+
     self->elem = p;
     return true;
 }
-
-// and now lost the WARN_RESULT checking..
-// void BoxT_try_new_copy_T(BoxT *const self, T const *const v, Status *ret) {
-//     T *const p = T_malloc();
-//     if (p == NULL) {
-//         STATUS_RAISE(ret, Error_ENOMEM);
-//         return;
-//     }
-//     T_new_copy_T(p, v, ret);
-//     if (Status_is_err(ret)) {
-//         free(p);
-//     }
-//     self->elem = p;
-// }
-// and now lost the WARN_RESULT checking..
-// void BoxT_try_new_copy_T(BoxT *const self, T const *const v, Result *ret) {
-//     T *const p = T_malloc();
-//     if (p == NULL) {
-//         RESULT_ERR(ret, Error_ENOMEM);
-//         return;
-//     }
-//     T_new_copy_T(p, v, ret);
-//     if (Result_is_err(ret)) {
-//         free(p);
-//     }
-//     self->elem = p;
-// }
 
 // hmm, BoxT look like unique_ptr implementation
 // but without the release

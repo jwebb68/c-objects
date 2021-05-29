@@ -32,6 +32,7 @@ void *BoxV_deref_mut(BoxV *const self);
 // create and take ownsership of existing heap obj
 // no disown as that is an implicit destroy.
 void BoxV_new_own(BoxV *const self, void *const p);
+
 // void BoxV_new_(BoxV_ *const self, ...);
 
 bool WARN_UNUSED_RESULT BoxV_try_new_from(BoxV *const self,

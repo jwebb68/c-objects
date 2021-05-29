@@ -25,6 +25,7 @@ T const *BoxVT_deref(BoxVT const *const self);
 T *BoxVT_deref_mut(BoxVT *const self);
 
 void BoxVT_new_own(BoxVT *const self, T *const p);
+
 // void BoxVT_new_(BoxVT_ *const self, ...);
 
 bool WARN_UNUSED_RESULT BoxVT_try_new_from_T(BoxVT *const self, T *const v, Error *err);

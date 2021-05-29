@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     VectorVT_destroy(&vec);
 }
 // good, p is contained in the for-loop scope, pity 'it' isn't.
-// bad 3 compares, one advance, one deref
+// bad 2 compares, one advance, one deref
 // safer, wont advance past end, cannot deref at end.
 
 

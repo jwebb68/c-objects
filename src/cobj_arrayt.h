@@ -34,31 +34,4 @@ void ArrayT_as_slice_mut(T *const arr, size_t len, SliceTMut *const s);
 void ArrayT_iter(T const *const arr, size_t len, SliceTIter *const it);
 void ArrayT_iter_mut(T *const arr, size_t len, SliceTMutIter *const it);
 
-// void ArrayT_iter(T const *const arr, size_t len, ArrayTIter *const it);
-// void ArrayT_iter_mut(T *const arr, size_t len, ArrayTIterMut *const it);
-
-// struct ArrayTIter_ {
-//     T const *arr;
-//     T const *end;
-//     T const *pos;
-// };
-
-// void ArrayTIter_destroy(ArrayTIter *const self);
-// void ArrayTIter_move(ArrayTIter *const self, ArrayTIter *const src);
-// bool WARN_UNUSED_RESULT ArrayTIter_try_copy(T *const arr, T const *const src);
-// T const *ArrayTIter_next(ArrayTIter *const self);
-// void ArrayTIter_new(ArrayTIter *const self, T const *const arr, size_t len);
-
-// struct ArrayTIterMut_ {
-//     T *arr;
-//     T *end;
-//     T *pos;
-// };
-
-// void ArrayTIterMut_destroy(ArrayTIterMut *const self);
-// void ArrayTIterMut_move(ArrayTIterMut *const self, ArrayTIterMut *const src);
-// bool WARN_UNUSED_RESULT ArrayTIterMut_try_copy(T *const arr, T const *const src);
-// T *ArrayTIterMut_next(ArrayTIterMut *const self);
-// void ArrayTIterMut_new(ArrayTIterMut *const self, T *const arr, size_t len);
-
 #endif //! defined(COBJ_ARRAYT_H)

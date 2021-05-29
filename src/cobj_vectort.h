@@ -19,6 +19,9 @@ typedef struct VectorTIterMut_ VectorTIterMut;
 // defines
 typedef size_t Index;
 
+// maybe vector can take a private heap struct, (if private heap is needed elsewhere)
+// TODO: VectorT_malloc/VectorT_free/VectorT_malloc_new/VectorT_free_destroy.
+
 struct VectorT_ {
     T *arr;
     T *arr_end;
@@ -41,40 +44,9 @@ T const *VectorT_get_item_at(VectorT const *const self, Index pos);
 void VectorT_as_slice(VectorT const *const self, SliceT *const s);
 void VectorT_as_slice_mut(VectorT const *const self, SliceTMut *const s);
 
+// iters can iter over contents of vector WITHOUT needing to bounds check
+// each access (unlike get_item_at) so faster than for looped index access.
 void VectorT_iter(VectorT const *const self, SliceTIter *const it);
 void VectorT_iter_mut(VectorT const *const self, SliceTMutIter *const it);
-
-// maybe vector can take a private heap struct, (if private heap is needed elsewhere)
-// TODO: VectorT_malloc/VectorT_free/VectorT_malloc_new/VectorT_free_destroy.
-
-// iters can iter over contents of vector WITHOUT needing to bounds check
-// so faster.
-
-// struct VectorTIterMut_ {
-//     VectorT *vec;
-//     T *it;
-// };
-// void VectorTIterMut_destroy(VectorTIterMut *const self);
-// void VectorTIterMut_move(VectorTIterMut *const self, VectorTIterMut *const src);
-// // initialises iter, sets start at first item
-// void VectorTIterMut_new(VectorTIterMut *const self, VectorT *const vec);
-// // moves to next item, returns ptr to item or NULL if no more items.
-// T * WARN_UNUSED_RESULT VectorTIterMut_next(VectorTIterMut *const self);
-// // annoyingly, it's 2 compares per call + 1 in the caller in the for-loop
-// // 3 ifs..
-
-// struct VectorTIter_ {
-//     VectorT const *vec;
-//     T const *it;
-// };
-// void VectorTIter_destroy(VectorTIter *const self);
-// void VectorTIter_move(VectorTIter *const self, VectorTIter *const src);
-// // initialises iter, sets start at first item
-// // does not return first item.
-// void VectorTIter_new(VectorTIter *const self, VectorT const *const vec);
-// // moves to next item, returns ptr to item or NULL if no more items.
-// T const * WARN_UNUSED_RESULT VectorTIter_next(VectorTIter *const self);
-// // annoyingly, it's 2 compares per call + 1 in the caller in the for-loop
-// // 3 ifs..
 
 #endif //! defined(COBJ_VECTORT_H)
