@@ -1,5 +1,7 @@
 #include "cobj_boxvt.h"
 
+#include "cobj_memory.h" // STRUCTWIPE
+
 static void BoxVT_destroy_elem(void *const self)
 {
     T_destroy((T *)self);
@@ -15,14 +17,21 @@ static bool BoxVT_try_copy_elem(void *self, void const *src, Error *err)
     return T_try_copy((T *)self, (T const *)src, err);
 }
 
+static void BoxVT_wipe(BoxVT *const self)
+{
+    STRUCTWIPE(self);
+}
+
 void BoxVT_destroy(BoxVT *const self)
 {
     BoxV_destroy(&self->inner, BoxVT_destroy_elem);
+    // is wipe needed if only one member that wipes itself?
 }
 
 void BoxVT_move(BoxVT *const self, BoxVT *const src)
 {
-    BoxV_move(&self->inner, &src->inner);
+    *self = *src;
+    BoxVT_wipe(src);
 }
 
 bool WARN_UNUSED_RESULT BoxVT_try_copy(BoxVT *const self, BoxVT const *const v, Error *err)

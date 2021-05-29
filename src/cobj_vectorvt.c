@@ -12,9 +12,10 @@ static void VectorVT_destroy_elem(void *const self)
     T_destroy((T *)self);
 }
 
-// static void VectorVT_wipe(VectorVT *const self) {
-//     STRUCTWIPE(self);
-// }
+static void VectorVT_wipe(VectorVT *const self)
+{
+    STRUCTWIPE(self);
+}
 
 void VectorVT_destroy(VectorVT *const self)
 {
@@ -24,8 +25,8 @@ void VectorVT_destroy(VectorVT *const self)
 
 void VectorVT_move(VectorVT *const self, VectorVT *const src)
 {
-    VectorV_move(&self->inner, &src->inner);
-    // do we need to wipe if only 1 struct in struct with own wipe?
+    *self = *src;
+    VectorVT_wipe(src);
 }
 
 void VectorVT_new(VectorVT *const self, T *const arr, size_t const len)
@@ -80,9 +81,10 @@ void VectorVT_iter_mut(VectorVT const *const self, VectorVTIterMut *const it)
 
 //===========================================================================
 
-// static void VectorVTIter_wipe(VectorVTIter *const self) {
-//     STRUCTWIPE(self);
-// }
+static void VectorVTIter_wipe(VectorVTIter *const self)
+{
+    STRUCTWIPE(self);
+}
 
 void VectorVTIter_destroy(VectorVTIter *const self)
 {
@@ -92,8 +94,8 @@ void VectorVTIter_destroy(VectorVTIter *const self)
 
 void VectorVTIter_move(VectorVTIter *const self, VectorVTIter *const src)
 {
-    VectorVIter_move(&self->inner, &src->inner);
-    // do we need to wipe if only 1 struct in struct with own wipe?
+    *self = *src;
+    VectorVTIter_wipe(src);
 }
 
 T const *WARN_UNUSED_RESULT VectorVTIter_next(VectorVTIter *const self)
@@ -107,9 +109,11 @@ void VectorVTIter_new(VectorVTIter *const self, T const *const b, T const *const
 }
 
 // ========================================================================
-// static void VectorVTIterMut_wipe(VectorVTIterMut *const self) {
-//     STRUCTWIPE(self);
-// }
+
+static void VectorVTIterMut_wipe(VectorVTIterMut *const self)
+{
+    STRUCTWIPE(self);
+}
 
 void VectorVTIterMut_destroy(VectorVTIterMut *const self)
 {
@@ -119,8 +123,8 @@ void VectorVTIterMut_destroy(VectorVTIterMut *const self)
 
 void VectorVTIterMut_move(VectorVTIterMut *const self, VectorVTIterMut *const src)
 {
-    VectorVIterMut_move(&self->inner, &src->inner);
-    // do we need to wipe if only 1 struct in struct with own wipe?
+    *self = *src;
+    VectorVTIterMut_wipe(src);
 }
 
 T *WARN_UNUSED_RESULT VectorVTIterMut_next(VectorVTIterMut *const self)

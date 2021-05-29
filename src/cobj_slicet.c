@@ -5,15 +5,20 @@
 
 #include <memory.h> // memmove
 
-void SliceT_destroy(SliceT *const self)
+static void SliceT_wipe(SliceT *const self)
 {
     STRUCTWIPE(self);
+}
+
+void SliceT_destroy(SliceT *const self)
+{
+    SliceT_wipe(self);
 }
 
 void SliceT_move(SliceT *const self, SliceT *const src)
 {
     *self = *src;
-    STRUCTWIPE(src);
+    SliceT_wipe(src);
 }
 
 bool WARN_UNUSED_RESULT SliceT_try_copy(SliceT *self, SliceT const *const src, Error *err)
@@ -118,15 +123,20 @@ void SliceT_iter(SliceT const *const self, SliceTIter *const it)
     SliceTIter_new(it, self->arr, self->arr_end);
 }
 
-void SliceTIter_destroy(SliceTIter *const self)
+static void SliceTIter_wipe(SliceTIter *const self)
 {
     STRUCTWIPE(self);
+}
+
+void SliceTIter_destroy(SliceTIter *const self)
+{
+    SliceTIter_wipe(self);
 }
 
 void SliceTIter_move(SliceTIter *const self, SliceTIter *const src)
 {
     *self = *src;
-    STRUCTWIPE(src);
+    SliceTIter_wipe(src);
 }
 
 bool WARN_UNUSED_RESULT SliceTIter_try_copy(SliceTIter *const self, SliceTIter const *const src)
@@ -151,15 +161,20 @@ void SliceTIter_new(SliceTIter *const self, T const *const b, T const *const e)
     self->e = e;
 }
 
-void SliceTMut_destroy(SliceTMut *const self)
+void SliceTMut_wipe(SliceTMut *const self)
 {
     STRUCTWIPE(self);
+}
+
+void SliceTMut_destroy(SliceTMut *const self)
+{
+    SliceTMut_wipe(self);
 }
 
 void SliceTMut_move(SliceTMut *const self, SliceTMut *const src)
 {
     *self = *src;
-    STRUCTWIPE(src);
+    SliceTMut_wipe(src);
 }
 
 bool WARN_UNUSED_RESULT SliceTMut_try_copy(SliceTMut *self, SliceTMut const *const src, Error *err)
@@ -290,15 +305,20 @@ void SliceTMut_iter_mut(SliceTMut const *const self, SliceTMutIter *const it)
     SliceTMutIter_new(it, self->arr, self->arr_end);
 }
 
-void SliceTMutIter_destroy(SliceTMutIter *const self)
+void SliceTMutIter_wipe(SliceTMutIter *const self)
 {
     STRUCTWIPE(self);
+}
+
+void SliceTMutIter_destroy(SliceTMutIter *const self)
+{
+    SliceTMutIter_wipe(self);
 }
 
 void SliceTMutIter_move(SliceTMutIter *const self, SliceTMutIter *const src)
 {
     *self = *src;
-    STRUCTWIPE(src);
+    SliceTMutIter_wipe(src);
 }
 
 bool WARN_UNUSED_RESULT SliceTMutIter_try_copy(SliceTMutIter *const self,
