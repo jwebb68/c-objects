@@ -36,8 +36,7 @@ int main(int argc, char *argv[]) {
     //etc
 
     VectorVTIter it;
-    VectorVTIter_new(&it, &vec);
-    // or VectorT_iter(&vec, &it);
+    VectorVT_iter(&vec, &it);
     for (T const *p;  NULL != (p = VectorVTIter_next(&it));) {
         // do something with p
         // p->...

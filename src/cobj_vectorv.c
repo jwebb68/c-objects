@@ -100,12 +100,12 @@ void const *VectorV_get_item_at(VectorV *self, Index pos, size_t elem_size)
 
 void VectorV_iter(VectorV const *const self, VectorVIter *const it)
 {
-    VectorVIter_new(it, self);
+    VectorVIter_new(it, self->buf, self->buf_end);
 }
 
-void VectorV_iter_mut(VectorV *const self, VectorVIterMut *const it)
+void VectorV_iter_mut(VectorV const *const self, VectorVIterMut *const it)
 {
-    VectorVIterMut_new(it, self);
+    VectorVIterMut_new(it, self->buf, self->buf_end);
 }
 
 // ==========================================================================
@@ -126,19 +126,19 @@ void VectorVIter_move(VectorVIter *const self, VectorVIter *const src)
     VectorVIter_wipe(src);
 }
 
-void VectorVIter_new(VectorVIter *const self, VectorV const *const vec)
-{
-    self->vec = vec;
-    self->it = vec->buf;
-}
-
 void const *WARN_UNUSED_RESULT VectorVIter_next(VectorVIter *const self, size_t elem_size)
 {
-    if (self->it >= self->vec->buf_pos) {
+    if (self->p >= self->e) {
         return NULL;
     }
-    self->it += elem_size;
-    return self->it;
+    self->p += elem_size;
+    return self->p;
+}
+
+void VectorVIter_new(VectorVIter *const self, void const *const b, void const *const e)
+{
+    self->p = (uint8_t const *)b;
+    self->e = (uint8_t const *)e;
 }
 
 // ==========================================================================
@@ -159,17 +159,17 @@ void VectorVIterMut_move(VectorVIterMut *const self, VectorVIterMut *const src)
     VectorVIterMut_wipe(src);
 }
 
-void VectorVIterMut_new(VectorVIterMut *const self, VectorV *const vec)
-{
-    self->vec = vec;
-    self->it = vec->buf;
-}
-
 void *WARN_UNUSED_RESULT VectorVIterMut_next(VectorVIterMut *const self, size_t elem_size)
 {
-    if (self->it >= self->vec->buf_pos) {
+    if (self->p >= self->e) {
         return NULL;
     }
-    self->it += elem_size;
-    return self->it;
+    self->p += elem_size;
+    return self->p;
+}
+
+void VectorVIterMut_new(VectorVIterMut *const self, void *const b, void *const e)
+{
+    self->p = (uint8_t *)b;
+    self->e = (uint8_t *)e;
 }

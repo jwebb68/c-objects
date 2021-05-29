@@ -42,24 +42,24 @@ bool WARN_UNUSED_RESULT VectorV_pop_back(VectorV *self,
 void *VectorV_get_item_at_mut(VectorV *self, Index pos, size_t elem_size);
 void const *VectorV_get_item_at(VectorV *self, Index pos, size_t elem_size);
 void VectorV_iter(VectorV const *const self, VectorVIter *const it);
-void VectorV_iter_mut(VectorV *const self, VectorVIterMut *const it);
+void VectorV_iter_mut(VectorV const *const self, VectorVIterMut *const it);
 
 struct VectorVIter_ {
-    VectorV const *vec;
-    uint8_t const *it;
+    uint8_t const *p;
+    uint8_t const *e;
 };
 void VectorVIter_destroy(VectorVIter *const self);
 void VectorVIter_move(VectorVIter *const self, VectorVIter *const src);
-void VectorVIter_new(VectorVIter *const self, VectorV const *const vec);
 void const *WARN_UNUSED_RESULT VectorVIter_next(VectorVIter *const self, size_t elem_size);
+void VectorVIter_new(VectorVIter *const self, void const *const b, void const *const e);
 
 struct VectorVIterMut_ {
-    VectorV *vec;
-    uint8_t *it;
+    uint8_t *p;
+    uint8_t *e;
 };
 void VectorVIterMut_destroy(VectorVIterMut *const self);
 void VectorVIterMut_move(VectorVIterMut *const self, VectorVIterMut *const src);
-void VectorVIterMut_new(VectorVIterMut *const self, VectorV *const vec);
 void *WARN_UNUSED_RESULT VectorVIterMut_next(VectorVIterMut *const self, size_t elem_size);
+void VectorVIterMut_new(VectorVIterMut *const self, void *const b, void *const e);
 
 #endif //! defined(CBOJ_VECTORV_H)

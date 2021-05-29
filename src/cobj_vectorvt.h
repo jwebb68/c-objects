@@ -29,7 +29,7 @@ bool WARN_UNUSED_RESULT VectorVT_pop_back(VectorVT *const self, T *const elem);
 T *VectorVT_get_item_at_mut(VectorVT *const self, Index const pos);
 T const *VectorVT_get_item_at(VectorVT *const self, Index const pos);
 void VectorVT_iter(VectorVT const *const self, VectorVTIter *const it);
-void VectorVT_iter_mut(VectorVT *const self, VectorVTIterMut *const it);
+void VectorVT_iter_mut(VectorVT const *const self, VectorVTIterMut *const it);
 
 struct VectorVTIter_ {
     VectorVIter inner;
@@ -37,16 +37,16 @@ struct VectorVTIter_ {
 
 void VectorVTIter_destroy(VectorVTIter *const self);
 void VectorVTIter_move(VectorVTIter *const self, VectorVTIter *const src);
-void VectorVTIter_new(VectorVTIter *const self, VectorVT const *const vec);
 T const *WARN_UNUSED_RESULT VectorVTIter_next(VectorVTIter *const self);
+void VectorVTIter_new(VectorVTIter *const self, T const *const b, T const *const e);
 
 struct VectorVTIterMut_ {
     VectorVIterMut inner;
 };
 void VectorVTIterMut_destroy(VectorVTIterMut *const self);
 void VectorVTIterMut_move(VectorVTIterMut *const self, VectorVTIterMut *const src);
-void VectorVTIterMut_new(VectorVTIterMut *const self, VectorVT *const vec);
 T *WARN_UNUSED_RESULT VectorVTIterMut_next(VectorVTIterMut *const self);
+void VectorVTIterMut_new(VectorVTIterMut *const self, T *const b, T *const e);
 
 // the V/T2 style means that I wouldn't see T in the debugger for the struct.
 // Is there a way of keeping VectorT struct and using VectorV for functions?
