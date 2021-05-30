@@ -1,5 +1,5 @@
-#if !defined(CBOJ_VECTORV_H)
-#    define CBOJ_VECTORV_H
+#if !defined(COBJ_VECTORV_H)
+#    define COBJ_VECTORV_H
 
 ///////////////////////////////////////////////////////////////////////////////
 // can vector internals be commoned across all vectors in C?
@@ -62,4 +62,4 @@ void VectorVMutIter_move(VectorVMutIter *const self, VectorVMutIter *const src);
 void *WARN_UNUSED_RESULT VectorVMutIter_next(VectorVMutIter *const self, size_t elem_size);
 void VectorVMutIter_new(VectorVMutIter *const self, void *const b, void *const e);
 
-#endif //! defined(CBOJ_VECTORV_H)
+#endif // ! defined(COBJ_VECTORV_H)
