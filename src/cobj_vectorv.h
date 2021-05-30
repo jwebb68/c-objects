@@ -20,14 +20,14 @@ typedef struct VectorVMutIter_ VectorVMutIter;
 #    include <stddef.h> // size_t
 
 struct VectorV_ {
-    uint8_t *buf;
-    uint8_t *buf_end;
-    uint8_t *buf_pos;
+    uint8_t *b;
+    uint8_t *e;
+    uint8_t *p;
 };
 
 void VectorV_destroy(VectorV *const self, size_t elem_size, void (*elem_destroy)(void *const));
 void VectorV_move(VectorV *const self, VectorV *const src);
-void VectorV_new(VectorV *const self, uint8_t *const arr, uint8_t *const arr_e);
+void VectorV_new(VectorV *const self, uint8_t *const b, uint8_t *const e);
 bool VectorV_is_empty(VectorV const *const self);
 void VectorV_clear(VectorV *const self, size_t elem_size, void (*elem_destroy)(void *const));
 size_t VectorV_len(VectorV const *const self, size_t elem_size);

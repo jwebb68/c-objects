@@ -23,14 +23,14 @@ typedef size_t Index;
 // TODO: VectorT_malloc/VectorT_free/VectorT_malloc_new/VectorT_free_destroy.
 
 struct VectorT_ {
-    T *arr;
-    T *arr_end;
-    T *arr_pos;
+    T *b;
+    T *e;
+    T *p;
 };
 
 void VectorT_destroy(VectorT *const self);
 void VectorT_move(VectorT *const self, VectorT *const src);
-void VectorT_new(VectorT *const self, T *const arr, size_t len);
+void VectorT_new(VectorT *const self, T *const b, T *const e);
 void VectorT_clear(VectorT *const self);
 bool VectorT_is_empty(VectorT const *const self);
 size_t VectorT_len(VectorT const *const self);

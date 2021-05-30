@@ -29,9 +29,9 @@ void VectorVT_move(VectorVT *const self, VectorVT *const src)
     VectorVT_wipe(src);
 }
 
-void VectorVT_new(VectorVT *const self, T *const arr, size_t const len)
+void VectorVT_new(VectorVT *const self, T *const b, T *const e)
 {
-    VectorV_new(&self->inner, (uint8_t *)arr, (uint8_t *)(arr + len));
+    VectorV_new(&self->inner, (uint8_t *)b, (uint8_t *)e);
 }
 
 bool VectorVT_is_empty(VectorVT const *const self)

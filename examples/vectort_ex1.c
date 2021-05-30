@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 
     T backing[10];
     VectorT vec;
-    VectorT_new(&vec, backing, COBJ_CARRAY_LEN(backing));
+    VectorT_new(&vec, backing, COBJ_CARRAY_END(backing));
 
     T t1;
     T_new_default(&t1);

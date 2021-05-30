@@ -5,7 +5,7 @@
 static void
 VectorV_destroy_elems(VectorV *const self, size_t elem_size, void (*elem_destroy)(void *const))
 {
-    for (uint8_t *it = self->buf; it != self->buf_pos; it += elem_size) {
+    for (uint8_t *it = self->b; it != self->p; it += elem_size) {
         elem_destroy(it);
     }
 }
@@ -27,27 +27,27 @@ void VectorV_move(VectorV *const self, VectorV *const src)
     VectorV_wipe(src);
 }
 
-void VectorV_new(VectorV *const self, uint8_t *const arr, uint8_t *const arr_e)
+void VectorV_new(VectorV *const self, uint8_t *const b, uint8_t *const e)
 {
-    self->buf = arr;
-    self->buf_end = arr_e;
-    self->buf_pos = arr;
+    self->b = b;
+    self->e = e;
+    self->p = b;
 }
 
 bool VectorV_is_empty(VectorV const *const self)
 {
-    return self->buf_pos == self->buf;
+    return self->p == self->b;
 }
 
 void VectorV_clear(VectorV *const self, size_t elem_size, void (*elem_destroy)(void *const))
 {
     VectorV_destroy_elems(self, elem_size, elem_destroy);
-    self->buf_pos = self->buf;
+    self->p = self->b;
 }
 
 size_t VectorV_len(VectorV const *const self, size_t elem_size)
 {
-    return (self->buf_pos - self->buf) / elem_size;
+    return (self->p - self->b) / elem_size;
 }
 
 bool WARN_UNUSED_RESULT VectorV_push_back(VectorV *const self,
@@ -56,11 +56,11 @@ bool WARN_UNUSED_RESULT VectorV_push_back(VectorV *const self,
                                           void (*elem_move)(void *const, void *const))
 {
     // moves, not copies
-    if (self->buf_pos >= self->buf_end) {
+    if (self->p >= self->e) {
         return false;
     }
-    elem_move(self->buf_pos, elem);
-    self->buf_pos += elem_size;
+    elem_move(self->p, elem);
+    self->p += elem_size;
     return true;
 }
 
@@ -70,19 +70,19 @@ bool WARN_UNUSED_RESULT VectorV_pop_back(VectorV *const self,
                                          void (*elem_move)(void *const, void *const))
 {
     // moves, not copies
-    if (self->buf_pos == self->buf) {
+    if (self->p == self->b) {
         return false;
     }
-    self->buf_pos -= elem_size;
-    elem_move(elem, self->buf_pos);
+    self->p -= elem_size;
+    elem_move(elem, self->p);
     return true;
 }
 
 void *VectorV_get_item_at_mut(VectorV const *const self, Index pos, size_t elem_size)
 {
     // null if no item at pos
-    uint8_t *p = self->buf + (pos * elem_size);
-    if (p >= self->buf_end) {
+    uint8_t *p = self->p + (pos * elem_size);
+    if (p >= self->e) {
         return NULL;
     }
     return p;
@@ -91,8 +91,8 @@ void *VectorV_get_item_at_mut(VectorV const *const self, Index pos, size_t elem_
 void const *VectorV_get_item_at(VectorV const *const self, Index pos, size_t elem_size)
 {
     // null if no item at pos
-    uint8_t *p = self->buf + (pos * elem_size);
-    if (p >= self->buf_end) {
+    uint8_t *p = self->b + (pos * elem_size);
+    if (p >= self->e) {
         return NULL;
     }
     return p;
@@ -100,12 +100,12 @@ void const *VectorV_get_item_at(VectorV const *const self, Index pos, size_t ele
 
 void VectorV_iter(VectorV const *const self, VectorVIter *const it)
 {
-    VectorVIter_new(it, self->buf, self->buf_pos);
+    VectorVIter_new(it, self->b, self->p);
 }
 
 void VectorV_iter_mut(VectorV const *const self, VectorVMutIter *const it)
 {
-    VectorVMutIter_new(it, self->buf, self->buf_pos);
+    VectorVMutIter_new(it, self->b, self->p);
 }
 
 // ==========================================================================

@@ -20,7 +20,7 @@ struct VectorVT_ {
 };
 void VectorVT_destroy(VectorVT *const self);
 void VectorVT_move(VectorVT *const self, VectorVT *const src);
-void VectorVT_new(VectorVT *const self, T *const arr, size_t const len);
+void VectorVT_new(VectorVT *const self, T *const b, T *const e);
 bool VectorVT_is_empty(VectorVT const *const self);
 void VectorVT_clear(VectorVT *const self);
 size_t VectorVT_len(VectorVT const *const self);

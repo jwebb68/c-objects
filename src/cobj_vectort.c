@@ -11,7 +11,7 @@ static void VectorT_wipe(VectorT *const self)
 
 void VectorT_destroy(VectorT *const self)
 {
-    ArrayT_destroy_p(self->arr, self->arr_pos);
+    ArrayT_destroy_p(self->b, self->p);
     VectorT_wipe(self);
 }
 
@@ -21,33 +21,33 @@ void VectorT_move(VectorT *const self, VectorT *const src)
     VectorT_wipe(self);
 }
 
-void VectorT_new(VectorT *const self, T *const arr, size_t len)
+void VectorT_new(VectorT *const self, T *const b, T *const e)
 {
     // don't use init lists, they are inefficient.
-    self->arr = arr;
-    self->arr_end = arr + len;
-    self->arr_pos = arr;
+    self->b = b;
+    self->e = e;
+    self->p = b;
 }
 
 void VectorT_clear(VectorT *const self)
 {
-    ArrayT_destroy_p(self->arr, self->arr_pos);
-    self->arr_pos = self->arr;
+    ArrayT_destroy_p(self->b, self->p);
+    self->p = self->b;
 }
 
 bool VectorT_is_empty(VectorT const *const self)
 {
-    return self->arr_pos == self->arr;
+    return self->p == self->b;
 }
 
 size_t VectorT_len(VectorT const *const self)
 {
-    return self->arr_pos - self->arr;
+    return self->p - self->b;
 }
 
 size_t VectorT_alloc(VectorT const *const self)
 {
-    return self->arr_end - self->arr;
+    return self->e - self->b;
 }
 
 bool WARN_UNUSED_RESULT VectorT_realloc(VectorT *const self, size_t newalloc)
@@ -63,30 +63,30 @@ bool WARN_UNUSED_RESULT VectorT_realloc(VectorT *const self, size_t newalloc)
 bool WARN_UNUSED_RESULT VectorT_push_back(VectorT *const self, T *const item)
 {
     // moves item
-    if (self->arr_pos >= self->arr_end) {
+    if (self->p >= self->e) {
         return false;
     }
-    T_move(self->arr_pos, item);
-    self->arr_pos += 1;
+    T_move(self->p, item);
+    self->p += 1;
     return true;
 }
 
 bool WARN_UNUSED_RESULT VectorT_pop_back(VectorT *const self, T *const item)
 {
     // moves item
-    if (self->arr_pos == self->arr) {
+    if (self->p == self->b) {
         return false;
     }
-    self->arr_pos -= 1;
-    T_move(item, self->arr_pos);
+    self->p -= 1;
+    T_move(item, self->p);
     return true;
 }
 
 T *VectorT_get_item_at_mut(VectorT const *const self, Index pos)
 {
     // NULL if not exist
-    T *p = self->arr + pos;
-    if (p >= self->arr_end) {
+    T *p = self->b + pos;
+    if (p >= self->e) {
         return NULL;
     }
     return p;
@@ -95,8 +95,8 @@ T *VectorT_get_item_at_mut(VectorT const *const self, Index pos)
 T const *VectorT_get_item_at(VectorT const *const self, Index pos)
 {
     // NULL if not exist
-    T *p = self->arr + pos;
-    if (p >= self->arr_end) {
+    T *p = self->b + pos;
+    if (p >= self->e) {
         return NULL;
     }
     return p;
@@ -104,20 +104,20 @@ T const *VectorT_get_item_at(VectorT const *const self, Index pos)
 
 void VectorT_as_slice(VectorT const *const self, SliceT *const s)
 {
-    SliceT_new(s, self->arr, VectorT_len(self));
+    SliceT_new(s, self->b, self->p);
 }
 
 void VectorT_as_slice_mut(VectorT const *const self, SliceTMut *const s)
 {
-    SliceTMut_new(s, self->arr, VectorT_len(self));
+    SliceTMut_new(s, self->b, self->p);
 }
 
 void VectorT_iter(VectorT const *const self, SliceTIter *const it)
 {
-    SliceTIter_new(it, self->arr, self->arr_pos);
+    SliceTIter_new(it, self->b, self->p);
 }
 
 void VectorT_iter_mut(VectorT const *const self, SliceTMutIter *const it)
 {
-    SliceTMutIter_new(it, self->arr, self->arr_pos);
+    SliceTMutIter_new(it, self->b, self->p);
 }

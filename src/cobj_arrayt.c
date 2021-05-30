@@ -47,12 +47,12 @@ void ArrayT_new_default(T *const arr, size_t len)
 
 void ArrayT_as_slice(T const *const arr, size_t len, SliceT *const s)
 {
-    SliceT_new(s, arr, len);
+    SliceT_new(s, arr, arr + len);
 }
 
 void ArrayT_as_slice_mut(T *const arr, size_t len, SliceTMut *const s)
 {
-    SliceTMut_new(s, arr, len);
+    SliceTMut_new(s, arr, arr + len);
 }
 
 void ArrayT_iter(T const *const arr, size_t len, SliceTIter *const it)

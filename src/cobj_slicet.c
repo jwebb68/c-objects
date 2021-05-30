@@ -28,10 +28,10 @@ bool WARN_UNUSED_RESULT SliceT_try_copy(SliceT *self, SliceT const *const src, E
     return true;
 }
 
-void SliceT_new(SliceT *const self, T const *arr, size_t len)
+void SliceT_new(SliceT *const self, T const *b, T const *e)
 {
-    self->arr = arr;
-    self->arr_end = arr + len;
+    self->b = b;
+    self->e = e;
 }
 
 // T const *SliceT_ptr(SliceT const *const self) {
@@ -44,18 +44,18 @@ void SliceT_new(SliceT *const self, T const *arr, size_t len)
 
 size_t SliceT_len(SliceT const *const self)
 {
-    return self->arr_end - self->arr;
+    return self->e - self->b;
 }
 
 bool SliceT_is_empty(SliceT const *const self)
 {
-    return self->arr_end == self->arr;
+    return self->e == self->b;
 }
 
 T const *SliceT_get_item_at(SliceT const *const self, size_t pos)
 {
-    T const *p = self->arr + pos;
-    if (p >= self->arr_end) {
+    T const *p = self->b + pos;
+    if (p >= self->e) {
         return NULL;
     }
     return p;
@@ -76,13 +76,13 @@ bool SliceT_try_subslice(SliceT const *const self,
     if (e > SliceT_len(self)) {
         return ERROR_RAISE(err, Error_EFAIL);
     }
-    SliceT_new(dest, self->arr + b, e - b);
+    SliceT_new(dest, self->b + b, self->b + (e - b));
     return true;
 }
 
 void SliceT_iter(SliceT const *const self, SliceTIter *const it)
 {
-    SliceTIter_new(it, self->arr, self->arr_end);
+    SliceTIter_new(it, self->b, self->e);
 }
 
 // =============================================================================
@@ -152,10 +152,10 @@ bool WARN_UNUSED_RESULT SliceTMut_try_copy(SliceTMut *self,
     return true;
 }
 
-void SliceTMut_new(SliceTMut *const self, T *const arr, size_t len)
+void SliceTMut_new(SliceTMut *const self, T *const b, T *const e)
 {
-    self->arr = arr;
-    self->arr_end = arr + len;
+    self->b = b;
+    self->e = e;
 }
 
 // T *SliceTMut_ptr(SliceTMut const *const self) {
@@ -168,18 +168,18 @@ void SliceTMut_new(SliceTMut *const self, T *const arr, size_t len)
 
 size_t SliceTMut_len(SliceTMut const *const self)
 {
-    return self->arr_end - self->arr;
+    return self->e - self->b;
 }
 
 bool SliceTMut_is_empty(SliceTMut const *const self)
 {
-    return self->arr_end == self->arr;
+    return self->e == self->b;
 }
 
 bool SliceTMut_try_subslice(SliceTMut const *const self,
                             size_t b,
                             size_t e,
-                            SliceTMut *const dest,
+                            SliceT *const dest,
                             Error *const err)
 {
     if (b > e) {
@@ -191,14 +191,32 @@ bool SliceTMut_try_subslice(SliceTMut const *const self,
     if (e > SliceTMut_len(self)) {
         return ERROR_RAISE(err, Error_EFAIL);
     }
-    SliceTMut_new(dest, self->arr + b, e - b);
+    SliceT_new(dest, self->b + b, self->b + (e - b));
+    return true;
+}
+
+bool SliceTMut_try_subslice_mut(SliceTMut const *const self,
+                                size_t b,
+                                size_t e,
+                                SliceTMut *const dest,
+                                Error *const err)
+{
+    if (b > e) {
+        return ERROR_RAISE(err, Error_EFAIL);
+    }
+    if (b > SliceTMut_len(self)) {
+        return ERROR_RAISE(err, Error_EFAIL);
+    }
+    if (e > SliceTMut_len(self)) {
+        return ERROR_RAISE(err, Error_EFAIL);
+    }
+    SliceTMut_new(dest, self->b + b, self->b + (e - b));
     return true;
 }
 
 void SliceTMut_as_slice(SliceTMut const *const self, SliceT *const s)
 {
-    s->arr = self->arr;
-    s->arr_end = self->arr_end;
+    SliceT_new(s, self->b, self->e);
 }
 
 bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self,
@@ -249,15 +267,15 @@ bool WARN_UNUSED_RESULT SliceTMut_try_copy_from(SliceTMut *const self,
     //     T_destroy(it);
     // }
     bool ok = true;
-    T *d_it = self->arr;
-    for (T const *s_it = src->arr; d_it != self->arr_end; ++d_it, ++s_it) {
+    T *d_it = self->b;
+    for (T const *s_it = src->b; d_it != self->e; ++d_it, ++s_it) {
         ok = T_try_copy(d_it, s_it, err);
         if (!ok) {
             break;
         }
     }
     if (!ok) {
-        for (T *it = self->arr; it != d_it; ++it) {
+        for (T *it = self->b; it != d_it; ++it) {
             T_destroy(it);
         }
     }
@@ -266,12 +284,12 @@ bool WARN_UNUSED_RESULT SliceTMut_try_copy_from(SliceTMut *const self,
 
 void SliceTMut_iter(SliceTMut const *const self, SliceTIter *const it)
 {
-    SliceTIter_new(it, self->arr, self->arr_end);
+    SliceTIter_new(it, self->b, self->e);
 }
 
 void SliceTMut_iter_mut(SliceTMut const *const self, SliceTMutIter *const it)
 {
-    SliceTMutIter_new(it, self->arr, self->arr_end);
+    SliceTMutIter_new(it, self->b, self->e);
 }
 
 // ============================================================================
