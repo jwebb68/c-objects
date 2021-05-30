@@ -69,70 +69,22 @@ T const *VectorVT_get_item_at(VectorVT const *const self, Index const pos)
     return (T const *)VectorV_get_item_at(&self->inner, pos, sizeof(T));
 }
 
-void VectorVT_iter(VectorVT const *const self, VectorVTIter *const it)
+void VectorVT_as_slice(VectorVT const *const self, SliceVT *const s)
+{
+    VectorV_as_slice(&self->inner, &s->inner);
+}
+
+void VectorVT_as_slice_mut(VectorVT const *const self, SliceVTMut *const s)
+{
+    VectorV_as_slice_mut(&self->inner, &s->inner);
+}
+
+void VectorVT_iter(VectorVT const *const self, SliceVTIter *const it)
 {
     VectorV_iter(&self->inner, &it->inner);
 }
 
-void VectorVT_iter_mut(VectorVT const *const self, VectorVTMutIter *const it)
+void VectorVT_iter_mut(VectorVT const *const self, SliceVTMutIter *const it)
 {
     VectorV_iter_mut(&self->inner, &it->inner);
-}
-
-//===========================================================================
-
-static void VectorVTIter_wipe(VectorVTIter *const self)
-{
-    STRUCTWIPE(self);
-}
-
-void VectorVTIter_destroy(VectorVTIter *const self)
-{
-    VectorVIter_destroy(&self->inner);
-    // do we need to wipe if only 1 struct in struct with own wipe?
-}
-
-void VectorVTIter_move(VectorVTIter *const self, VectorVTIter *const src)
-{
-    *self = *src;
-    VectorVTIter_wipe(src);
-}
-
-T const *WARN_UNUSED_RESULT VectorVTIter_next(VectorVTIter *const self)
-{
-    return (T const *)VectorVIter_next(&self->inner, sizeof(T));
-}
-
-void VectorVTIter_new(VectorVTIter *const self, T const *const b, T const *const e)
-{
-    VectorVIter_new(&self->inner, b, e);
-}
-
-// ========================================================================
-
-static void VectorVTMutIter_wipe(VectorVTMutIter *const self)
-{
-    STRUCTWIPE(self);
-}
-
-void VectorVTMutIter_destroy(VectorVTMutIter *const self)
-{
-    VectorVMutIter_destroy(&self->inner);
-    // do we need to wipe if only 1 struct in struct with own wipe?
-}
-
-void VectorVTMutIter_move(VectorVTMutIter *const self, VectorVTMutIter *const src)
-{
-    *self = *src;
-    VectorVTMutIter_wipe(src);
-}
-
-T *WARN_UNUSED_RESULT VectorVTMutIter_next(VectorVTMutIter *const self)
-{
-    return (T *)VectorVMutIter_next(&self->inner, sizeof(T));
-}
-
-void VectorVTMutIter_new(VectorVTMutIter *const self, T *const b, T *const e)
-{
-    VectorVMutIter_new(&self->inner, b, e);
 }

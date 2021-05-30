@@ -98,80 +98,22 @@ void const *VectorV_get_item_at(VectorV const *const self, Index pos, size_t ele
     return p;
 }
 
-void VectorV_iter(VectorV const *const self, VectorVIter *const it)
+void VectorV_as_slice(VectorV const *const self, SliceV *const s)
 {
-    VectorVIter_new(it, self->b, self->p);
+    SliceV_new(s, self->b, self->p);
 }
 
-void VectorV_iter_mut(VectorV const *const self, VectorVMutIter *const it)
+void VectorV_as_slice_mut(VectorV const *const self, SliceVMut *const s)
 {
-    VectorVMutIter_new(it, self->b, self->p);
+    SliceVMut_new(s, self->b, self->p);
 }
 
-// ==========================================================================
-
-static void VectorVIter_wipe(VectorVIter *const self)
+void VectorV_iter(VectorV const *const self, SliceVIter *const it)
 {
-    STRUCTWIPE(self);
+    SliceVIter_new(it, self->b, self->p);
 }
 
-void VectorVIter_destroy(VectorVIter *const self)
+void VectorV_iter_mut(VectorV const *const self, SliceVMutIter *const it)
 {
-    VectorVIter_wipe(self);
-}
-
-void VectorVIter_move(VectorVIter *const self, VectorVIter *const src)
-{
-    *self = *src;
-    VectorVIter_wipe(src);
-}
-
-void const *WARN_UNUSED_RESULT VectorVIter_next(VectorVIter *const self, size_t elem_size)
-{
-    uint8_t const *const p = self->p;
-    if (p >= self->e) {
-        return NULL;
-    }
-    self->p += elem_size;
-    return p;
-}
-
-void VectorVIter_new(VectorVIter *const self, void const *const b, void const *const e)
-{
-    self->p = (uint8_t const *)b;
-    self->e = (uint8_t const *)e;
-}
-
-// ==========================================================================
-
-static void VectorVMutIter_wipe(VectorVMutIter *const self)
-{
-    STRUCTWIPE(self);
-}
-
-void VectorVMutIter_destroy(VectorVMutIter *const self)
-{
-    VectorVMutIter_wipe(self);
-}
-
-void VectorVMutIter_move(VectorVMutIter *const self, VectorVMutIter *const src)
-{
-    *self = *src;
-    VectorVMutIter_wipe(src);
-}
-
-void *WARN_UNUSED_RESULT VectorVMutIter_next(VectorVMutIter *const self, size_t elem_size)
-{
-    uint8_t *const p = self->p;
-    if (p >= self->e) {
-        return NULL;
-    }
-    self->p += elem_size;
-    return p;
-}
-
-void VectorVMutIter_new(VectorVMutIter *const self, void *const b, void *const e)
-{
-    self->p = (uint8_t *)b;
-    self->e = (uint8_t *)e;
+    SliceVMutIter_new(it, self->b, self->p);
 }

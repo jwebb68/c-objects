@@ -10,10 +10,9 @@
 // but, idea is to keep functions small so they'll be inlined so
 // the templated version should not appear as sep functions.
 typedef struct VectorV_ VectorV;
-typedef struct VectorVIter_ VectorVIter;
-typedef struct VectorVMutIter_ VectorVMutIter;
 
 #    include "cobj_defs.h" // WARN_RESULT
+#    include "cobj_slicev.h"
 
 #    include <inttypes.h> // uint8_t
 #    include <stdbool.h>
@@ -41,25 +40,11 @@ bool WARN_UNUSED_RESULT VectorV_pop_back(VectorV *const self,
                                          void (*elem_move)(void *const, void *const));
 void *VectorV_get_item_at_mut(VectorV const *const self, Index pos, size_t elem_size);
 void const *VectorV_get_item_at(VectorV const *const self, Index pos, size_t elem_size);
-void VectorV_iter(VectorV const *const self, VectorVIter *const it);
-void VectorV_iter_mut(VectorV const *const self, VectorVMutIter *const it);
 
-struct VectorVIter_ {
-    uint8_t const *p;
-    uint8_t const *e;
-};
-void VectorVIter_destroy(VectorVIter *const self);
-void VectorVIter_move(VectorVIter *const self, VectorVIter *const src);
-void const *WARN_UNUSED_RESULT VectorVIter_next(VectorVIter *const self, size_t elem_size);
-void VectorVIter_new(VectorVIter *const self, void const *const b, void const *const e);
+void VectorV_as_slice(VectorV const *const self, SliceV *const s);
+void VectorV_as_slice_mut(VectorV const *const self, SliceVMut *const s);
 
-struct VectorVMutIter_ {
-    uint8_t *p;
-    uint8_t *e;
-};
-void VectorVMutIter_destroy(VectorVMutIter *const self);
-void VectorVMutIter_move(VectorVMutIter *const self, VectorVMutIter *const src);
-void *WARN_UNUSED_RESULT VectorVMutIter_next(VectorVMutIter *const self, size_t elem_size);
-void VectorVMutIter_new(VectorVMutIter *const self, void *const b, void *const e);
+void VectorV_iter(VectorV const *const self, SliceVIter *const it);
+void VectorV_iter_mut(VectorV const *const self, SliceVMutIter *const it);
 
 #endif // ! defined(COBJ_VECTORV_H)

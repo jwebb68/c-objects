@@ -35,14 +35,14 @@ int main(int argc, char *argv[]) {
 
     //etc
 
-    VectorVTIter it;
+    SliceVTIter it;
     VectorVT_iter(&vec, &it);
-    for (T const *p;  NULL != (p = VectorVTIter_next(&it));) {
+    for (T const *p;  NULL != (p = SliceVTIter_next(&it));) {
         // do something with p
         // p->...
         printf("foo %d", p->dummy);
     }
-    VectorVTIter_destroy(&it);
+    SliceVTIter_destroy(&it);
 
     printf("foo");
 

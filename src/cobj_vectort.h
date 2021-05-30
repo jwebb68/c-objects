@@ -7,8 +7,6 @@
 
 // forward declares
 typedef struct VectorT_ VectorT;
-typedef struct VectorTIter_ VectorTIter;
-typedef struct VectorTIterMut_ VectorTIterMut;
 
 // includes
 #    include "cobj_slicet.h"
