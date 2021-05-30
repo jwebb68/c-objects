@@ -103,9 +103,9 @@ void VectorV_iter(VectorV const *const self, VectorVIter *const it)
     VectorVIter_new(it, self->buf, self->buf_pos);
 }
 
-void VectorV_iter_mut(VectorV const *const self, VectorVIterMut *const it)
+void VectorV_iter_mut(VectorV const *const self, VectorVMutIter *const it)
 {
-    VectorVIterMut_new(it, self->buf, self->buf_pos);
+    VectorVMutIter_new(it, self->buf, self->buf_pos);
 }
 
 // ==========================================================================
@@ -144,23 +144,23 @@ void VectorVIter_new(VectorVIter *const self, void const *const b, void const *c
 
 // ==========================================================================
 
-static void VectorVIterMut_wipe(VectorVIterMut *const self)
+static void VectorVMutIter_wipe(VectorVMutIter *const self)
 {
     STRUCTWIPE(self);
 }
 
-void VectorVIterMut_destroy(VectorVIterMut *const self)
+void VectorVMutIter_destroy(VectorVMutIter *const self)
 {
-    VectorVIterMut_wipe(self);
+    VectorVMutIter_wipe(self);
 }
 
-void VectorVIterMut_move(VectorVIterMut *const self, VectorVIterMut *const src)
+void VectorVMutIter_move(VectorVMutIter *const self, VectorVMutIter *const src)
 {
     *self = *src;
-    VectorVIterMut_wipe(src);
+    VectorVMutIter_wipe(src);
 }
 
-void *WARN_UNUSED_RESULT VectorVIterMut_next(VectorVIterMut *const self, size_t elem_size)
+void *WARN_UNUSED_RESULT VectorVMutIter_next(VectorVMutIter *const self, size_t elem_size)
 {
     uint8_t *const p = self->p;
     if (p >= self->e) {
@@ -170,7 +170,7 @@ void *WARN_UNUSED_RESULT VectorVIterMut_next(VectorVIterMut *const self, size_t 
     return p;
 }
 
-void VectorVIterMut_new(VectorVIterMut *const self, void *const b, void *const e)
+void VectorVMutIter_new(VectorVMutIter *const self, void *const b, void *const e)
 {
     self->p = (uint8_t *)b;
     self->e = (uint8_t *)e;

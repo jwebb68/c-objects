@@ -74,7 +74,7 @@ void VectorVT_iter(VectorVT const *const self, VectorVTIter *const it)
     VectorV_iter(&self->inner, &it->inner);
 }
 
-void VectorVT_iter_mut(VectorVT const *const self, VectorVTIterMut *const it)
+void VectorVT_iter_mut(VectorVT const *const self, VectorVTMutIter *const it)
 {
     VectorV_iter_mut(&self->inner, &it->inner);
 }
@@ -110,29 +110,29 @@ void VectorVTIter_new(VectorVTIter *const self, T const *const b, T const *const
 
 // ========================================================================
 
-static void VectorVTIterMut_wipe(VectorVTIterMut *const self)
+static void VectorVTMutIter_wipe(VectorVTMutIter *const self)
 {
     STRUCTWIPE(self);
 }
 
-void VectorVTIterMut_destroy(VectorVTIterMut *const self)
+void VectorVTMutIter_destroy(VectorVTMutIter *const self)
 {
-    VectorVIterMut_destroy(&self->inner);
+    VectorVMutIter_destroy(&self->inner);
     // do we need to wipe if only 1 struct in struct with own wipe?
 }
 
-void VectorVTIterMut_move(VectorVTIterMut *const self, VectorVTIterMut *const src)
+void VectorVTMutIter_move(VectorVTMutIter *const self, VectorVTMutIter *const src)
 {
     *self = *src;
-    VectorVTIterMut_wipe(src);
+    VectorVTMutIter_wipe(src);
 }
 
-T *WARN_UNUSED_RESULT VectorVTIterMut_next(VectorVTIterMut *const self)
+T *WARN_UNUSED_RESULT VectorVTMutIter_next(VectorVTMutIter *const self)
 {
-    return (T *)VectorVIterMut_next(&self->inner, sizeof(T));
+    return (T *)VectorVMutIter_next(&self->inner, sizeof(T));
 }
 
-void VectorVTIterMut_new(VectorVTIterMut *const self, T *const b, T *const e)
+void VectorVTMutIter_new(VectorVTMutIter *const self, T *const b, T *const e)
 {
-    VectorVIterMut_new(&self->inner, b, e);
+    VectorVMutIter_new(&self->inner, b, e);
 }

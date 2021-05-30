@@ -3,7 +3,7 @@
 
 typedef struct VectorVT_ VectorVT;
 typedef struct VectorVTIter_ VectorVTIter;
-typedef struct VectorVTIterMut_ VectorVTIterMut;
+typedef struct VectorVTMutIter_ VectorVTMutIter;
 
 #    include "cobj_vectorv.h"
 #    include "t.h"
@@ -29,7 +29,7 @@ bool WARN_UNUSED_RESULT VectorVT_pop_back(VectorVT *const self, T *const elem);
 T *VectorVT_get_item_at_mut(VectorVT const *const self, Index const pos);
 T const *VectorVT_get_item_at(VectorVT const *const self, Index const pos);
 void VectorVT_iter(VectorVT const *const self, VectorVTIter *const it);
-void VectorVT_iter_mut(VectorVT const *const self, VectorVTIterMut *const it);
+void VectorVT_iter_mut(VectorVT const *const self, VectorVTMutIter *const it);
 
 struct VectorVTIter_ {
     VectorVIter inner;
@@ -40,13 +40,13 @@ void VectorVTIter_move(VectorVTIter *const self, VectorVTIter *const src);
 T const *WARN_UNUSED_RESULT VectorVTIter_next(VectorVTIter *const self);
 void VectorVTIter_new(VectorVTIter *const self, T const *const b, T const *const e);
 
-struct VectorVTIterMut_ {
-    VectorVIterMut inner;
+struct VectorVTMutIter_ {
+    VectorVMutIter inner;
 };
-void VectorVTIterMut_destroy(VectorVTIterMut *const self);
-void VectorVTIterMut_move(VectorVTIterMut *const self, VectorVTIterMut *const src);
-T *WARN_UNUSED_RESULT VectorVTIterMut_next(VectorVTIterMut *const self);
-void VectorVTIterMut_new(VectorVTIterMut *const self, T *const b, T *const e);
+void VectorVTMutIter_destroy(VectorVTMutIter *const self);
+void VectorVTMutIter_move(VectorVTMutIter *const self, VectorVTMutIter *const src);
+T *WARN_UNUSED_RESULT VectorVTMutIter_next(VectorVTMutIter *const self);
+void VectorVTMutIter_new(VectorVTMutIter *const self, T *const b, T *const e);
 
 // the V/T2 style means that I wouldn't see T in the debugger for the struct.
 // Is there a way of keeping VectorT struct and using VectorV for functions?
@@ -71,9 +71,9 @@ void VectorVTIterMut_new(VectorVTIterMut *const self, T *const b, T *const e);
 #    define m_VectorVTIter_new(T, self, vec) VectorVIter_new((self), (vec))
 #    define m_VectorVTIter_next(T, self) ((T *)VectorVIter_next(self))
 
-#    define m_VectorVTIterMut(T, name) VectorVIterMut name
-#    define m_VectorVTIterMut_destroy(T, self) VectorVIterMut_destroy((self))
-#    define m_VectorVTIterMut_new(T, self, vec) VectorVIterMut_new((self), (vec))
-#    define m_VectorVTIterMut_next(T, self) ((T *)VectorVIterMut_next(self))
+#    define m_VectorVTMutIter(T, name) VectorVIterMut name
+#    define m_VectorVTMutIter_destroy(T, self) VectorVIterMut_destroy((self))
+#    define m_VectorVTMutIter_new(T, self, vec) VectorVIterMut_new((self), (vec))
+#    define m_VectorVTMutIter_next(T, self) ((T *)VectorVIterMut_next(self))
 
 #endif //! defined(COBJ_VECTORVT_H)
