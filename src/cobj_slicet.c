@@ -21,7 +21,7 @@ void SliceT_move(SliceT *const self, SliceT *const src)
     SliceT_wipe(src);
 }
 
-bool WARN_UNUSED_RESULT SliceT_try_copy(SliceT *self, SliceT const *const src, Error *err)
+bool WARN_UNUSED_RESULT SliceT_try_copy(SliceT *self, SliceT const *const src, Error *const err)
 {
     UNUSED_ARG(err);
     *self = *src;
@@ -65,7 +65,7 @@ bool SliceT_try_subslice(SliceT const *const self,
                          size_t b,
                          size_t e,
                          SliceT *const dest,
-                         Error *err)
+                         Error *const err)
 {
     if (b > e) {
         return ERROR_RAISE(err, Error_EFAIL);
@@ -143,14 +143,16 @@ void SliceTMut_move(SliceTMut *const self, SliceTMut *const src)
     SliceTMut_wipe(src);
 }
 
-bool WARN_UNUSED_RESULT SliceTMut_try_copy(SliceTMut *self, SliceTMut const *const src, Error *err)
+bool WARN_UNUSED_RESULT SliceTMut_try_copy(SliceTMut *self,
+                                           SliceTMut const *const src,
+                                           Error *const err)
 {
     UNUSED_ARG(err);
     *self = *src;
     return true;
 }
 
-void SliceTMut_new(SliceTMut *const self, T *arr, size_t len)
+void SliceTMut_new(SliceTMut *const self, T *const arr, size_t len)
 {
     self->arr = arr;
     self->arr_end = arr + len;
@@ -178,7 +180,7 @@ bool SliceTMut_try_subslice(SliceTMut const *const self,
                             size_t b,
                             size_t e,
                             SliceTMut *const dest,
-                            Error *err)
+                            Error *const err)
 {
     if (b > e) {
         return ERROR_RAISE(err, Error_EFAIL);
@@ -201,7 +203,7 @@ void SliceTMut_as_slice(SliceTMut const *const self, SliceT *const s)
 
 bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self,
                                                 SliceTMut const *const src,
-                                                Error *err)
+                                                Error *const err)
 {
     // move contents of one slice into another, both structs must be initialised., what structs
     // refer to must be initialised? or dest must not be initialised.
@@ -229,7 +231,7 @@ bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self,
 
 bool WARN_UNUSED_RESULT SliceTMut_try_copy_from(SliceTMut *const self,
                                                 SliceT const *const src,
-                                                Error *err)
+                                                Error *const err)
 {
     // copy contents of one slice into another, both structs must be initialised., what structs
     // refer to must be initialised? or dest must not be initialised.

@@ -45,13 +45,13 @@ void VectorV_clear(VectorV *const self, size_t elem_size, void (*elem_destroy)(v
     self->buf_pos = self->buf;
 }
 
-size_t VectorV_len(VectorV const *self, size_t elem_size)
+size_t VectorV_len(VectorV const *const self, size_t elem_size)
 {
     return (self->buf_pos - self->buf) / elem_size;
 }
 
-bool WARN_UNUSED_RESULT VectorV_push_back(VectorV *self,
-                                          void *elem,
+bool WARN_UNUSED_RESULT VectorV_push_back(VectorV *const self,
+                                          void *const elem,
                                           size_t elem_size,
                                           void (*elem_move)(void *const, void *const))
 {

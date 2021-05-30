@@ -12,7 +12,7 @@ static void BoxVT_move_elem(void *const elem, void *const src)
     T_move((T *)elem, (T *)src);
 }
 
-static bool BoxVT_try_copy_elem(void *self, void const *src, Error *err)
+static bool BoxVT_try_copy_elem(void *const self, void const *src, Error *const err)
 {
     return T_try_copy((T *)self, (T const *)src, err);
 }
@@ -34,7 +34,7 @@ void BoxVT_move(BoxVT *const self, BoxVT *const src)
     BoxVT_wipe(src);
 }
 
-bool WARN_UNUSED_RESULT BoxVT_try_copy(BoxVT *const self, BoxVT const *const v, Error *err)
+bool WARN_UNUSED_RESULT BoxVT_try_copy(BoxVT *const self, BoxVT const *const v, Error *const err)
 {
     return BoxV_try_copy(&self->inner, &v->inner, err, sizeof(T), BoxVT_try_copy_elem);
 }
@@ -58,7 +58,7 @@ void BoxVT_new_own(BoxVT *const self, T *const p)
 //  T_new(&self->elem, ...);
 //}
 
-bool WARN_UNUSED_RESULT BoxVT_try_new_from_T(BoxVT *const self, T *const v, Error *err)
+bool WARN_UNUSED_RESULT BoxVT_try_new_from_T(BoxVT *const self, T *const v, Error *const err)
 {
     return BoxV_try_new_from(&self->inner, v, err, sizeof(T), BoxVT_move_elem);
 }

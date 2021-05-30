@@ -19,7 +19,7 @@ struct BoxVT_ {
 
 void BoxVT_destroy(BoxVT *const self);
 void BoxVT_move(BoxVT *const self, BoxVT *const src);
-bool WARN_UNUSED_RESULT BoxVT_try_copy(BoxVT *const self, BoxVT const *const v, Error *err);
+bool WARN_UNUSED_RESULT BoxVT_try_copy(BoxVT *const self, BoxVT const *const v, Error *const err);
 
 T const *BoxVT_deref(BoxVT const *const self);
 T *BoxVT_deref_mut(BoxVT *const self);
@@ -28,6 +28,6 @@ void BoxVT_new_own(BoxVT *const self, T *const p);
 
 // void BoxVT_new_(BoxVT_ *const self, ...);
 
-bool WARN_UNUSED_RESULT BoxVT_try_new_from_T(BoxVT *const self, T *const v, Error *err);
+bool WARN_UNUSED_RESULT BoxVT_try_new_from_T(BoxVT *const self, T *const v, Error *const err);
 
 #endif //! defined(COBJ_BOXVT_H)

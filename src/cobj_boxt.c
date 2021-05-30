@@ -28,7 +28,7 @@ void BoxT_move(BoxT *const self, BoxT *const src)
     BoxT_wipe(src);
 }
 
-bool WARN_UNUSED_RESULT BoxT_try_copy(BoxT *const self, BoxT const *const src, Error *err)
+bool WARN_UNUSED_RESULT BoxT_try_copy(BoxT *const self, BoxT const *const src, Error *const err)
 {
     T *const p = _T_malloc();
     if (p == NULL) {
@@ -81,7 +81,7 @@ void BoxT_new_own(BoxT *const self, T *const p)
     self->elem = p;
 }
 
-bool WARN_UNUSED_RESULT BoxT_try_new_int(BoxT *const self, int v, Error *err)
+bool WARN_UNUSED_RESULT BoxT_try_new_int(BoxT *const self, int v, Error *const err)
 {
     // err, malloc can fail, so new can fail
     // try_new ?
@@ -95,7 +95,7 @@ bool WARN_UNUSED_RESULT BoxT_try_new_int(BoxT *const self, int v, Error *err)
     return true;
 }
 
-bool WARN_UNUSED_RESULT BoxT_try_new_from_T(BoxT *const self, T *const v, Error *err)
+bool WARN_UNUSED_RESULT BoxT_try_new_from_T(BoxT *const self, T *const v, Error *const err)
 {
     T *const p = _T_malloc();
     if (p == NULL) {
@@ -107,7 +107,7 @@ bool WARN_UNUSED_RESULT BoxT_try_new_from_T(BoxT *const self, T *const v, Error 
     return true;
 }
 
-bool WARN_UNUSED_RESULT BoxT_try_new_copy_T(BoxT *const self, T const *const v, Error *err)
+bool WARN_UNUSED_RESULT BoxT_try_new_copy_T(BoxT *const self, T const *const v, Error *const err)
 {
     T *const p = _T_malloc();
     if (p == NULL) {

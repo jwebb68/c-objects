@@ -3,12 +3,12 @@
 #include "cobj_error.h"
 #include "cobj_memory.h" // STRUCTWIPE
 
-static void RCBoxVT_destroy_elem(void *elem)
+static void RCBoxVT_destroy_elem(void *const elem)
 {
     T_destroy((T *)elem);
 }
 
-static bool RCBoxVT_try_copy_elem(void *elem, void const *src, Error *err)
+static bool RCBoxVT_try_copy_elem(void *const elem, void const *const src, Error *const err)
 {
     return T_try_copy((T *)elem, (T const *)src, err);
 }
@@ -28,7 +28,7 @@ void RCBoxVT_move(RCBoxVT *const self, RCBoxVT *const src)
     // anything else to do here?
 }
 
-bool RCBoxVT_try_copy(RCBoxVT *const self, RCBoxVT const *const src, Error *err)
+bool RCBoxVT_try_copy(RCBoxVT *const self, RCBoxVT const *const src, Error *const err)
 {
     return RCBoxV_try_copy(&self->inner, &src->inner, err);
 }

@@ -18,7 +18,9 @@ struct RCBoxVT_ {
 
 void RCBoxVT_destroy(RCBoxVT *const self);
 void RCBoxVT_move(RCBoxVT *const self, RCBoxVT *const src);
-bool WARN_UNUSED_RESULT RCBoxVT_try_copy(RCBoxVT *const self, RCBoxVT const *const src, Error *err);
+bool WARN_UNUSED_RESULT RCBoxVT_try_copy(RCBoxVT *const self,
+                                         RCBoxVT const *const src,
+                                         Error *const err);
 
 T const *RCBoxVT_deref(RCBoxVT const *const self);
 T *RCBoxVT_deref_mut(RCBoxVT *const self);

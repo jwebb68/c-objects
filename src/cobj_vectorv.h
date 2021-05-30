@@ -30,7 +30,7 @@ void VectorV_move(VectorV *const self, VectorV *const src);
 void VectorV_new(VectorV *const self, uint8_t *const arr, uint8_t *const arr_e);
 bool VectorV_is_empty(VectorV const *const self);
 void VectorV_clear(VectorV *const self, size_t elem_size, void (*elem_destroy)(void *const));
-size_t VectorV_len(VectorV const *self, size_t elem_size);
+size_t VectorV_len(VectorV const *const self, size_t elem_size);
 bool WARN_UNUSED_RESULT VectorV_push_back(VectorV *const self,
                                           void *const elem,
                                           size_t elem_size,

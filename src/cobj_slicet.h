@@ -28,8 +28,8 @@ struct SliceT_ {
 
 void SliceT_destroy(SliceT *const self);
 void SliceT_move(SliceT *const self, SliceT *const src);
-bool WARN_UNUSED_RESULT SliceT_try_copy(SliceT *self, SliceT const *const src, Error *err);
-void SliceT_new(SliceT *const self, T const *arr, size_t len);
+bool WARN_UNUSED_RESULT SliceT_try_copy(SliceT *self, SliceT const *const src, Error *const err);
+void SliceT_new(SliceT *const self, T const *const arr, size_t len);
 
 T const *SliceT_ptr(SliceT const *const self);
 size_t SliceT_len(SliceT const *const self);
@@ -42,7 +42,7 @@ bool SliceT_try_subslice(SliceT const *const self,
                          size_t b,
                          size_t e,
                          SliceT *const dest,
-                         Error *err);
+                         Error *const err);
 
 // cannot move const data src into const data dest
 // bool WARN_UNUSED_RESULT SliceT_try_move_from(SliceT *const self, SliceT *const src, Error *err);
@@ -70,8 +70,10 @@ struct SliceTMut_ {
 
 void SliceTMut_destroy(SliceTMut *const self);
 void SliceTMut_move(SliceTMut *const self, SliceTMut *const src);
-bool WARN_UNUSED_RESULT SliceTMut_try_copy(SliceTMut *self, SliceTMut const *const src, Error *err);
-void SliceTMut_new(SliceTMut *const self, T *arr, size_t len);
+bool WARN_UNUSED_RESULT SliceTMut_try_copy(SliceTMut *self,
+                                           SliceTMut const *const src,
+                                           Error *const err);
+void SliceTMut_new(SliceTMut *const self, T *const arr, size_t len);
 
 size_t SliceTMut_len(SliceTMut const *const self);
 bool SliceTMut_is_empty(SliceTMut const *const self);
@@ -83,16 +85,16 @@ bool SliceTMut_try_subslice(SliceTMut const *const self,
                             size_t b,
                             size_t e,
                             SliceTMut *const dest,
-                            Error *err);
+                            Error *const err);
 
 void SliceTMut_as_slice(SliceTMut const *const self, SliceT *const s);
 
 bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self,
                                                 SliceTMut const *const src,
-                                                Error *err);
+                                                Error *const err);
 bool WARN_UNUSED_RESULT SliceTMut_try_copy_from(SliceTMut *const self,
                                                 SliceT const *const src,
-                                                Error *err);
+                                                Error *const err);
 
 void SliceTMut_iter(SliceTMut const *const self, SliceTIter *const it);
 void SliceTMut_iter_mut(SliceTMut const *const self, SliceTMutIter *const it);

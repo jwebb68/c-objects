@@ -23,13 +23,13 @@ struct BoxT_ {
 void BoxT_destroy(BoxT *const self);
 
 void BoxT_move(BoxT *const self, BoxT *const src);
-bool WARN_UNUSED_RESULT BoxT_try_copy(BoxT *const self, BoxT const *const v, Error *err);
+bool WARN_UNUSED_RESULT BoxT_try_copy(BoxT *const self, BoxT const *const v, Error *const err);
 
 // create in-place and take ownership
 // one new_* for each new_* on T
-bool WARN_UNUSED_RESULT BoxT_try_new_int(BoxT *const self, int v, Error *err);
-bool WARN_UNUSED_RESULT BoxT_try_new_from_T(BoxT *const self, T *const v, Error *err);
-bool WARN_UNUSED_RESULT BoxT_try_new_copy_T(BoxT *const self, T const *const v, Error *err);
+bool WARN_UNUSED_RESULT BoxT_try_new_int(BoxT *const self, int v, Error *const err);
+bool WARN_UNUSED_RESULT BoxT_try_new_from_T(BoxT *const self, T *const v, Error *const err);
+bool WARN_UNUSED_RESULT BoxT_try_new_copy_T(BoxT *const self, T const *const v, Error *const err);
 // othe new funcs here..
 
 // access without transferring ownership

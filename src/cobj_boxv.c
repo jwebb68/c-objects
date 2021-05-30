@@ -24,11 +24,11 @@ void BoxV_move(BoxV *const self, BoxV *const src)
 
 bool WARN_UNUSED_RESULT BoxV_try_copy(BoxV *const self,
                                       BoxV const *const v,
-                                      Error *err,
+                                      Error *const err,
                                       size_t elem_size,
-                                      bool (*elem_try_copy)(void *elem,
-                                                            void const *elem_src,
-                                                            Error *err))
+                                      bool (*elem_try_copy)(void *const elem,
+                                                            void const *const elem_src,
+                                                            Error *const err))
 {
     void *p = malloc(elem_size);
     if (p == NULL) {
@@ -69,7 +69,7 @@ bool WARN_UNUSED_RESULT BoxV_try_new_from(BoxV *const self,
                                           void *const elem,
                                           Error *const err,
                                           size_t elem_size,
-                                          void (*elem_move)(void *elem, void *src))
+                                          void (*elem_move)(void *const elem, void *const src))
 {
     void *p = malloc(elem_size);
     if (p == NULL) {

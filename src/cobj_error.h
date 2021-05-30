@@ -25,11 +25,11 @@ struct Error_ {
 };
 
 void Error_destroy(Error *const self);
-void Error_new(Error *const self, ErrorCode code, size_t line, char const *filen);
+void Error_new(Error *const self, ErrorCode code, size_t line, char const *const filen);
 bool WARN_UNUSED_RESULT Error_raise(Error *const self,
                                     ErrorCode code,
                                     size_t line,
-                                    char const *filen);
+                                    char const *const filen);
 
 #    define ERROR_RAISE(self, code) Error_raise(self, code, __LINE__, __FILE__)
 

@@ -22,7 +22,7 @@ void RCNodeV_wipe(RCNodeV *const self)
     memwipe(self, sizeof(size_t) + self->alloc);
 }
 
-void RCNodeV_destroy(RCNodeV *const self, void (*elem_destroy)(void *elem))
+void RCNodeV_destroy(RCNodeV *const self, void (*elem_destroy)(void *const elem))
 {
     elem_destroy(self->val);
     RCNodeV_wipe(self);
@@ -49,7 +49,7 @@ void *RCNodeV_deref_mut(RCNodeV *const self)
     return self->val;
 }
 
-RCNodeV *RCNodeV_malloc(size_t elem_size, Error *err)
+RCNodeV *RCNodeV_malloc(size_t elem_size, Error *const err)
 {
     size_t size = sizeof(size_t) + sizeof(size_t) + elem_size;
     RCNodeV *p = malloc(size);
@@ -84,7 +84,7 @@ static void RCBoxV_wipe(RCBoxV *const self)
     STRUCTWIPE(self);
 }
 
-void RCBoxV_destroy(RCBoxV *const self, void (*elem_destroy)(void *elem))
+void RCBoxV_destroy(RCBoxV *const self, void (*elem_destroy)(void *const elem))
 {
     if (!RCNodeV_release(self->node)) {
         RCNodeV_destroy(self->node, elem_destroy);
@@ -98,7 +98,7 @@ void RCBoxV_move(RCBoxV *const self, RCBoxV *const src)
     RCBoxV_wipe(src);
 }
 
-bool RCBoxV_try_copy(RCBoxV *const self, RCBoxV const *const src, Error *err)
+bool RCBoxV_try_copy(RCBoxV *const self, RCBoxV const *const src, Error *const err)
 {
     UNUSED_ARG(err);
     *self = *src;
@@ -132,9 +132,9 @@ bool WARN_UNUSED_RESULT RCBoxV_try_new_from(RCBoxV *const self,
                                             void *const v,
                                             Error *const err,
                                             size_t elem_size,
-                                            bool (*elem_try_copy)(void *elem,
-                                                                  void const *src,
-                                                                  Error *err))
+                                            bool (*elem_try_copy)(void *const elem,
+                                                                  void const *const src,
+                                                                  Error *const err))
 {
     RCNodeV *p = RCNodeV_malloc(elem_size, err);
     if (p == NULL) {
