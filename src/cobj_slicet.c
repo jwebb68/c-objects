@@ -34,14 +34,6 @@ void SliceT_new(SliceT *const self, T const *b, T const *e)
     self->e = e;
 }
 
-// T const *SliceT_ptr(SliceT const *const self) {
-//     return self->arr;
-// }
-
-// static T const *SliceT_end(SliceT const *const self) {
-//     return self->arr_end;
-// }
-
 size_t SliceT_len(SliceT const *const self)
 {
     return self->e - self->b;
@@ -158,14 +150,6 @@ void SliceTMut_new(SliceTMut *const self, T *const b, T *const e)
     self->e = e;
 }
 
-// T *SliceTMut_ptr(SliceTMut const *const self) {
-//     return self->arr;
-// }
-
-// static T *SliceTMut_end(SliceTMut const *const self) {
-//     return self->arr_end;
-// }
-
 size_t SliceTMut_len(SliceTMut const *const self)
 {
     return self->e - self->b;
@@ -232,7 +216,7 @@ bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self,
     // self/dest must be uninitialised
     // This will mean a mid-range move will have a very bad contents overall in the dest.
     // After the move, the src will be in a bad state if it's a midrange slice.
-    // (a uninitialsed block in a block of initialised)
+    // (an uninitialised block in a block of initialised)
     // for (T *it = self->arr; it != self->arr_end; ++it) {
     //     T_destroy(it);
     // }
@@ -262,7 +246,7 @@ bool WARN_UNUSED_RESULT SliceTMut_try_copy_from(SliceTMut *const self,
     // so, copy_from cannot be used to mutate contents of a vec.
     // copy_from cannot be used to populate array
     // This will mean a mid-range copy will have a very bad contents overall in the dest.
-    // (a uninitialsed block in a block of initialised)
+    // (an uninitialised block in a block of initialised)
     // for (T *it = self->arr; it != self->arr_end; ++it) {
     //     T_destroy(it);
     // }

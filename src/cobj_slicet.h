@@ -31,7 +31,6 @@ void SliceT_move(SliceT *const self, SliceT *const src);
 bool WARN_UNUSED_RESULT SliceT_try_copy(SliceT *self, SliceT const *const src, Error *err);
 void SliceT_new(SliceT *const self, T const *const b, T const *const e);
 
-T const *SliceT_ptr(SliceT const *const self);
 size_t SliceT_len(SliceT const *const self);
 bool SliceT_is_empty(SliceT const *const self);
 
@@ -43,12 +42,6 @@ bool SliceT_try_subslice(SliceT const *const self,
                          size_t e,
                          SliceT *const dest,
                          Error *const err);
-
-// cannot move const data src into const data dest
-// bool WARN_UNUSED_RESULT SliceT_try_move_from(SliceT *const self, SliceT *const src, Error *err);
-// cannot copy into a const array
-// bool WARN_UNUSED_RESULT SliceT_try_copy_from(SliceT *const self, SliceT const *const src, Error
-// *err);
 
 void SliceT_iter(SliceT const *const self, SliceTIter *const it);
 
