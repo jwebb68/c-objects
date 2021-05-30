@@ -242,8 +242,8 @@ bool WARN_UNUSED_RESULT SliceTMut_try_move_from(SliceTMut *const self,
     // }
     // use memmove to move the bits en masse, for speed.
     // bad: memmove src is const, when shouldn't be.
-    memmove(self->arr, src->arr, SliceTMut_len(self));
-    memwipe(src->arr, SliceTMut_len(src));
+    memmove(self->b, src->b, (self->e - self->b) * sizeof(T));
+    memwipe(src->b, (src->e - src->b) * sizeof(T));
     return true;
 }
 
