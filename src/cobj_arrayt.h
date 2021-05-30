@@ -2,8 +2,6 @@
 #    define COBJ_ARRAYT_H
 
 // no structs as intended to work with normal carrays
-typedef struct ArrayTIter_ ArrayTIter;
-typedef struct ArrayTIterMut_ ArrayTIterMut;
 
 #    include "cobj_defs.h" // WARN_UNUSED_RESULT
 #    include "cobj_error.h"
