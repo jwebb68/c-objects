@@ -17,7 +17,6 @@ START_TEST(test_try_new_from_T)
 
     // value is in box.
     ck_assert(T_is_eq(&t2, BoxT_deref(&bt)));
-    ck_assert(T_is_ne(&t1, BoxT_deref(&bt)));
 
     BoxT_destroy(&bt);
     // no destroy of t1, it was moved into bt;
