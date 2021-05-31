@@ -7,7 +7,6 @@
 
 // forward declares;
 typedef struct BoxT_ BoxT;
-// typedef struct BoxTMut_ BoxTMut;
 
 // includes
 #    include "cobj_error.h"
