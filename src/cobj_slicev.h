@@ -1,6 +1,18 @@
 #if !defined(COBJ_SLICEV_H)
 #    define COBJ_SLICEV_H
 
+/**
+ * SliceV, SliceV: The undelying implementation for a non-owned region of initialised Ts.
+ *
+ * This version is the underlying implementation for all SliceV<T> types.
+ * Used to reduce the code footprint if using it.
+ * But when debugging, the value won't be visible in the debugger (it'll be a block of bytes,
+ * not deconstructed as most debuggers are able to do).
+ * It treats the value as a block of ram, so specialisations of operations
+ * operating on T are passed in.
+ * This may prevent some optimisations that are available, compared to SliceT.
+ */
+
 typedef struct SliceV_ SliceV;
 typedef struct SliceVIter_ SliceVIter;
 
@@ -13,13 +25,6 @@ typedef struct SliceVMutIter_ SliceVMutIter;
 #    include <inttypes.h> // uint8_t
 #    include <stdbool.h>
 #    include <stddef.h> // size_t
-
-/**
- * Slice
- * A contiguous range of T.
- * Shared, Does not own what it points to, merely tracks the range
- * It's the Developers responsibility to ensure contents and array remain valid for it's lifetime.
- */
 
 struct SliceV_ {
     uint8_t const *b;

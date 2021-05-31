@@ -1,6 +1,16 @@
 #if !defined(COBJ_RCBOXT_H)
 #    define COBJ_RCBOXT_H
 
+/**
+ * RCBox<T>: object created and managed on the heap, with sharing.
+ *
+ * RCBox contents are not owned by the box and are shared using simple ref counting.
+ * inherently Mutable; cannot move a const value into it, cannot copy into into a const box.
+ *
+ */
+// because it's C there is no template mechanism, so this needs to be repeated for each type
+// being treated this way.
+
 // forward declares
 typedef struct RCNodeT_ RCNodeT;
 typedef struct RCBoxT_ RCBoxT;

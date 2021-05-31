@@ -1,6 +1,26 @@
 #if !defined(COBJ_RCBOXVT_H)
 #    define COBJ_RCBOXVT_H
 
+/**
+ * RCBoxV<T>: object created and managed on the heap, with sharing.
+ *
+ * Box contents are not owned by the box and are shared.
+ * Inherently Mutable; cannot move a const value into it, cannot copy into into a const box
+ *
+ * This version is the veneer layer for when using RCBoxV as the actual implementation.
+ * Used to reduce the code footprint if using it.
+ * But when debugging, the value won't be visible in the debugger (it'll be a block of bytes,
+ * not deconstructed as most debuggers are able to do).
+ * It treats the value as a block of ram, so specialisations of operations
+ * operating on T are passed in.
+ * This may prevent some optimisations that are available, compared to BoxT.
+ *
+ * Warning: some of the  new_ functions may prevent this being a viable pattern.
+ * As I've yet to find a solution that is a single func call to RCBoxV (as the rest of them are).
+ */
+// because it's C there is no template mechanism, so this needs to be repeated for each type
+// being treated this way.
+
 // forward declares
 typedef struct RCBoxVT_ RCBoxVT;
 

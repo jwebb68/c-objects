@@ -1,6 +1,24 @@
 #if !defined(COBJ_BOXV_H)
 #    define COBJ_BOXV_H
 
+/**
+ * BoxV: object created and managed on the heap, without sharing.
+ *
+ * Box contents owned by the box and are not shared (use RCT for shared objects).
+ * inherently a Mut; cannot move a const value into it, cannot copy into into a const box.
+ *
+ * This version is the underlying implementation for all BoxV<T> types.
+ * Used to reduce the code footprint if using it.
+ * But when debugging, the value won't be visible in the debugger (it'll be a block of bytes,
+ * not deconstructed as most debuggers are able to do).
+ * It treats the value as a block of ram, so specialisations of operations
+ * operating on T are passed in.
+ * This may prevent some optimisations that are available, compared to BoxT.
+ */
+// hmm, using the void * as implementation would prevent debug lookups.
+// also, the two implementations look the same so won't get any code size reductions.
+// prob simpler/easier to go with the non-V version
+
 // forward declares
 typedef struct BoxV_ BoxV;
 
@@ -39,9 +57,6 @@ bool WARN_UNUSED_RESULT BoxV_try_new_from(BoxV *const self,
                                           size_t elem_size,
                                           void (*elem_move)(void *const elem, void *const src));
 
-// hmm, using the void * as implementation would prevent debug lookups.
-// also, the two implementations look the same so won't get any code size reductions.
-// prob simpler/easier to go with the non-V version
 bool WARN_UNUSED_RESULT BoxV_try_new_copy(BoxV *const self,
                                           void const *const elem,
                                           Error *const err,

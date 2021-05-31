@@ -1,22 +1,36 @@
 #if !defined(COBJ_VECTORVT_H)
 #    define COBJ_VECTORVT_H
 
+/**
+ * VectorV<T>
+ *
+ * A container of dynamically set initialised Ts
+ *
+ * This is the non-heap version, ( well a private heap).
+ *
+ * The Array owns the set values, so when destroyed, will destroy the Ts set into it.
+ *
+ * This version is the veneer layer using VectorV as the actual implementation.
+ * Used to reduce the code footprint if using it.
+ * But when debugging, the value won't be visible in the debugger (it'll be a block of bytes,
+ * not deconstructed as most debuggers are able to do).
+ * It treats the value as a block of ram, so specialisations of operations
+ * operating on T are passed in.
+ * This may prevent some optimisations that are available, compared to VectorT.
+ *
+ * WARNING: might not be viable in macro form as support funcs are needed on a per-type basis.
+ */
+
 typedef struct VectorVT_ VectorVT;
 
 #    include "cobj_slicevt.h"
 #    include "cobj_vectorv.h"
 #    include "t.h"
 
-// in typed vector:
-// the same as above, still messy, too much typing.
-// macro each fn? - will dupe code at call site.
-// macro whole thing? akk code in macros..
-// would be nicer to use jinja2 to template vector and create as needed,
-// then wouldn't need to split into a generic one, but maybe do so for space saving
-//(no duplicate code at runtime?)
 struct VectorVT_ {
     VectorV inner;
 };
+
 void VectorVT_destroy(VectorVT *const self);
 void VectorVT_move(VectorVT *const self, VectorVT *const src);
 void VectorVT_new(VectorVT *const self, T *const b, T *const e);

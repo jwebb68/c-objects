@@ -1,6 +1,15 @@
 #if !defined(COBJ_ARRAYT_H)
 #    define COBJ_ARRAYT_H
 
+/**
+ * Array<T>
+ *
+ * A contiguous block of initialised Ts.
+ * Array owns the block, so when destroyed, will destroy the Ts.
+ */
+// because it's C there is no template mechanism, so this needs to be repeated for each type
+// being treated this way.
+
 // no structs as intended to work with normal carrays
 
 #    include "cobj_defs.h" // WARN_UNUSED_RESULT

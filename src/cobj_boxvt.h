@@ -1,6 +1,24 @@
 #if !defined(COBJ_BOXVT_H)
 #    define COBJ_BOXVT_H
 
+/**
+ * BoxV<T>: object created and managed on the heap, without sharing.
+ *
+ * Box contents owned by the box and are not shared (use RCT for shared objects).
+ * inherently a Mut; cannot move a const value into it, cannot copy into into a const box.
+ *
+ * This version is the veneer layer for when using BoxV as the actual implementation.
+ * Used to reduce the code footprint if using it.
+ * But when debugging, the value won't be visible in the debugger (it'll be a block of bytes,
+ * not deconstructed as most debuggers are able to do).
+ * It treats the value as a block of ram, so specialisations of operations
+ * operating on T are passed in.
+ * This may prevent some optimisations that are available, compared to BoxT.
+ *
+ * Warning: some of the  new_ functions may prevent this being a viable pattern.
+ * As I've yet to find a solution that is a single func call to BoxV (as the rest of them are).
+ */
+
 // forward declares
 typedef struct BoxVT_ BoxVT;
 

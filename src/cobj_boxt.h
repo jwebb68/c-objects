@@ -1,9 +1,14 @@
 #if !defined(COBJ_BOX_H)
 #    define COBJ_BOX_H
 
-// Box, object created and managed on the heap
-// and not shared (use RCT for shared objects).
-// inherently a Mut.
+/**
+ * Box<T>: object created and managed on the heap, without sharing.
+ *
+ * Box contents owned by the box and are not shared (use RCT for shared objects).
+ * inherently Mutable; cannot move a const value into it, cannot copy into into a const box
+ */
+// because it's C there is no template mechanism, so this needs to be repeated for each type
+// being treated this way.
 
 // forward declares;
 typedef struct BoxT_ BoxT;

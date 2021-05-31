@@ -1,6 +1,22 @@
 #if !defined(COBJ_SLICEVT_H)
 #    define COBJ_SLICEVT_H
 
+/**
+ * SliceV<T>, SliceV<TMut>: A non-owned region of initialised Ts.
+ *
+ * Shared, Does not own what it points to, merely tracks the range
+ * It's the Developers responsibility to ensure contents and array remain valid for it's lifetime.
+ *
+ * This version is the veneer layer using SliceV as the actual implementation.
+ * Used to reduce the code footprint if using it.
+ * But when debugging, the value won't be visible in the debugger (it'll be a block of bytes,
+ * not deconstructed as most debuggers are able to do).
+ * It treats the value as a block of ram, so specialisations of operations
+ * operating on T are passed in.
+ * This may prevent some optimisations that are available, compared to SliceT/SliceTMut.
+ */
+
+
 typedef struct SliceVT_ SliceVT;
 typedef struct SliceVTIter_ SliceVTIter;
 

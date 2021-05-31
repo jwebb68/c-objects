@@ -2,8 +2,16 @@
 #    define COBJ_VECTORT_H
 
 /**
- * A Vector 'pattern' for C
+ * Vector<T>
+ *
+ * A container of dynamically set initialised Ts
+ *
+ * This is the non-heap version, ( well a private heap).
+ *
+ * The Array owns the set values, so when destroyed, will destroy the Ts set into it.
  */
+// because it's C there is no template mechanism, so this needs to be repeated for each type
+// being treated this way.
 
 // forward declares
 typedef struct VectorT_ VectorT;

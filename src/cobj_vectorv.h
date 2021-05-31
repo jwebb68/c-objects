@@ -1,14 +1,24 @@
 #if !defined(COBJ_VECTORV_H)
 #    define COBJ_VECTORV_H
 
-///////////////////////////////////////////////////////////////////////////////
-// can vector internals be commoned across all vectors in C?
-// yes, but still adds typing for each specialisation
-// and adds 2ptrs+a size_t for each instance.
-// and as 2 func ptrs are used, adds unsafeness as they are stored in ram for
-// the lifetime of the vector.
-// but, idea is to keep functions small so they'll be inlined so
-// the templated version should not appear as sep functions.
+/**
+ * VectorV
+ *
+ * The underlying implementation for a container of dynamically set initialised Ts.
+ *
+ * This is the non-heap version, ( well a private heap).
+ *
+ * The Array owns the set values, so when destroyed, will destroy the Ts set into it.
+ *
+ * This version is the underlying implementation for all VectorV<T> types.
+ * Used to reduce the code footprint if using it.
+ * But when debugging, the value won't be visible in the debugger (it'll be a block of bytes,
+ * not deconstructed as most debuggers are able to do).
+ * It treats the value as a block of ram, so specialisations of operations
+ * operating on T are passed in.
+ * This may prevent some optimisations that are available, compared to VectorT.
+ */
+
 typedef struct VectorV_ VectorV;
 
 #    include "cobj_defs.h" // WARN_RESULT

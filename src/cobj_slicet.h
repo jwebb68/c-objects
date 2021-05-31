@@ -1,6 +1,13 @@
 #if !defined(COBJ_SLICET_H)
 #    define COBJ_SLICET_H
 
+/**
+ * Slice<T>, Slice<TMut>: A non-owned region of initialised Ts.
+ *
+ * Shared, Does not own what it points to, merely tracks the range
+ * It's the Developers responsibility to ensure contents and array remain valid for it's lifetime.
+ */
+
 typedef struct SliceT_ SliceT;
 typedef struct SliceTIter_ SliceTIter;
 
@@ -14,12 +21,6 @@ typedef struct SliceTMutIter_ SliceTMutIter;
 #    include <stdbool.h>
 #    include <stddef.h> // size_t
 
-/**
- * Slice
- * A contiguous range of T.
- * Shared, Does not own what it points to, merely tracks the range
- * It's the Developers responsibility to ensure contents and array remain valid for it's lifetime.
- */
 
 struct SliceT_ {
     T const *b;
