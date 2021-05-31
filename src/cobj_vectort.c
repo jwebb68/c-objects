@@ -1,6 +1,5 @@
 #include "cobj_vectort.h"
 
-#include "cobj_arrayt.h"
 #include "cobj_defs.h" // UNUSED_ARG
 #include "cobj_memory.h" // STRUCTWIPE
 
@@ -9,9 +8,15 @@ static void VectorT_wipe(VectorT *const self)
     STRUCTWIPE(self);
 }
 
+static void VectorT_destroy_elems(T *const b, T *const e) {
+    for (T *it = b; it != e; ++it) {
+        T_destroy(it);
+    }
+}
+
 void VectorT_destroy(VectorT *const self)
 {
-    ArrayT_destroy_p(self->b, self->p);
+    VectorT_destroy_elems(self->b, self->p);
     VectorT_wipe(self);
 }
 
@@ -31,7 +36,7 @@ void VectorT_new(VectorT *const self, T *const b, T *const e)
 
 void VectorT_clear(VectorT *const self)
 {
-    ArrayT_destroy_p(self->b, self->p);
+    VectorT_destroy_elems(self->b, self->p);
     self->p = self->b;
 }
 
