@@ -37,8 +37,10 @@ bool BoxVT_contains(BoxVT const *const self, T const *const v);
 
 void BoxVT_new_own(BoxVT *const self, T *const p);
 
-// void BoxVT_new_(BoxVT_ *const self, ...);
-
 bool WARN_UNUSED_RESULT BoxVT_try_new_from_T(BoxVT *const self, T *const v, Error *const err);
+bool WARN_UNUSED_RESULT BoxVT_try_new_copy_T(BoxVT *const self, T const *const v, Error *const err);
+
+// developer needs to add own inplace new functions per type.
+// void BoxVT_new_(BoxVT_ *const self, ...);
 
 #endif //! defined(COBJ_BOXVT_H)

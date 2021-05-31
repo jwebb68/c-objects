@@ -80,3 +80,25 @@ bool WARN_UNUSED_RESULT BoxV_try_new_from(BoxV *const self,
     BoxV_new_own(self, p);
     return true;
 }
+
+bool WARN_UNUSED_RESULT BoxV_try_new_copy(BoxV *const self,
+                                          void const *const elem,
+                                          Error *const err,
+                                          size_t elem_size,
+                                          bool (*elem_try_copy)(void *const elem, void const *const src, Error *const err))
+{
+    void *p = malloc(elem_size);
+    if (p == NULL) {
+        return ERROR_RAISE(err, Error_ENOMEM);
+    }
+
+    bool ok;
+    ok = elem_try_copy(p, elem, err);
+    if (!ok) {
+        free(p);
+        return false;
+    }
+
+    BoxV_new_own(self, p);
+    return true;
+}

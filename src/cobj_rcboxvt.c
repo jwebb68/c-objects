@@ -13,19 +13,26 @@ static bool RCBoxVT_try_copy_elem(void *const elem, void const *const src, Error
     return T_try_copy((T *)elem, (T const *)src, err);
 }
 
-// static void RCBoxVT_wipe(RCBoxVT *const self) {
-//     STRUCTWIPE(self);
-// }
+static void RCBoxVT_move_elem(void *const elem, void *const src)
+{
+    T_move((T *)elem, (T *)src);
+}
+
+static void RCBoxVT_wipe(RCBoxVT *const self)
+{
+    STRUCTWIPE(self);
+}
 
 void RCBoxVT_destroy(RCBoxVT *const self)
 {
     RCBoxV_destroy(&self->inner, RCBoxVT_destroy_elem);
+    // do I need to wipe if only 1 element and that's already wiped.
 }
 
 void RCBoxVT_move(RCBoxVT *const self, RCBoxVT *const src)
 {
-    RCBoxV_move(&self->inner, &src->inner);
-    // anything else to do here?
+    *self = *src;
+    RCBoxVT_wipe(self);
 }
 
 bool RCBoxVT_try_copy(RCBoxVT *const self, RCBoxVT const *const src, Error *const err)
@@ -43,44 +50,31 @@ T *RCBoxVT_deref_mut(RCBoxVT *const self)
     return RCBoxV_deref_mut(&self->inner);
 }
 
-// bool WARN_UNUSED_RESULT RCBoxT_try_new_int(RCBoxT *const self, int v, Error *const err) {
-//     RCNodeT *p = RCNodeT_malloc();
+// Can I boil this down to a single RCBoxV func?
+// it's the T_new_* func sig that's the issue..
+// bool WARN_UNUSED_RESULT RCBoxVT_try_new_int(RCBoxVT *const self, int v, Error *const err) {
+//     RCNodeV *p = RCNodeV_malloc(sizeof(T));
 //     if (p == NULL) {
 //         return ERROR_RAISE(err, Error_ENOMEM);
 //     }
 
-//     RCNodeT_new_int(p, v);
-//     RCNodeT_grab(p);
-//     self->node = p;
+//     T_new_int(&p->value, v);
+//     RCNodeV_grab(p);
+//     self->inner.node = p;
 //     return true;
 // }
 
 bool WARN_UNUSED_RESULT RCBoxVT_try_new_from_T(RCBoxVT *const self, T *const v, Error *const err)
 {
-    return RCBoxV_try_new_from(&self->inner, v, err, sizeof(*v), RCBoxVT_try_copy_elem);
+    return RCBoxV_try_new_from(&self->inner, v, err, sizeof(*v), RCBoxVT_move_elem);
 }
 
-// // new_copy variant? copy direct into dest without intermed storage?
-// bool WARN_UNUSED_RESULT RCBoxT_try_new_copy_T(RCBoxT *const self, T const *const v, Error *const
-// err) {
-//     RCNodeT *p = RCNodeT_malloc();
-//     if (p == NULL) {
-//         return ERROR_RAISE(err, Error_ENOMEM);
-//     }
-
-//     bool ok;
-//     ok = T_try_copy(RCNodeT_deref_mut(p), v, err);
-//     if (!ok) {
-//         // no destroy as node is not initialised and destroy wants it
-//         // initialised.
-//         free(p);
-//         return false;
-//     }
-
-//     RCNodeT_grab(p);
-//     self->node = p;
-//     return true;
-// }
+bool WARN_UNUSED_RESULT RCBoxVT_try_new_copy_T(RCBoxVT *const self,
+                                               T const *const v,
+                                               Error *const err)
+{
+    return RCBoxV_try_new_copy(&self->inner, v, err, sizeof(*v), RCBoxVT_try_copy_elem);
+}
 
 bool RCBoxVT_is_eq(RCBoxVT const *const self, RCBoxVT const *const b)
 {

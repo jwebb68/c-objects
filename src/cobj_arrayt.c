@@ -4,7 +4,7 @@
 
 #include <string.h> // memmove
 
-void ArrayT_destroy_p(T *const arr, T *const end)
+static void ArrayT_destroy_p(T *const arr, T *const end)
 {
     for (T *it = arr; it != end; ++it) {
         T_destroy(it);

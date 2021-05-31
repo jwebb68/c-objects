@@ -97,3 +97,8 @@ bool WARN_UNUSED_RESULT BoxVT_try_new_from_T(BoxVT *const self, T *const v, Erro
 {
     return BoxV_try_new_from(&self->inner, v, err, sizeof(T), BoxVT_move_elem);
 }
+
+bool WARN_UNUSED_RESULT BoxVT_try_new_copy_T(BoxVT *const self, T const *const v, Error *const err)
+{
+    return BoxV_try_new_copy(&self->inner, v, err, sizeof(T), BoxVT_try_copy_elem);
+}

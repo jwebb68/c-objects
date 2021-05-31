@@ -62,21 +62,6 @@ RCNodeV *RCNodeV_malloc(size_t elem_size, Error *const err)
     return p;
 }
 
-// void RCNodeV_new_int(RCNodeV *const self, int v) {
-//     self->rc = 0;
-//     T_new_int(&self->val, v);
-// }
-
-// void RCNodeV_new_from_T(RCNodeV *const self, T *const src) {
-//     self->rc = 0;
-//     T_move(&self->val, src);
-// }
-
-// bool RCNodeV_try_new_copy_T(RCNodeV *const self, T const *const src, Error *const err) {
-//     self->rc = 0;
-//     return T_try_copy(&self->val, src, err);
-// }
-
 // ==========================================================================
 
 static void RCBoxV_wipe(RCBoxV *const self)
@@ -116,20 +101,26 @@ void *RCBoxV_deref_mut(RCBoxV *const self)
     return RCNodeV_deref_mut(self->node);
 }
 
-// bool WARN_UNUSED_RESULT RCBoxV_try_new_int(RCBoxV *const self, int v, Error *const err) {
-//     RCNodeV *p = RCNodeV_malloc();
-//     if (p == NULL) {
-//         return ERROR_RAISE(err, Error_ENOMEM);
-//     }
-
-//     RCNodeV_new_int(p, v);
-//     RCNodeV_grab(p);
-//     self->node = p;
-//     return true;
-// }
-
 bool WARN_UNUSED_RESULT RCBoxV_try_new_from(RCBoxV *const self,
                                             void *const v,
+                                            Error *const err,
+                                            size_t elem_size,
+                                            void (*elem_move)(void *const self, void *const src))
+{
+    RCNodeV *p = RCNodeV_malloc(elem_size, err);
+    if (p == NULL) {
+        return p;
+    }
+
+    elem_move(RCNodeV_deref_mut(p), v);
+
+    RCNodeV_grab(p);
+    self->node = p;
+    return true;
+}
+
+bool WARN_UNUSED_RESULT RCBoxV_try_new_copy(RCBoxV *const self,
+                                            T const *const v,
                                             Error *const err,
                                             size_t elem_size,
                                             bool (*elem_try_copy)(void *const elem,
@@ -138,66 +129,22 @@ bool WARN_UNUSED_RESULT RCBoxV_try_new_from(RCBoxV *const self,
 {
     RCNodeV *p = RCNodeV_malloc(elem_size, err);
     if (p == NULL) {
-        return p;
+        return ERROR_RAISE(err, Error_ENOMEM);
     }
 
     bool ok;
     ok = elem_try_copy(RCNodeV_deref_mut(p), v, err);
     if (!ok) {
+        // no destroy as node is not initialised and destroy wants it
+        // initialised.
         free(p);
-        return ERROR_RAISE(err, Error_EFAIL);
+        return false;
     }
 
     RCNodeV_grab(p);
     self->node = p;
     return true;
 }
-
-// bool WARN_UNUSED_RESULT RCBoxV_try_new_from_T(RCBoxT *const self, T *const v, Error *const err) {
-//     RCNodeV *p = RCNodeV_malloc();
-//     if (p == NULL) {
-//         return ERROR_RAISE(err, Error_ENOMEM);
-//     }
-
-//     T_move(RCNodeV_deref_mut(p), v);
-//     RCNodeV_grab(p);
-//     self->node = p;
-//     return true;
-// }
-
-// // new_copy variant? copy direct into dest without intermed storage?
-// bool WARN_UNUSED_RESULT RCBoxT_try_new_copy_T(RCBoxT *const self, T const *const v, Error *const
-// err) {
-//     RCNodeV *p = RCNodeV_malloc();
-//     if (p == NULL) {
-//         return ERROR_RAISE(err, Error_ENOMEM);
-//     }
-
-//     bool ok;
-//     ok = T_try_copy(RCNodeV_deref_mut(p), v, err);
-//     if (!ok) {
-//         // no destroy as node is not initialised and destroy wants it
-//         // initialised.
-//         free(p);
-//         return false;
-//     }
-
-//     RCNodeV_grab(p);
-//     self->node = p;
-//     return true;
-// }
-
-// bool RCBoxV_is_eq(RCBoxV const *const self, RCBoxV const *const b) {
-//     return T_is_eq(RCBoxT_deref(self), RCBoxT_deref(b));
-// }
-
-// bool RCBoxT_is_lt(RCBoxT const *const self, RCBoxT const *const b) {
-//     return T_is_lt(RCBoxT_deref(self), RCBoxT_deref(b));
-// }
-
-// bool RCBoxT_is_gt(RCBoxT const *const self, RCBoxT const *const b) {
-//     return T_is_gt(RCBoxT_deref(self), RCBoxT_deref(b));
-// }
 
 // no own of ptr: that leads to heap fragmentation
 // no own of value: that's a new_default + T_destroy + T_move

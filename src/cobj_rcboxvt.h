@@ -25,13 +25,6 @@ bool WARN_UNUSED_RESULT RCBoxVT_try_copy(RCBoxVT *const self,
 T const *RCBoxVT_deref(RCBoxVT const *const self);
 T *RCBoxVT_deref_mut(RCBoxVT *const self);
 
-// bool WARN_UNUSED_RESULT RCBoxVT_try_new_int(RCBoxVT *const self, int v, Error *const err);
-bool WARN_UNUSED_RESULT RCBoxVT_try_new_from_T(RCBoxVT *const self, T *const v, Error *const err);
-
-// // new_copy variant? copy direct into dest without intermed storage?
-// bool WARN_UNUSED_RESULT RCBoxVT_try_new_copy_T(RCBoxVT *const self, T const *const v, Error
-// *const err);
-
 bool RCBoxVT_is_eq(RCBoxVT const *const self, RCBoxVT const *const b);
 bool RCBoxVT_is_ne(RCBoxVT const *const self, RCBoxVT const *const b);
 bool RCBoxVT_is_lt(RCBoxVT const *const self, RCBoxVT const *const b);
@@ -39,6 +32,14 @@ bool RCBoxVT_is_gt(RCBoxVT const *const self, RCBoxVT const *const b);
 bool RCBoxVT_is_le(RCBoxVT const *const self, RCBoxVT const *const b);
 bool RCBoxVT_is_ge(RCBoxVT const *const self, RCBoxVT const *const b);
 bool RCBoxVT_contains(RCBoxVT const *const self, T const *const b);
+
+bool WARN_UNUSED_RESULT RCBoxVT_try_new_from_T(RCBoxVT *const self, T *const v, Error *const err);
+
+bool WARN_UNUSED_RESULT RCBoxVT_try_new_copy_T(RCBoxVT *const self,
+                                               T const *const v,
+                                               Error *const err);
+
+// bool WARN_UNUSED_RESULT RCBoxVT_try_new_int(RCBoxVT *const self, int v, Error *const err);
 
 // no own of a ptr: that leads to heap fragmentation
 // no own of value: that's a new_default + T_destroy + T_move

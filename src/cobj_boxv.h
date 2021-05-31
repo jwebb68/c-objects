@@ -33,8 +33,6 @@ void *BoxV_deref_mut(BoxV *const self);
 // no disown as that is an implicit destroy.
 void BoxV_new_own(BoxV *const self, void *const p);
 
-// void BoxV_new_(BoxV_ *const self, ...);
-
 bool WARN_UNUSED_RESULT BoxV_try_new_from(BoxV *const self,
                                           void *const elem,
                                           Error *const err,
@@ -44,5 +42,13 @@ bool WARN_UNUSED_RESULT BoxV_try_new_from(BoxV *const self,
 // hmm, using the void * as implementation would prevent debug lookups.
 // also, the two implementations look the same so won't get any code size reductions.
 // prob simpler/easier to go with the non-V version
+bool WARN_UNUSED_RESULT BoxV_try_new_copy(BoxV *const self,
+                                          void const *const elem,
+                                          Error *const err,
+                                          size_t elem_size,
+                                          bool (*elem_try_copy)(void *const elem, void const *const src, Error *const err));
+
+// void BoxV_new_(BoxV_ *const self, ...);
+
 
 #endif //! defined(COBJ_BOXV_H)

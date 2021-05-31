@@ -25,13 +25,6 @@ void BoxT_destroy(BoxT *const self);
 void BoxT_move(BoxT *const self, BoxT *const src);
 bool WARN_UNUSED_RESULT BoxT_try_copy(BoxT *const self, BoxT const *const v, Error *const err);
 
-// create in-place and take ownership
-// one new_* for each new_* on T
-bool WARN_UNUSED_RESULT BoxT_try_new_int(BoxT *const self, int v, Error *const err);
-bool WARN_UNUSED_RESULT BoxT_try_new_from_T(BoxT *const self, T *const v, Error *const err);
-bool WARN_UNUSED_RESULT BoxT_try_new_copy_T(BoxT *const self, T const *const v, Error *const err);
-// othe new funcs here..
-
 // access without transferring ownership
 T const *BoxT_deref(BoxT const *const self);
 T *BoxT_deref_mut(BoxT *const self);
@@ -52,7 +45,14 @@ bool BoxT_contains(BoxT const *const self, T const *const v);
 // what of null?
 void BoxT_new_own(BoxT *const self, T *const p);
 
-// can box ever be null?
+// create in-place and take ownership
+// one new_* for each new_* on T
+// developer needs to add own inplace new functions per type.
+bool WARN_UNUSED_RESULT BoxT_try_new_int(BoxT *const self, int v, Error *const err);
+
+bool WARN_UNUSED_RESULT BoxT_try_new_from_T(BoxT *const self, T *const v, Error *const err);
+bool WARN_UNUSED_RESULT BoxT_try_new_copy_T(BoxT *const self, T const *const v, Error *const err);
+// othe new funcs here..
 
 // hmm, BoxT look like unique_ptr implementation
 // but without the release

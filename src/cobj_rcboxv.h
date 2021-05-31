@@ -23,9 +23,14 @@ bool RCBoxV_try_copy(RCBoxV *const self, RCBoxV const *const src, Error *const e
 void const *RCBoxV_deref(RCBoxV const *const self);
 void *RCBoxV_deref_mut(RCBoxV *const self);
 
-// bool WARN_UNUSED_RESULT RCBoxV_try_new_int(RCBoxV *const self, int v, Error *const err);
 bool WARN_UNUSED_RESULT RCBoxV_try_new_from(RCBoxV *const self,
                                             void *const v,
+                                            Error *const err,
+                                            size_t elem_size,
+                                            void (*elem_move)(void *const self, void *const src));
+
+bool WARN_UNUSED_RESULT RCBoxV_try_new_copy(RCBoxV *const self,
+                                            T const *const v,
                                             Error *const err,
                                             size_t elem_size,
                                             bool (*elem_try_copy)(void *const elem,
