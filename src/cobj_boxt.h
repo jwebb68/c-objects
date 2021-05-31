@@ -41,6 +41,11 @@ bool BoxT_is_eq(BoxT const *const self, BoxT const *const b);
 bool BoxT_is_ne(BoxT const *const self, BoxT const *const b);
 bool BoxT_is_lt(BoxT const *const self, BoxT const *const b);
 bool BoxT_is_gt(BoxT const *const self, BoxT const *const b);
+bool BoxT_is_le(BoxT const *const self, BoxT const *const b);
+bool BoxT_is_ge(BoxT const *const self, BoxT const *const b);
+
+// does box contain value..
+bool BoxT_contains(BoxT const *const self, T const *const v);
 
 // create and take ownership of existing heap based object.
 // no disown function as that is an implicit destroy.

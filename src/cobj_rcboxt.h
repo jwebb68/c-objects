@@ -34,9 +34,12 @@ bool WARN_UNUSED_RESULT RCBoxT_try_new_copy_T(RCBoxT *const self,
 bool RCBoxT_is_eq(RCBoxT const *const self, RCBoxT const *const b);
 bool RCBoxT_is_lt(RCBoxT const *const self, RCBoxT const *const b);
 bool RCBoxT_is_gt(RCBoxT const *const self, RCBoxT const *const b);
+bool RCBoxT_is_le(RCBoxT const *const self, RCBoxT const *const b);
+bool RCBoxT_is_ge(RCBoxT const *const self, RCBoxT const *const b);
+bool RCBoxT_contains(RCBoxT const *const self, T const *const v);
 
 // no own of a ptr: that leads to heap fragmentation
-// no own of value: that's a new_default + T_destroy + T_move
+// no own of a value: that's a new_default + T_destroy + T_move
 // no disown of value: that requires only 1 ref so would be a try_disown, and also required as move.
 
 #endif //! defined(COBJ_RCBOXT_H)

@@ -49,6 +49,41 @@ T *BoxVT_deref_mut(BoxVT *const self)
     return (T *)BoxV_deref_mut(&self->inner);
 }
 
+bool BoxVT_is_eq(BoxVT const *const self, BoxVT const *const b)
+{
+    return T_is_eq(BoxVT_deref(self), BoxVT_deref(b));
+}
+
+bool BoxVT_is_ne(BoxVT const *const self, BoxVT const *const b)
+{
+    return T_is_ne(BoxVT_deref(self), BoxVT_deref(b));
+}
+
+bool BoxVT_is_lt(BoxVT const *const self, BoxVT const *const b)
+{
+    return T_is_lt(BoxVT_deref(self), BoxVT_deref(b));
+}
+
+bool BoxVT_is_gt(BoxVT const *const self, BoxVT const *const b)
+{
+    return T_is_gt(BoxVT_deref(self), BoxVT_deref(b));
+}
+
+bool BoxVT_is_le(BoxVT const *const self, BoxVT const *const b)
+{
+    return T_is_le(BoxVT_deref(self), BoxVT_deref(b));
+}
+
+bool BoxVT_is_ge(BoxVT const *const self, BoxVT const *const b)
+{
+    return T_is_ge(BoxVT_deref(self), BoxVT_deref(b));
+}
+
+bool BoxVT_contains(BoxVT const *const self, T const *const v)
+{
+    return T_is_eq(BoxVT_deref(self), v);
+}
+
 void BoxVT_new_own(BoxVT *const self, T *const p)
 {
     BoxV_new_own(&self->inner, p);

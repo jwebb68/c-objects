@@ -158,17 +158,32 @@ bool WARN_UNUSED_RESULT RCBoxT_try_new_copy_T(RCBoxT *const self,
 
 bool RCBoxT_is_eq(RCBoxT const *const self, RCBoxT const *const b)
 {
-    return T_is_eq(RCBoxT_deref(self), RCBoxT_deref(b));
+    return T_is_eq(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
 }
 
 bool RCBoxT_is_lt(RCBoxT const *const self, RCBoxT const *const b)
 {
-    return T_is_lt(RCBoxT_deref(self), RCBoxT_deref(b));
+    return T_is_lt(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
 }
 
 bool RCBoxT_is_gt(RCBoxT const *const self, RCBoxT const *const b)
 {
-    return T_is_gt(RCBoxT_deref(self), RCBoxT_deref(b));
+    return T_is_gt(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
+}
+
+bool RCBoxT_is_le(RCBoxT const *const self, RCBoxT const *const b)
+{
+    return T_is_le(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
+}
+
+bool RCBoxT_is_ge(RCBoxT const *const self, RCBoxT const *const b)
+{
+    return T_is_ge(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
+}
+
+bool RCBoxT_contains(RCBoxT const *const self, T const *const v)
+{
+    return T_is_eq(RCNodeT_deref(self->node), v);
 }
 
 // no own of just a ptr: that leads to heap fragmentation

@@ -228,6 +228,8 @@ bool T_is_ne(T const *const self, T const *const b);
  */
 bool T_is_lt(T const *const self, T const *const b);
 
+bool T_is_le(T const *const self, T const *const b);
+
 /**
  * Determines if self is greater than by value to another.
  *
@@ -248,6 +250,8 @@ bool T_is_lt(T const *const self, T const *const b);
  * @warning UB if b is initialised.
  */
 bool T_is_gt(T const *const self, T const *const b);
+
+bool T_is_ge(T const *const self, T const *const b);
 
 /**
  * initialisers,

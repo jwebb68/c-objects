@@ -76,6 +76,21 @@ bool BoxT_is_gt(BoxT const *const self, BoxT const *const b)
     return T_is_gt(self->elem, b->elem);
 }
 
+bool BoxT_is_le(BoxT const *const self, BoxT const *const b)
+{
+    return T_is_le(self->elem, b->elem);
+}
+
+bool BoxT_is_ge(BoxT const *const self, BoxT const *const b)
+{
+    return T_is_ge(self->elem, b->elem);
+}
+
+bool BoxT_contains(BoxT const *const self, T const *const v)
+{
+    return T_is_eq(self->elem, v);
+}
+
 void BoxT_new_own(BoxT *const self, T *const p)
 {
     self->elem = p;

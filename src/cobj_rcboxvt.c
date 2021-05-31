@@ -97,6 +97,21 @@ bool RCBoxVT_is_gt(RCBoxVT const *const self, RCBoxVT const *const b)
     return T_is_gt(RCBoxVT_deref(self), RCBoxVT_deref(b));
 }
 
+bool RCBoxVT_is_le(RCBoxVT const *const self, RCBoxVT const *const b)
+{
+    return T_is_le(RCBoxVT_deref(self), RCBoxVT_deref(b));
+}
+
+bool RCBoxVT_is_ge(RCBoxVT const *const self, RCBoxVT const *const b)
+{
+    return T_is_ge(RCBoxVT_deref(self), RCBoxVT_deref(b));
+}
+
+bool RCBoxVT_contains(RCBoxVT const *const self, T const *const v)
+{
+    return T_is_eq(RCBoxVT_deref(self), v);
+}
+
 // no own of ptr: that leads to heap fragmentation
 // no own of value: that's a new_default + T_destroy + T_move
 // no disown of value: that requires only 1 ref so would be a try_disown, and also required as move.

@@ -52,6 +52,16 @@ bool T_is_gt(T const *const self, T const *const b)
     return self->dummy > b->dummy;
 }
 
+bool T_is_le(T const *const self, T const *const b)
+{
+    return self->dummy <= b->dummy;
+}
+
+bool T_is_ge(T const *const self, T const *const b)
+{
+    return self->dummy >= b->dummy;
+}
+
 void T_new_int(T *const self, int v)
 {
     self->dummy = v;
