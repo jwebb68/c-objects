@@ -33,9 +33,9 @@ align-pointer=name
 align-reference=name
 #break-closing-brackets
 #break-elseifs
-break-one-line-headers
+#break-one-line-headers
 add-braces
-#add-one-line-braces
+add-one-line-braces
 #remove-braces
 #break-return-type
 attach-return-type

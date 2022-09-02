@@ -1,6 +1,6 @@
-#include "t.h"
-#include "cobj_vectort.h"
-#include "cobj_carray.h"
+#include <cobj/t.h>
+#include <cobj/cobj_vectort.h>
+#include <cobj/cobj_carray.h>
 
 #include <stdio.h>
 #include <assert.h>
@@ -12,10 +12,10 @@ int main(int argc, char *argv[]) {
 
     T backing[10];
     VectorT vec;
-    VectorT_new(&vec, backing, COBJ_CARRAY_END(backing));
+    VectorT_new(&vec, backing, COBJ_CARRAY_LEN(backing));
 
     T t1;
-    T_new_default(&t1);
+    T_default(&t1);
 
     bool ok;
     ok = VectorT_push_back(&vec, &t1);
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     ok = VectorT_push_back(&vec, &t1);
     if (!ok) {}
 
-    T_new_default(&t1);
+    T_default(&t1);
     ok = VectorT_push_back(&vec, &t1);
     if (!ok) {}
 

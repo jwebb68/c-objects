@@ -6,21 +6,24 @@ Language : Cpp
 
 AccessModifierOffset: 0
 AlignAfterOpenBracket: Align
+#AlignAfterOpenBracket: BlockIndent
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
-#AlignConsecutiveMacros: false
+AlignConsecutiveMacros: None
 AlignEscapedNewlines: DontAlign
 AlignOperands: true
 AlignTrailingComments: false
-#AllowAllArgumentsOnNextLine: false
+AllowAllArgumentsOnNextLine: false
 #AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Always
 #AllowShortBlocksOnASingleLine: Never
-AllowShortBlocksOnASingleLine: false
 AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Empty
-AllowShortIfStatementsOnASingleLine: false
-#AllowShortLambdasOnASingleLine: empty
+AllowShortIfStatementsOnASingleLine: true
+#AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLambdasOnASingleLine: Inline
 AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
@@ -47,6 +50,7 @@ IndentCaseLabels: true
 #IndentGotoLabels: false
 IndentPPDirectives: AfterHash
 IndentWrappedFunctionNames: false
+#InsertBraces: true
 #TrailingCommaStyle: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 NamespaceIndentation: None

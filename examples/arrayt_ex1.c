@@ -1,5 +1,5 @@
 #include <cobj/t.h>
-#include <cobj/cobj_vectorvt.h>
+#include <cobj/cobj_arrayt.h>
 #include <cobj/cobj_carray.h>
 
 #include <stdio.h>
@@ -11,45 +11,32 @@ int main(int argc, char *argv[]) {
     ((void)(argv));
 
     T backing[10];
-    VectorVT vec;
-    VectorVT_new(&vec, backing, COBJ_CARRAY_LEN(backing));
 
-    T t1;
-    T_default(&t1);
-
-    bool ok;
-    ok = VectorVT_push_back(&vec, &t1);
-    if (!ok) {}
-
-    ok = VectorVT_pop_back(&vec, &t1);
-    if (!ok) {}
-
-    ok = VectorVT_push_back(&vec, &t1);
-    if (!ok) {}
-
-    T_default(&t1);
-    ok = VectorVT_push_back(&vec, &t1);
-    if (!ok) {}
+    // arrays must be initialised
+    // so either default all elems on create
+    // or copy/move from existing array.
+    // if move then what happens to src?
+    ArrayTMut arr;
+    ArrayTMut_default(&arr, backing, COBJ_CARRAY_LEN(backing));
 
     printf("foo");
 
-    //etc
-
     SliceTIter it;
-    VectorVT_iter(&vec, &it);
+
+    ArrayTMut_iter(&arr, &it);
     for (T const *p;  NULL != (p = SliceTIter_next(&it));) {
         // do something with p
         // p->...
-        printf("foo %d", p->dummy);
+        printf("ham %d", p->dummy);
     }
     SliceTIter_destroy(&it);
 
     printf("foo");
 
-    VectorVT_destroy(&vec);
+    ArrayTMut_destroy(&arr);
 }
 // good, p is contained in the for-loop scope, pity 'it' isn't.
-// bad 2 compares, one advance, one deref
+// bad 3 compares, one advance, one deref
 // safer, wont advance past end, cannot deref at end.
 
 
