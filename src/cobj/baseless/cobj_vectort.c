@@ -3,33 +3,33 @@
 #include <cobj/core/cobj_defs.h> // COBJ_UNUSED_ARG
 #include <cobj/core/cobj_memory.h> // STRUCTWIPE
 
-static void VectorT_wipe(VectorT *const self)
+static void cobj_VectorT_wipe(cobj_VectorT *const self)
 {
     STRUCTWIPE(self);
 }
 
-void VectorT_destroy_member(VectorT *const self)
+void cobj_VectorT_destroy_member(cobj_VectorT *const self)
 {
-    CArrayTMut_destroy(self->ptr, self->len);
+    cobj_CArrayTMut_destroy(self->ptr, self->len);
 }
 
-void VectorT_destroy(VectorT *const self)
+void cobj_VectorT_destroy(cobj_VectorT *const self)
 {
-    VectorT_destroy_member(self);
-    VectorT_wipe(self);
+    cobj_VectorT_destroy_member(self);
+    cobj_VectorT_wipe(self);
 }
 
-void VectorT_move_member(VectorT *const self, VectorT *const src)
+void cobj_VectorT_move_member(cobj_VectorT *const self, cobj_VectorT *const src)
 {
     *self = *src;
 }
-void VectorT_move(VectorT *const self, VectorT *const src)
+void cobj_VectorT_move(cobj_VectorT *const self, cobj_VectorT *const src)
 {
-    VectorT_move_member(self, src);
-    VectorT_wipe(self);
+    cobj_VectorT_move_member(self, src);
+    cobj_VectorT_wipe(self);
 }
 
-void VectorT_new(VectorT *const self, T *const ptr, size_t len)
+void cobj_VectorT_new(cobj_VectorT *const self, T *const ptr, size_t len)
 {
     // don't use init lists, they are inefficient.
     self->ptr = ptr;
@@ -37,28 +37,28 @@ void VectorT_new(VectorT *const self, T *const ptr, size_t len)
     self->len = 0;
 }
 
-void VectorT_clear(VectorT *const self)
+void cobj_VectorT_clear(cobj_VectorT *const self)
 {
-    CArrayTMut_destroy(self->ptr, self->len);
+    cobj_CArrayTMut_destroy(self->ptr, self->len);
     self->len = 0;
 }
 
-bool VectorT_is_empty(VectorT const *const self)
+bool cobj_VectorT_is_empty(cobj_VectorT const *const self)
 {
     return self->len == 0;
 }
 
-size_t VectorT_len(VectorT const *const self)
+size_t cobj_VectorT_len(cobj_VectorT const *const self)
 {
     return self->len;
 }
 
-size_t VectorT_alloc(VectorT const *const self)
+size_t cobj_VectorT_alloc(cobj_VectorT const *const self)
 {
     return self->alloc;
 }
 
-bool WARN_UNUSED_RESULT VectorT_realloc(VectorT *const self, size_t newalloc)
+bool WARN_UNUSED_RESULT cobj_VectorT_realloc(cobj_VectorT *const self, size_t newalloc)
 {
     // heapless vector cannot realloc?
     // can it realloc smaller?
@@ -68,7 +68,7 @@ bool WARN_UNUSED_RESULT VectorT_realloc(VectorT *const self, size_t newalloc)
     return false;
 }
 
-bool WARN_UNUSED_RESULT VectorT_push_back(VectorT *const self, T *const item)
+bool WARN_UNUSED_RESULT cobj_VectorT_push_back(cobj_VectorT *const self, T *const item)
 {
     if (self->len >= self->alloc) { return false; }
     T_move(&self->ptr[self->len], item);
@@ -76,7 +76,7 @@ bool WARN_UNUSED_RESULT VectorT_push_back(VectorT *const self, T *const item)
     return true;
 }
 
-bool WARN_UNUSED_RESULT VectorT_pop_back(VectorT *const self, T *const item)
+bool WARN_UNUSED_RESULT cobj_VectorT_pop_back(cobj_VectorT *const self, T *const item)
 {
     if (self->len == 0) { return false; }
     self->len -= 1;
@@ -84,34 +84,34 @@ bool WARN_UNUSED_RESULT VectorT_pop_back(VectorT *const self, T *const item)
     return true;
 }
 
-T *VectorT_try_get_mut(VectorT const *const self, cobj_Index pos)
+T *cobj_VectorT_try_get_mut(cobj_VectorT const *const self, cobj_Index pos)
 {
     if (pos >= self->len) { return NULL; }
     return &self->ptr[pos];
 }
 
-T const *VectorT_try_get(VectorT const *const self, cobj_Index pos)
+T const *cobj_VectorT_try_get(cobj_VectorT const *const self, cobj_Index pos)
 {
     if (pos >= self->len) { return NULL; }
     return &self->ptr[pos];
 }
 
-void VectorT_as_SliceT(VectorT const *const self, SliceT *const s)
+void cobj_VectorT_as_cobj_SliceT(cobj_VectorT const *const self, cobj_SliceT *const s)
 {
-    SliceT_new(s, self->ptr, self->len);
+    cobj_SliceT_new(s, self->ptr, self->len);
 }
 
-void VectorT_as_SliceTMut(VectorT const *const self, SliceTMut *const s)
+void cobj_VectorT_as_cobj_SliceTMut(cobj_VectorT const *const self, cobj_SliceTMut *const s)
 {
-    SliceTMut_new(s, self->ptr, self->len);
+    cobj_SliceTMut_new(s, self->ptr, self->len);
 }
 
-void VectorT_iter(VectorT const *const self, SliceTIter *const it)
+void cobj_VectorT_iter(cobj_VectorT const *const self, cobj_SliceTIter *const it)
 {
-    SliceTIter_new(it, self->ptr, self->ptr + self->len);
+    cobj_SliceTIter_new(it, self->ptr, self->ptr + self->len);
 }
 
-void VectorT_iter_mut(VectorT const *const self, SliceTMutIter *const it)
+void cobj_VectorT_iter_mut(cobj_VectorT const *const self, cobj_SliceTMutIter *const it)
 {
-    SliceTMutIter_new(it, self->ptr, self->ptr + self->len);
+    cobj_SliceTMutIter_new(it, self->ptr, self->ptr + self->len);
 }

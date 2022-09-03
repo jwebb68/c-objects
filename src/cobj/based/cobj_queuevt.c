@@ -1,76 +1,78 @@
 #include <cobj/based/cobj_queuevt.h>
 #include <cobj/core/cobj_memory.h>
 // ===========================================================================
-static void QueueVT_elem_move(void *const d, void *const s)
+static void cobj_QueueVT_elem_move(void *const d, void *const s)
 {
     T_move(d, s);
 }
 
-static void *QueueVT_elem_ptr_mut(void *const arr, size_t idx)
+static void *cobj_QueueVT_elem_ptr_mut(void *const arr, size_t idx)
 {
     return &((T *)arr)[idx];
 }
 
-static void QueueVT_elem_destroy_member(void *const elem)
+static void cobj_QueueVT_elem_destroy_member(void *const elem)
 {
     T_destroy_member(elem);
 }
 
-static void QueueVT_wipe(QueueVT *const self)
+static void cobj_QueueVT_wipe(cobj_QueueVT *const self)
 {
     STRUCTWIPE(self);
 }
 
-void QueueVT_destroy_member(QueueVT *const self)
+void cobj_QueueVT_destroy_member(cobj_QueueVT *const self)
 {
-    QueueV_destroy_member(&self->inner, QueueVT_elem_ptr_mut, QueueVT_elem_destroy_member);
+    cobj_QueueV_destroy_member(&self->inner,
+                               cobj_QueueVT_elem_ptr_mut,
+                               cobj_QueueVT_elem_destroy_member);
 }
 
-void QueueVT_destroy(QueueVT *const self)
+void cobj_QueueVT_destroy(cobj_QueueVT *const self)
 {
-    QueueVT_destroy_member(self);
-    QueueVT_wipe(self);
+    cobj_QueueVT_destroy_member(self);
+    cobj_QueueVT_wipe(self);
 }
 
-void QueueVT_move_member(QueueVT *const self, QueueVT *const src)
+void cobj_QueueVT_move_member(cobj_QueueVT *const self, cobj_QueueVT *const src)
 {
-    QueueV_move_member(&self->inner, &src->inner);
+    cobj_QueueV_move_member(&self->inner, &src->inner);
 }
 
-void QueueVT_move(QueueVT *const self, QueueVT *const src)
+void cobj_QueueVT_move(cobj_QueueVT *const self, cobj_QueueVT *const src)
 {
-    QueueVT_move_member(self, src);
-    QueueVT_wipe(src);
+    cobj_QueueVT_move_member(self, src);
+    cobj_QueueVT_wipe(src);
 }
 
-void QueueVT_new(QueueVT *const self, void *const ptr, size_t alloc)
+void cobj_QueueVT_new(cobj_QueueVT *const self, void *const ptr, size_t alloc)
 {
-    QueueV_new(&self->inner, ptr, alloc);
+    cobj_QueueV_new(&self->inner, ptr, alloc);
 }
-void QueueVT_clear(QueueVT *const self)
+void cobj_QueueVT_clear(cobj_QueueVT *const self)
 {
-    QueueV_clear(&self->inner, QueueVT_elem_ptr_mut, QueueVT_elem_destroy_member);
-}
-
-bool QueueVT_is_empty(QueueVT const *const self)
-{
-    return QueueV_is_empty(&self->inner);
+    cobj_QueueV_clear(&self->inner, cobj_QueueVT_elem_ptr_mut, cobj_QueueVT_elem_destroy_member);
 }
 
-size_t QueueVT_len(QueueVT const *const self)
+bool cobj_QueueVT_is_empty(cobj_QueueVT const *const self)
 {
-    return QueueV_len(&self->inner);
-}
-size_t QueueVT_alloc(QueueVT const *const self)
-{
-    return QueueV_alloc(&self->inner);
+    return cobj_QueueV_is_empty(&self->inner);
 }
 
-bool WARN_UNUSED_RESULT QueueVT_put(QueueVT *const self, T *const elem)
+size_t cobj_QueueVT_len(cobj_QueueVT const *const self)
 {
-    return QueueV_put(&self->inner, elem, QueueVT_elem_ptr_mut, QueueVT_elem_move);
+    return cobj_QueueV_len(&self->inner);
 }
-bool WARN_UNUSED_RESULT QueueVT_get(QueueVT *const self, T *const item)
+size_t cobj_QueueVT_alloc(cobj_QueueVT const *const self)
 {
-    return QueueV_get(&self->inner, item, QueueVT_elem_ptr_mut, QueueVT_elem_move);
+    return cobj_QueueV_alloc(&self->inner);
+}
+
+bool WARN_UNUSED_RESULT cobj_QueueVT_put(cobj_QueueVT *const self, T *const elem)
+{
+    return cobj_QueueV_put(&self->inner, elem, cobj_QueueVT_elem_ptr_mut, cobj_QueueVT_elem_move);
+}
+bool WARN_UNUSED_RESULT cobj_QueueVT_get(cobj_QueueVT *const self, T *const item)
+{
+    return cobj_QueueV_get(&self->inner, item, cobj_QueueVT_elem_ptr_mut, cobj_QueueVT_elem_move);
 }

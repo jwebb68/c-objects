@@ -2,7 +2,7 @@
 #    define COBJ_ARRAYVT_H
 
 /**
- * ArrayV<T>
+ * cobj_ArrayV<T>
  *
  * A contiguous block of initialised Ts.
  * Array owns the block, so when destroyed, will destroy the Ts.
@@ -10,7 +10,7 @@
 // because it's C there is no template mechanism, so this needs to be repeated for each type
 // being treated this way.
 
-typedef struct ArrayVT_s ArrayVT;
+typedef struct cobj_ArrayVT_s cobj_ArrayVT;
 
 #    include <cobj/based/cobj_arrayv.h>
 #    include <cobj/based/cobj_slicevt.h>
@@ -20,28 +20,28 @@ typedef struct ArrayVT_s ArrayVT;
 #    include <stdbool.h>
 #    include <stddef.h> // size_t
 
-struct ArrayVT_s {
-    ArrayV inner;
+struct cobj_ArrayVT_s {
+    cobj_ArrayV inner;
 };
 
-void ArrayVT_destroy_member(ArrayVT *const self);
-void ArrayVT_destroy(ArrayVT *const self);
+void cobj_ArrayVT_destroy_member(cobj_ArrayVT *const self);
+void cobj_ArrayVT_destroy(cobj_ArrayVT *const self);
 
-void ArrayVT_move(ArrayVT *const self, ArrayVT *const src);
+void cobj_ArrayVT_move(cobj_ArrayVT *const self, cobj_ArrayVT *const src);
 
 // copy src into self, but self is uninitialised and so nothing to copy to.
-// bool WARN_UNUSED_RESULT ArrayVT_try_copy(ArrayVT *const self, ArrayVT const *const src, Error
-// *err);
+// bool WARN_UNUSED_RESULT cobj_ArrayVT_try_copy(cobj_ArrayVT *const self, cobj_ArrayVT const *const
+// src, cobj_Error*err);
 
-void ArrayVT_default(ArrayVT *const self, T *const arr, size_t len);
+void cobj_ArrayVT_default(cobj_ArrayVT *const self, T *const arr, size_t len);
 
-void ArrayVT_own(ArrayVT *const self, T *const arr, size_t len);
-void ArrayVT_disown(ArrayVT *const self, T **const arr, size_t *const len);
+void cobj_ArrayVT_own(cobj_ArrayVT *const self, T *const arr, size_t len);
+void cobj_ArrayVT_disown(cobj_ArrayVT *const self, T **const arr, size_t *const len);
 
-void ArrayVT_as_SliceT(ArrayVT const *const self, SliceVT *const s);
-void ArrayVT_as_SliceTMut(ArrayVT *const self, SliceVTMut *const s);
+void cobj_ArrayVT_as_cobj_SliceT(cobj_ArrayVT const *const self, cobj_SliceVT *const s);
+void cobj_ArrayVT_as_cobj_SliceTMut(cobj_ArrayVT *const self, cobj_SliceVTMut *const s);
 
-void ArrayVT_iter(ArrayVT const *const self, SliceVTIter *const it);
-void ArrayVT_iter_mut(ArrayVT *const self, SliceVTMutIter *const it);
+void cobj_ArrayVT_iter(cobj_ArrayVT const *const self, cobj_SliceVTIter *const it);
+void cobj_ArrayVT_iter_mut(cobj_ArrayVT *const self, cobj_SliceVTMutIter *const it);
 
 #endif //! defined(COBJ_ARRAYVT_H)

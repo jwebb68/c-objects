@@ -28,7 +28,7 @@ void T_move(T *const self, T *const src)
     T_wipe(src);
 }
 
-bool WARN_UNUSED_RESULT T_try_copy_member(T *const self, T const *const src, Error *const err)
+bool WARN_UNUSED_RESULT T_try_copy_member(T *const self, T const *const src, cobj_Error *const err)
 {
     *self = *src;
     // and/or copy any members in a by-member fashion,
@@ -36,9 +36,9 @@ bool WARN_UNUSED_RESULT T_try_copy_member(T *const self, T const *const src, Err
     COBJ_UNUSED_ARG(err);
     return true;
     // or
-    // return ERROR_RAISE(err, Error_ENOTIMPL);
+    // return COBJ_ERROR_RAISE(err, cobj_cobj_ErrorCode_ENOTIMPL);
 }
-bool WARN_UNUSED_RESULT T_try_copy(T *const self, T const *const src, Error *const err)
+bool WARN_UNUSED_RESULT T_try_copy(T *const self, T const *const src, cobj_Error *const err)
 {
     if (!T_try_copy_member(self, src, err)) {
         T_wipe(self);
@@ -99,7 +99,7 @@ void T_default(T *const self)
 //  *   T_destroy(p);
 //  *   T_free(p);
 //  * *
-//  * But then is a better soln to use a BoxT ? (somewhat equiv of a unique_ptr<T> in C++).
+//  * But then is a better soln to use a cobj_BoxT ? (somewhat equiv of a unique_ptr<T> in C++).
 //  *
 //  * note: had tried creating malloc_new* functions as helpers, but although it looks neater
 //  *       it was a lot of duplication.
@@ -108,9 +108,9 @@ void T_default(T *const self)
 //  *       in that free did more than just free.
 //  *       Simpler to use have a T_malloc and T_free and call new/destroy as needed.
 //  */
-// T *T_try_malloc(Error *const err)
+// T *T_cobj_try_malloc(cobj_Error*const err)
 // {
-//     return (T *)try_malloc(sizeof(T), err);
+//     return (T *)cobj_try_malloc(sizeof(T), err);
 // }
 
 // void T_free(T *const self)

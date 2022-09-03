@@ -1,121 +1,127 @@
 #include <cobj/based/cobj_carrayvt.h>
 #include <string.h> // memset
 
-static void CArrayVT_elem_destroy(void *const self)
+static void cobj_CArrayVT_elem_destroy(void *const self)
 {
     T_destroy(self);
 }
 
-static void CArrayVT_elem_default(void *const self)
+static void cobj_CArrayVT_elem_default(void *const self)
 {
     T_default(self);
 }
 
-static bool WARN_UNUSED_RESULT CArrayVT_elem_try_copy(void *const self,
-                                                      void const *const src,
-                                                      Error *const err)
+static bool WARN_UNUSED_RESULT cobj_CArrayVT_elem_try_copy(void *const self,
+                                                           void const *const src,
+                                                           cobj_Error *const err)
 {
     return T_try_copy(self, src, err);
 }
 
-static void const *CArrayVT_elem_ptr(void const *const arr, size_t idx)
+static void const *cobj_CArrayVT_elem_ptr(void const *const arr, size_t idx)
 {
-    return CArrayVT_get(arr, idx);
+    return cobj_CArrayVT_get(arr, idx);
 }
 
-static void *CArrayVT_elem_ptr_mut(void *const arr, size_t idx)
+static void *cobj_CArrayVT_elem_ptr_mut(void *const arr, size_t idx)
 {
-    return CArrayVT_get_mut(arr, idx);
+    return cobj_CArrayVT_get_mut(arr, idx);
 }
 
-static void CArrayVT_wipe(T *const arr, size_t len)
+static void cobj_CArrayVT_wipe(T *const arr, size_t len)
 {
-    uint8_t *const e = (uint8_t *)CArrayVT_get_mut(arr, len);
+    uint8_t *const e = (uint8_t *)cobj_CArrayVT_get_mut(arr, len);
     memset(arr, 0xa5, e - (uint8_t *)arr);
 }
 
-void CArrayVT_destroy_member(T *const arr, size_t len)
+void cobj_CArrayVT_destroy_member(T *const arr, size_t len)
 {
-    CArrayV_destroy_member(arr, len, CArrayVT_elem_ptr_mut, CArrayVT_elem_destroy);
+    cobj_CArrayV_destroy_member(arr, len, cobj_CArrayVT_elem_ptr_mut, cobj_CArrayVT_elem_destroy);
 }
 
-void CArrayVT_destroy(T *const arr, size_t len)
+void cobj_CArrayVT_destroy(T *const arr, size_t len)
 {
-    CArrayVT_destroy_member(arr, len);
-    CArrayVT_wipe(arr, len);
+    cobj_CArrayVT_destroy_member(arr, len);
+    cobj_CArrayVT_wipe(arr, len);
 }
 
-void CArrayVT_move_member(T *const arr, size_t len, T *const src)
+void cobj_CArrayVT_move_member(T *const arr, size_t len, T *const src)
 {
-    CArrayV_move_member(arr, len, src, CArrayVT_elem_ptr_mut);
+    cobj_CArrayV_move_member(arr, len, src, cobj_CArrayVT_elem_ptr_mut);
 }
-void CArrayVT_move(T *const arr, size_t len, T *const src)
+void cobj_CArrayVT_move(T *const arr, size_t len, T *const src)
 {
-    CArrayVT_move_member(arr, len, src);
-    CArrayVT_wipe(src, len);
-}
-
-bool WARN_UNUSED_RESULT CArrayVT_try_copy(T *const arr, size_t len, T const *const src, Error *err)
-{
-    return CArrayV_try_copy(arr,
-                            len,
-                            src,
-                            err,
-                            CArrayVT_elem_ptr,
-                            CArrayVT_elem_ptr_mut,
-                            CArrayVT_elem_try_copy,
-                            CArrayVT_elem_destroy);
+    cobj_CArrayVT_move_member(arr, len, src);
+    cobj_CArrayVT_wipe(src, len);
 }
 
-bool WARN_UNUSED_RESULT CArrayVT_try_fill(T *const arr, size_t len, T const *const src, Error *err)
+bool WARN_UNUSED_RESULT cobj_CArrayVT_try_copy(T *const arr,
+                                               size_t len,
+                                               T const *const src,
+                                               cobj_Error *err)
 {
-    return CArrayV_try_fill(arr,
-                            len,
-                            src,
-                            err,
-                            CArrayVT_elem_ptr_mut,
-                            CArrayVT_elem_try_copy,
-                            CArrayVT_elem_destroy);
+    return cobj_CArrayV_try_copy(arr,
+                                 len,
+                                 src,
+                                 err,
+                                 cobj_CArrayVT_elem_ptr,
+                                 cobj_CArrayVT_elem_ptr_mut,
+                                 cobj_CArrayVT_elem_try_copy,
+                                 cobj_CArrayVT_elem_destroy);
 }
 
-void CArrayVT_default(T *const arr, size_t len)
+bool WARN_UNUSED_RESULT cobj_CArrayVT_try_fill(T *const arr,
+                                               size_t len,
+                                               T const *const src,
+                                               cobj_Error *err)
 {
-    CArrayV_default(arr, len, CArrayVT_elem_ptr_mut, CArrayVT_elem_default);
+    return cobj_CArrayV_try_fill(arr,
+                                 len,
+                                 src,
+                                 err,
+                                 cobj_CArrayVT_elem_ptr_mut,
+                                 cobj_CArrayVT_elem_try_copy,
+                                 cobj_CArrayVT_elem_destroy);
+}
+
+void cobj_CArrayVT_default(T *const arr, size_t len)
+{
+    cobj_CArrayV_default(arr, len, cobj_CArrayVT_elem_ptr_mut, cobj_CArrayVT_elem_default);
 }
 
 #if 0
-void CArrayVT_default(T *const b, T *const e)
+void cobj_CArrayVT_default(T *const b, T *const e)
 {
-    CArrayV_default(b, e, sizeof(T), CArrayVT_elem_default);
+    cobj_CArrayV_default(b, e, sizeof(T), cobj_CArrayVT_elem_default);
 }
 #endif
 
-T *CArrayVT_get_mut(T *const arr, size_t idx)
+T *cobj_CArrayVT_get_mut(T *const arr, size_t idx)
 {
     return &((T *)arr)[idx];
 }
 
-T const *CArrayVT_get(T const *const arr, size_t idx)
+T const *cobj_CArrayVT_get(T const *const arr, size_t idx)
 {
     return &((T const *)arr)[idx];
 }
 
-void CArrayVT_as_SliceVT(T const *const arr, size_t len, SliceVT *const s)
+void cobj_CArrayVT_as_cobj_SliceVT(T const *const arr, size_t len, cobj_SliceVT *const s)
 {
-    CArrayV_as_SliceV(arr, len, &s->inner);
+    cobj_CArrayV_as_cobj_SliceV(arr, len, &s->inner);
 }
 
-void CArrayVT_as_SliceVTMut(T *const arr, size_t len, SliceVTMut *const s)
+void cobj_CArrayVT_as_cobj_SliceVTMut(T *const arr, size_t len, cobj_SliceVTMut *const s)
 {
-    CArrayV_as_SliceVMut(arr, len, &s->inner);
+    cobj_CArrayV_as_cobj_SliceVMut(arr, len, &s->inner);
 }
 
-void CArrayVT_iter(T const *const arr, size_t len, SliceVTIter *const it)
+void cobj_CArrayVT_iter(T const *const arr, size_t len, cobj_SliceVTIter *const it)
 {
-    CArrayV_iter(arr, len, &it->inner, CArrayVT_elem_ptr);
+    cobj_CArrayV_iter(arr, len, &it->inner, cobj_CArrayVT_elem_ptr);
 }
 
-void CArrayVT_iter_mut(T *const arr, size_t len, SliceVTMutIter *const it)
+void cobj_CArrayVT_iter_mut(T *const arr, size_t len, cobj_SliceVTMutIter *const it)
 {
-    CArrayV_iter_mut(arr, len, &it->inner, CArrayVT_elem_ptr_mut);
+    cobj_CArrayV_iter_mut(arr, len, &it->inner, cobj_CArrayVT_elem_ptr_mut);
 }

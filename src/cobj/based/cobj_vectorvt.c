@@ -2,107 +2,115 @@
 #include <cobj/based/cobj_vectorvt.h>
 #include <cobj/core/cobj_memory.h> // STRUCTWIPE
 
-static void VectorVT_move_elem(void *const self, void *const src)
+static void cobj_VectorVT_move_elem(void *const self, void *const src)
 {
     T_move(self, src);
 }
 
-static void VectorVT_destroy_elem(void *const self)
+static void cobj_VectorVT_destroy_elem(void *const self)
 {
     T_destroy(self);
 }
 
-static void const *VectorVT_elem_ptr(void const *const arr, size_t idx)
+static void const *cobj_VectorVT_elem_ptr(void const *const arr, size_t idx)
 {
-    return CArrayVT_get(arr, idx);
+    return cobj_CArrayVT_get(arr, idx);
 }
 
-static void *VectorVT_elem_ptr_mut(void *const arr, size_t idx)
+static void *cobj_VectorVT_elem_ptr_mut(void *const arr, size_t idx)
 {
-    return CArrayVT_get_mut(arr, idx);
+    return cobj_CArrayVT_get_mut(arr, idx);
 }
 
-static void VectorVT_wipe(VectorVT *const self)
+static void cobj_VectorVT_wipe(cobj_VectorVT *const self)
 {
     STRUCTWIPE(self);
 }
 
-void VectorVT_destroy_member(VectorVT *const self)
+void cobj_VectorVT_destroy_member(cobj_VectorVT *const self)
 {
-    VectorV_destroy_member(&self->inner, VectorVT_elem_ptr_mut, VectorVT_destroy_elem);
+    cobj_VectorV_destroy_member(&self->inner,
+                                cobj_VectorVT_elem_ptr_mut,
+                                cobj_VectorVT_destroy_elem);
 }
-void VectorVT_destroy(VectorVT *const self)
+void cobj_VectorVT_destroy(cobj_VectorVT *const self)
 {
-    VectorVT_destroy_member(self);
-    VectorVT_wipe(self);
-}
-
-void VectorVT_move_member(VectorVT *const self, VectorVT *const src)
-{
-    VectorV_move_member(&self->inner, &src->inner);
-}
-void VectorVT_move(VectorVT *const self, VectorVT *const src)
-{
-    VectorVT_move_member(self, src);
-    VectorVT_wipe(self);
+    cobj_VectorVT_destroy_member(self);
+    cobj_VectorVT_wipe(self);
 }
 
-void VectorVT_new(VectorVT *const self, T *const ptr, size_t alloc)
+void cobj_VectorVT_move_member(cobj_VectorVT *const self, cobj_VectorVT *const src)
 {
-    VectorV_new(&self->inner, ptr, alloc);
+    cobj_VectorV_move_member(&self->inner, &src->inner);
+}
+void cobj_VectorVT_move(cobj_VectorVT *const self, cobj_VectorVT *const src)
+{
+    cobj_VectorVT_move_member(self, src);
+    cobj_VectorVT_wipe(self);
 }
 
-bool VectorVT_is_empty(VectorVT const *const self)
+void cobj_VectorVT_new(cobj_VectorVT *const self, T *const ptr, size_t alloc)
 {
-    return VectorV_is_empty(&self->inner);
+    cobj_VectorV_new(&self->inner, ptr, alloc);
 }
 
-void VectorVT_clear(VectorVT *const self)
+bool cobj_VectorVT_is_empty(cobj_VectorVT const *const self)
 {
-    VectorV_clear(&self->inner, VectorVT_elem_ptr_mut, VectorVT_destroy_elem);
+    return cobj_VectorV_is_empty(&self->inner);
 }
 
-size_t VectorVT_len(VectorVT const *const self)
+void cobj_VectorVT_clear(cobj_VectorVT *const self)
 {
-    return VectorV_len(&self->inner);
+    cobj_VectorV_clear(&self->inner, cobj_VectorVT_elem_ptr_mut, cobj_VectorVT_destroy_elem);
 }
 
-bool WARN_UNUSED_RESULT VectorVT_push_back(VectorVT *const self, T *const elem)
+size_t cobj_VectorVT_len(cobj_VectorVT const *const self)
 {
-    return VectorV_push_back(&self->inner, elem, VectorVT_elem_ptr_mut, VectorVT_move_elem);
+    return cobj_VectorV_len(&self->inner);
 }
 
-bool WARN_UNUSED_RESULT VectorVT_pop_back(VectorVT *const self, T *const elem)
+bool WARN_UNUSED_RESULT cobj_VectorVT_push_back(cobj_VectorVT *const self, T *const elem)
 {
-    return VectorV_pop_back(&self->inner, elem, VectorVT_elem_ptr_mut, VectorVT_move_elem);
+    return cobj_VectorV_push_back(&self->inner,
+                                  elem,
+                                  cobj_VectorVT_elem_ptr_mut,
+                                  cobj_VectorVT_move_elem);
 }
 
-T *VectorVT_try_get_mut(VectorVT const *const self, cobj_Index const pos)
+bool WARN_UNUSED_RESULT cobj_VectorVT_pop_back(cobj_VectorVT *const self, T *const elem)
 {
-    return VectorV_try_get_mut(&self->inner, pos, VectorVT_elem_ptr_mut);
+    return cobj_VectorV_pop_back(&self->inner,
+                                 elem,
+                                 cobj_VectorVT_elem_ptr_mut,
+                                 cobj_VectorVT_move_elem);
 }
 
-T const *VectorVT_try_get(VectorVT const *const self, cobj_Index const pos)
+T *cobj_VectorVT_try_get_mut(cobj_VectorVT const *const self, cobj_Index const pos)
 {
-    return VectorV_try_get(&self->inner, pos, VectorVT_elem_ptr);
+    return cobj_VectorV_try_get_mut(&self->inner, pos, cobj_VectorVT_elem_ptr_mut);
 }
 
-void VectorVT_as_SliceVT(VectorVT const *const self, SliceVT *const s)
+T const *cobj_VectorVT_try_get(cobj_VectorVT const *const self, cobj_Index const pos)
 {
-    VectorV_as_SliceV(&self->inner, &s->inner);
+    return cobj_VectorV_try_get(&self->inner, pos, cobj_VectorVT_elem_ptr);
 }
 
-void VectorVT_as_SliceVTMut(VectorVT const *const self, SliceVTMut *const s)
+void cobj_VectorVT_as_cobj_SliceVT(cobj_VectorVT const *const self, cobj_SliceVT *const s)
 {
-    VectorV_as_SliceVMut(&self->inner, &s->inner);
+    cobj_VectorV_as_cobj_SliceV(&self->inner, &s->inner);
 }
 
-void VectorVT_iter(VectorVT const *const self, SliceVTIter *const it)
+void cobj_VectorVT_as_cobj_SliceVTMut(cobj_VectorVT const *const self, cobj_SliceVTMut *const s)
 {
-    VectorV_iter(&self->inner, &it->inner, VectorVT_elem_ptr);
+    cobj_VectorV_as_cobj_SliceVMut(&self->inner, &s->inner);
 }
 
-void VectorVT_iter_mut(VectorVT const *const self, SliceVTMutIter *const it)
+void cobj_VectorVT_iter(cobj_VectorVT const *const self, cobj_SliceVTIter *const it)
 {
-    VectorV_iter_mut(&self->inner, &it->inner, VectorVT_elem_ptr_mut);
+    cobj_VectorV_iter(&self->inner, &it->inner, cobj_VectorVT_elem_ptr);
+}
+
+void cobj_VectorVT_iter_mut(cobj_VectorVT const *const self, cobj_SliceVTMutIter *const it)
+{
+    cobj_VectorV_iter_mut(&self->inner, &it->inner, cobj_VectorVT_elem_ptr_mut);
 }

@@ -23,11 +23,11 @@ void memwipe(void *const p, size_t const n)
     // memwipe2(p, (uint8_t *)p + n);
 }
 
-void *try_malloc(size_t size, Error *const err)
+void *cobj_try_malloc(size_t size, cobj_Error *const err)
 {
     void *p = malloc(size);
     if (p != NULL) { return p; }
-    bool r = ERROR_RAISE(err, Error_ENOMEM);
+    bool r = COBJ_ERROR_RAISE(err, cobj_ErrorCode_ENOMEM);
     (void)r;
     return NULL;
 }

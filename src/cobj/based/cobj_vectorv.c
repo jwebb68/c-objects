@@ -2,64 +2,64 @@
 #include <cobj/based/cobj_vectorv.h>
 #include <cobj/core/cobj_memory.h> // STRUCTWIPE
 
-static void VectorV_wipe(VectorV *const self)
+static void cobj_VectorV_wipe(cobj_VectorV *const self)
 {
     STRUCTWIPE(self);
 }
 
-void VectorV_destroy_member(VectorV *const self,
-                            void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                            void (*elem_destroy)(void *const))
+void cobj_VectorV_destroy_member(cobj_VectorV *const self,
+                                 void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                                 void (*elem_destroy)(void *const))
 {
-    CArrayV_destroy(self->ptr, self->len, elem_ptr_mut, elem_destroy);
+    cobj_CArrayV_destroy(self->ptr, self->len, elem_ptr_mut, elem_destroy);
 }
-void VectorV_destroy(VectorV *const self,
-                     void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                     void (*elem_destroy)(void *const))
+void cobj_VectorV_destroy(cobj_VectorV *const self,
+                          void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                          void (*elem_destroy)(void *const))
 {
-    VectorV_destroy_member(self, elem_ptr_mut, elem_destroy);
-    VectorV_wipe(self);
+    cobj_VectorV_destroy_member(self, elem_ptr_mut, elem_destroy);
+    cobj_VectorV_wipe(self);
 }
 
-void VectorV_move_member(VectorV *const self, VectorV *const src)
+void cobj_VectorV_move_member(cobj_VectorV *const self, cobj_VectorV *const src)
 {
     *self = *src;
 }
-void VectorV_move(VectorV *const self, VectorV *const src)
+void cobj_VectorV_move(cobj_VectorV *const self, cobj_VectorV *const src)
 {
-    VectorV_move_member(self, src);
-    VectorV_wipe(src);
+    cobj_VectorV_move_member(self, src);
+    cobj_VectorV_wipe(src);
 }
 
-void VectorV_new(VectorV *const self, void *const ptr, size_t alloc)
+void cobj_VectorV_new(cobj_VectorV *const self, void *const ptr, size_t alloc)
 {
     self->ptr = ptr;
     self->alloc = alloc;
     self->len = 0;
 }
 
-bool VectorV_is_empty(VectorV const *const self)
+bool cobj_VectorV_is_empty(cobj_VectorV const *const self)
 {
     return self->len == 0;
 }
 
-void VectorV_clear(VectorV *const self,
-                   void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                   void (*elem_destroy)(void *const))
+void cobj_VectorV_clear(cobj_VectorV *const self,
+                        void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                        void (*elem_destroy)(void *const))
 {
-    CArrayV_destroy(self->ptr, self->len, elem_ptr_mut, elem_destroy);
+    cobj_CArrayV_destroy(self->ptr, self->len, elem_ptr_mut, elem_destroy);
     self->len = 0;
 }
 
-size_t VectorV_len(VectorV const *const self)
+size_t cobj_VectorV_len(cobj_VectorV const *const self)
 {
     return self->len;
 }
 
-bool WARN_UNUSED_RESULT VectorV_push_back(VectorV *const self,
-                                          void *const elem,
-                                          void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                                          void (*elem_move)(void *const, void *const))
+bool WARN_UNUSED_RESULT cobj_VectorV_push_back(cobj_VectorV *const self,
+                                               void *const elem,
+                                               void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                                               void (*elem_move)(void *const, void *const))
 {
     // moves, not copies
     if (self->len >= self->alloc) { return false; }
@@ -69,10 +69,10 @@ bool WARN_UNUSED_RESULT VectorV_push_back(VectorV *const self,
     return true;
 }
 
-bool WARN_UNUSED_RESULT VectorV_pop_back(VectorV *const self,
-                                         void *const elem,
-                                         void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                                         void (*elem_move)(void *const, void *const))
+bool WARN_UNUSED_RESULT cobj_VectorV_pop_back(cobj_VectorV *const self,
+                                              void *const elem,
+                                              void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                                              void (*elem_move)(void *const, void *const))
 {
     if (self->len == 0) { return false; }
     self->len -= 1;
@@ -81,44 +81,44 @@ bool WARN_UNUSED_RESULT VectorV_pop_back(VectorV *const self,
     return true;
 }
 
-void *VectorV_try_get_mut(VectorV const *const self,
-                          cobj_Index pos,
-                          void *(*elem_ptr_mut)(void *const arr, size_t idx))
+void *cobj_VectorV_try_get_mut(cobj_VectorV const *const self,
+                               cobj_Index pos,
+                               void *(*elem_ptr_mut)(void *const arr, size_t idx))
 {
     if (pos >= self->len) { return false; }
     void *p = elem_ptr_mut(self->ptr, pos);
     return p;
 }
 
-void const *VectorV_try_get(VectorV const *const self,
-                            cobj_Index pos,
-                            void const *(*elem_ptr)(void const *const arr, size_t idx))
+void const *cobj_VectorV_try_get(cobj_VectorV const *const self,
+                                 cobj_Index pos,
+                                 void const *(*elem_ptr)(void const *const arr, size_t idx))
 {
     if (pos >= self->len) { return false; }
     void const *p = elem_ptr(self->ptr, pos);
     return p;
 }
 
-void VectorV_as_SliceV(VectorV const *const self, SliceV *const s)
+void cobj_VectorV_as_cobj_SliceV(cobj_VectorV const *const self, cobj_SliceV *const s)
 {
-    SliceV_new(s, self->ptr, self->len);
+    cobj_SliceV_new(s, self->ptr, self->len);
 }
 
-void VectorV_as_SliceVMut(VectorV const *const self, SliceVMut *const s)
+void cobj_VectorV_as_cobj_SliceVMut(cobj_VectorV const *const self, cobj_SliceVMut *const s)
 {
-    SliceVMut_new(s, self->ptr, self->len);
+    cobj_SliceVMut_new(s, self->ptr, self->len);
 }
 
-void VectorV_iter(VectorV const *const self,
-                  SliceVIter *const it,
-                  void const *(*elem_ptr)(void const *const arr, size_t idx))
+void cobj_VectorV_iter(cobj_VectorV const *const self,
+                       cobj_SliceVIter *const it,
+                       void const *(*elem_ptr)(void const *const arr, size_t idx))
 {
-    SliceVIter_new(it, self->ptr, elem_ptr(self->ptr, self->len));
+    cobj_SliceVIter_new(it, self->ptr, elem_ptr(self->ptr, self->len));
 }
 
-void VectorV_iter_mut(VectorV const *const self,
-                      SliceVMutIter *const it,
-                      void *(*elem_ptr_mut)(void *const arr, size_t idx))
+void cobj_VectorV_iter_mut(cobj_VectorV const *const self,
+                           cobj_SliceVMutIter *const it,
+                           void *(*elem_ptr_mut)(void *const arr, size_t idx))
 {
-    SliceVMutIter_new(it, self->ptr, elem_ptr_mut(self->ptr, self->len));
+    cobj_SliceVMutIter_new(it, self->ptr, elem_ptr_mut(self->ptr, self->len));
 }

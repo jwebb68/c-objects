@@ -10,7 +10,7 @@ void memwipe(void *const p, size_t const n);
 
 void memwipe2(void *const b, void *const e);
 
-void *try_malloc(size_t size, Error *const err);
+void *cobj_try_malloc(size_t size, cobj_Error *const err);
 
 void memswap(void *a, void *b, size_t n);
 

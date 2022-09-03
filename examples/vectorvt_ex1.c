@@ -11,42 +11,42 @@ int main(int argc, char *argv[]) {
     ((void)(argv));
 
     T backing[10];
-    VectorVT vec;
-    VectorVT_new(&vec, backing, COBJ_CARRAY_LEN(backing));
+    cobj_VectorVT vec;
+    cobj_VectorVT_new(&vec, backing, COBJ_CARRAY_LEN(backing));
 
     T t1;
     T_default(&t1);
 
     bool ok;
-    ok = VectorVT_push_back(&vec, &t1);
+    ok = cobj_VectorVT_push_back(&vec, &t1);
     if (!ok) {}
 
-    ok = VectorVT_pop_back(&vec, &t1);
+    ok = cobj_VectorVT_pop_back(&vec, &t1);
     if (!ok) {}
 
-    ok = VectorVT_push_back(&vec, &t1);
+    ok = cobj_VectorVT_push_back(&vec, &t1);
     if (!ok) {}
 
     T_default(&t1);
-    ok = VectorVT_push_back(&vec, &t1);
+    ok = cobj_VectorVT_push_back(&vec, &t1);
     if (!ok) {}
 
     printf("foo");
 
     //etc
 
-    SliceVTIter it;
-    VectorVT_iter(&vec, &it);
-    for (T const *p;  NULL != (p = SliceVTIter_next(&it));) {
+    cobj_SliceVTIter it;
+    cobj_VectorVT_iter(&vec, &it);
+    for (T const *p;  NULL != (p = cobj_SliceVTIter_next(&it));) {
         // do something with p
         // p->...
         printf("foo %d", p->dummy);
     }
-    SliceVTIter_destroy(&it);
+    cobj_SliceVTIter_destroy(&it);
 
     printf("foo");
 
-    VectorVT_destroy(&vec);
+    cobj_VectorVT_destroy(&vec);
 }
 // good, p is contained in the for-loop scope, pity 'it' isn't.
 // bad 2 compares, one advance, one deref

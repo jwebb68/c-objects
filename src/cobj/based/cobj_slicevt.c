@@ -4,295 +4,307 @@
 #include <cobj/core/cobj_memory.h>
 #include <memory.h> // memmove
 
-static void const *SliceVT_elem_ptr(void const *const arr, size_t idx)
+static void const *cobj_SliceVT_elem_ptr(void const *const arr, size_t idx)
 {
     return &((T const *)arr)[idx];
 }
 
-static void *SliceVT_elem_ptr_mut(void *const arr, size_t idx)
+static void *cobj_SliceVT_elem_ptr_mut(void *const arr, size_t idx)
 {
     return &((T *)arr)[idx];
 }
 
-static void SliceVT_elem_destroy(void *const elem)
+static void cobj_SliceVT_elem_destroy(void *const elem)
 {
     T_destroy_member((T *)elem);
 }
 
-static bool SliceVT_elem_try_copy(void *const elem, void const *const src, Error *const err)
+static bool
+cobj_SliceVT_elem_try_copy(void *const elem, void const *const src, cobj_Error *const err)
 {
     return T_try_copy((T *)elem, (T const *)src, err);
 }
 
-static void SliceVT_wipe(SliceVT *const self)
+static void cobj_SliceVT_wipe(cobj_SliceVT *const self)
 {
     STRUCTWIPE(self);
 }
 
-void SliceVT_destroy_member(SliceVT *const self)
+void cobj_SliceVT_destroy_member(cobj_SliceVT *const self)
 {
     COBJ_UNUSED_ARG(self);
 }
-void SliceVT_destroy(SliceVT *const self)
+void cobj_SliceVT_destroy(cobj_SliceVT *const self)
 {
-    SliceVT_destroy_member(self);
-    SliceVT_wipe(self);
+    cobj_SliceVT_destroy_member(self);
+    cobj_SliceVT_wipe(self);
 }
 
-void SliceVT_move_member(SliceVT *const self, SliceVT *const src)
+void cobj_SliceVT_move_member(cobj_SliceVT *const self, cobj_SliceVT *const src)
 {
     *self = *src;
 }
-void SliceVT_move(SliceVT *const self, SliceVT *const src)
+void cobj_SliceVT_move(cobj_SliceVT *const self, cobj_SliceVT *const src)
 {
-    SliceVT_move_member(self, src);
-    SliceVT_wipe(src);
+    cobj_SliceVT_move_member(self, src);
+    cobj_SliceVT_wipe(src);
 }
 
-bool WARN_UNUSED_RESULT SliceVT_try_copy(SliceVT *const self,
-                                         SliceVT const *const src,
-                                         Error *const err)
+bool WARN_UNUSED_RESULT cobj_SliceVT_try_copy(cobj_SliceVT *const self,
+                                              cobj_SliceVT const *const src,
+                                              cobj_Error *const err)
 {
-    return SliceV_try_copy(&self->inner, &src->inner, err);
+    return cobj_SliceV_try_copy(&self->inner, &src->inner, err);
 }
 
-void SliceVT_new(SliceVT *const self, T const *ptr, size_t len)
+void cobj_SliceVT_new(cobj_SliceVT *const self, T const *ptr, size_t len)
 {
-    SliceV_new(&self->inner, ptr, len);
+    cobj_SliceV_new(&self->inner, ptr, len);
 }
 
-size_t SliceVT_len(SliceVT const *const self)
+size_t cobj_SliceVT_len(cobj_SliceVT const *const self)
 {
-    return SliceV_len(&self->inner);
+    return cobj_SliceV_len(&self->inner);
 }
 
-bool SliceVT_is_empty(SliceVT const *const self)
+bool cobj_SliceVT_is_empty(cobj_SliceVT const *const self)
 {
-    return SliceV_is_empty(&self->inner);
+    return cobj_SliceV_is_empty(&self->inner);
 }
 
-T const *SliceVT_try_get(SliceVT const *const self, size_t pos)
+T const *cobj_SliceVT_try_get(cobj_SliceVT const *const self, size_t pos)
 {
-    return SliceV_try_get(&self->inner, pos, SliceVT_elem_ptr);
+    return cobj_SliceV_try_get(&self->inner, pos, cobj_SliceVT_elem_ptr);
 }
 
-bool SliceVT_try_subslice(SliceVT const *const self,
-                          size_t b,
-                          size_t e,
-                          SliceVT *const dest,
-                          Error *const err)
+bool cobj_SliceVT_try_subslice(cobj_SliceVT const *const self,
+                               size_t b,
+                               size_t e,
+                               cobj_SliceVT *const dest,
+                               cobj_Error *const err)
 {
-    return SliceV_try_subslice(&self->inner, b, e, &dest->inner, err, SliceVT_elem_ptr);
+    return cobj_SliceV_try_subslice(&self->inner, b, e, &dest->inner, err, cobj_SliceVT_elem_ptr);
 }
 
-void SliceVT_iter(SliceVT const *const self, SliceVTIter *const it)
+void cobj_SliceVT_iter(cobj_SliceVT const *const self, cobj_SliceVTIter *const it)
 {
-    SliceV_iter(&self->inner, &it->inner, SliceVT_elem_ptr);
+    cobj_SliceV_iter(&self->inner, &it->inner, cobj_SliceVT_elem_ptr);
 }
 
 // =============================================================================
 
-static void SliceVTIter_wipe(SliceVTIter *const self)
+static void cobj_SliceVTIter_wipe(cobj_SliceVTIter *const self)
 {
     STRUCTWIPE(self);
 }
 
-void SliceVTIter_destroy_member(SliceVTIter *const self)
+void cobj_SliceVTIter_destroy_member(cobj_SliceVTIter *const self)
 {
     COBJ_UNUSED_ARG(self);
 }
-void SliceVTIter_destroy(SliceVTIter *const self)
+void cobj_SliceVTIter_destroy(cobj_SliceVTIter *const self)
 {
-    SliceVTIter_destroy_member(self);
-    SliceVTIter_wipe(self);
+    cobj_SliceVTIter_destroy_member(self);
+    cobj_SliceVTIter_wipe(self);
 }
 
-void SliceVTIter_move_member(SliceVTIter *const self, SliceVTIter *const src)
+void cobj_SliceVTIter_move_member(cobj_SliceVTIter *const self, cobj_SliceVTIter *const src)
 {
     *self = *src;
 }
-void SliceVTIter_move(SliceVTIter *const self, SliceVTIter *const src)
+void cobj_SliceVTIter_move(cobj_SliceVTIter *const self, cobj_SliceVTIter *const src)
 {
-    SliceVTIter_move_member(self, src);
-    SliceVTIter_wipe(src);
+    cobj_SliceVTIter_move_member(self, src);
+    cobj_SliceVTIter_wipe(src);
 }
 
-bool WARN_UNUSED_RESULT SliceVTIter_try_copy(SliceVTIter *const self,
-                                             SliceVTIter const *const src,
-                                             Error *const err)
+bool WARN_UNUSED_RESULT cobj_SliceVTIter_try_copy(cobj_SliceVTIter *const self,
+                                                  cobj_SliceVTIter const *const src,
+                                                  cobj_Error *const err)
 {
-    return SliceVIter_try_copy(&self->inner, &src->inner, err);
+    return cobj_SliceVIter_try_copy(&self->inner, &src->inner, err);
 }
 
-T const *SliceVTIter_next(SliceVTIter *const self)
+T const *cobj_SliceVTIter_next(cobj_SliceVTIter *const self)
 {
-    return SliceVIter_next(&self->inner, sizeof(T));
+    return cobj_SliceVIter_next(&self->inner, sizeof(T));
 }
 
-void SliceVTIter_new(SliceVTIter *const self, T const *const b, T const *const e)
+void cobj_SliceVTIter_new(cobj_SliceVTIter *const self, T const *const b, T const *const e)
 {
-    SliceVIter_new(&self->inner, b, e);
+    cobj_SliceVIter_new(&self->inner, b, e);
 }
 
 //============================================================================
 
-static void *SliceVTMut_elem_ptr(void *const arr, size_t idx)
+static void *cobj_SliceVTMut_elem_ptr(void *const arr, size_t idx)
 {
     return &((T *)arr)[idx];
 }
 
-void SliceVTMut_wipe(SliceVTMut *const self)
+void cobj_SliceVTMut_wipe(cobj_SliceVTMut *const self)
 {
     STRUCTWIPE(self);
 }
 
-void SliceVTMut_destroy_member(SliceVTMut *const self)
+void cobj_SliceVTMut_destroy_member(cobj_SliceVTMut *const self)
 {
     COBJ_UNUSED_ARG(self);
 }
-void SliceVTMut_destroy(SliceVTMut *const self)
+void cobj_SliceVTMut_destroy(cobj_SliceVTMut *const self)
 {
-    SliceVTMut_destroy_member(self);
-    SliceVTMut_wipe(self);
+    cobj_SliceVTMut_destroy_member(self);
+    cobj_SliceVTMut_wipe(self);
 }
 
-void SliceVTMut_move_member(SliceVTMut *const self, SliceVTMut *const src)
+void cobj_SliceVTMut_move_member(cobj_SliceVTMut *const self, cobj_SliceVTMut *const src)
 {
     *self = *src;
 }
-void SliceVTMut_move(SliceVTMut *const self, SliceVTMut *const src)
+void cobj_SliceVTMut_move(cobj_SliceVTMut *const self, cobj_SliceVTMut *const src)
 {
-    SliceVTMut_move_member(self, src);
-    SliceVTMut_wipe(src);
+    cobj_SliceVTMut_move_member(self, src);
+    cobj_SliceVTMut_wipe(src);
 }
 
-bool WARN_UNUSED_RESULT SliceVTMut_try_copy(SliceVTMut *self,
-                                            SliceVTMut const *const src,
-                                            Error *const err)
+bool WARN_UNUSED_RESULT cobj_SliceVTMut_try_copy(cobj_SliceVTMut *self,
+                                                 cobj_SliceVTMut const *const src,
+                                                 cobj_Error *const err)
 {
-    return SliceVMut_try_copy(&self->inner, &src->inner, err);
+    return cobj_SliceVMut_try_copy(&self->inner, &src->inner, err);
 }
 
-void SliceVTMut_new(SliceVTMut *const self, T *const ptr, size_t len)
+void cobj_SliceVTMut_new(cobj_SliceVTMut *const self, T *const ptr, size_t len)
 {
-    SliceVMut_new(&self->inner, ptr, len);
+    cobj_SliceVMut_new(&self->inner, ptr, len);
 }
 
-size_t SliceVTMut_len(SliceVTMut const *const self)
+size_t cobj_SliceVTMut_len(cobj_SliceVTMut const *const self)
 {
-    return SliceVMut_len(&self->inner);
+    return cobj_SliceVMut_len(&self->inner);
 }
 
-bool SliceVTMut_is_empty(SliceVTMut const *const self)
+bool cobj_SliceVTMut_is_empty(cobj_SliceVTMut const *const self)
 {
-    return SliceVMut_is_empty(&self->inner);
+    return cobj_SliceVMut_is_empty(&self->inner);
 }
 
-T *SliceVTMut_try_get(SliceVTMut const *const self, size_t pos)
+T *cobj_SliceVTMut_try_get(cobj_SliceVTMut const *const self, size_t pos)
 {
-    return SliceVMut_try_get(&self->inner, pos, SliceVTMut_elem_ptr);
+    return cobj_SliceVMut_try_get(&self->inner, pos, cobj_SliceVTMut_elem_ptr);
 }
 
-bool SliceVTMut_try_subslice(SliceVTMut const *const self,
-                             size_t b,
-                             size_t e,
-                             SliceVT *const dest,
-                             Error *const err)
+bool cobj_SliceVTMut_try_subslice(cobj_SliceVTMut const *const self,
+                                  size_t b,
+                                  size_t e,
+                                  cobj_SliceVT *const dest,
+                                  cobj_Error *const err)
 {
-    return SliceVMut_try_subslice(&self->inner, b, e, &dest->inner, err, SliceVTMut_elem_ptr);
+    return cobj_SliceVMut_try_subslice(&self->inner,
+                                       b,
+                                       e,
+                                       &dest->inner,
+                                       err,
+                                       cobj_SliceVTMut_elem_ptr);
 }
 
-bool SliceVTMut_try_subslice_mut(SliceVTMut const *const self,
-                                 size_t b,
-                                 size_t e,
-                                 SliceVTMut *const dest,
-                                 Error *const err)
+bool cobj_SliceVTMut_try_subslice_mut(cobj_SliceVTMut const *const self,
+                                      size_t b,
+                                      size_t e,
+                                      cobj_SliceVTMut *const dest,
+                                      cobj_Error *const err)
 {
-    return SliceVMut_try_subslice_mut(&self->inner, b, e, &dest->inner, err, SliceVTMut_elem_ptr);
+    return cobj_SliceVMut_try_subslice_mut(&self->inner,
+                                           b,
+                                           e,
+                                           &dest->inner,
+                                           err,
+                                           cobj_SliceVTMut_elem_ptr);
 }
 
-void SliceVTMut_as_SliceVT(SliceVTMut const *const self, SliceVT *const s)
+void cobj_SliceVTMut_as_cobj_SliceVT(cobj_SliceVTMut const *const self, cobj_SliceVT *const s)
 {
-    SliceVMut_as_SliceV(&self->inner, &s->inner);
+    cobj_SliceVMut_as_cobj_SliceV(&self->inner, &s->inner);
 }
 
-bool WARN_UNUSED_RESULT SliceVTMut_try_move_from(SliceVTMut const *const self,
-                                                 SliceVTMut const *const src,
-                                                 Error *const err)
+bool WARN_UNUSED_RESULT cobj_SliceVTMut_try_move_from(cobj_SliceVTMut const *const self,
+                                                      cobj_SliceVTMut const *const src,
+                                                      cobj_Error *const err)
 {
     // move content of one slice into another.
     // before: src must be initialised pointing to initialised, self must be initialised to
     // uninitialised. after: src is initialised to de-initialised, self is initialised to
     // initialised. both must be same size..
-    return SliceVMut_try_move_from(&self->inner, &src->inner, err, SliceVTMut_elem_ptr);
+    return cobj_SliceVMut_try_move_from(&self->inner, &src->inner, err, cobj_SliceVTMut_elem_ptr);
 }
 
-bool WARN_UNUSED_RESULT SliceVTMut_try_copy_from(SliceVTMut const *const self,
-                                                 SliceVT const *const src,
-                                                 Error *const err)
+bool WARN_UNUSED_RESULT cobj_SliceVTMut_try_copy_from(cobj_SliceVTMut const *const self,
+                                                      cobj_SliceVT const *const src,
+                                                      cobj_Error *const err)
 {
     // copy content of one slice into another.
     // before: src must be initialised pointing to initialised, self must be initialised to
     // uninitialised. after: src is initialised to initialised, self is initialised to initialised.
     // both must be same size..
-    return SliceVMut_try_copy_from(&self->inner,
-                                   &src->inner,
-                                   err,
-                                   SliceVT_elem_ptr,
-                                   SliceVT_elem_ptr_mut,
-                                   SliceVT_elem_try_copy,
-                                   SliceVT_elem_destroy);
+    return cobj_SliceVMut_try_copy_from(&self->inner,
+                                        &src->inner,
+                                        err,
+                                        cobj_SliceVT_elem_ptr,
+                                        cobj_SliceVT_elem_ptr_mut,
+                                        cobj_SliceVT_elem_try_copy,
+                                        cobj_SliceVT_elem_destroy);
 }
 
-void SliceVTMut_iter(SliceVTMut const *const self, SliceVTIter *const it)
+void cobj_SliceVTMut_iter(cobj_SliceVTMut const *const self, cobj_SliceVTIter *const it)
 {
-    SliceVMut_iter(&self->inner, &it->inner, SliceVTMut_elem_ptr);
+    cobj_SliceVMut_iter(&self->inner, &it->inner, cobj_SliceVTMut_elem_ptr);
 }
 
-void SliceVTMut_iter_mut(SliceVTMut const *const self, SliceVTMutIter *const it)
+void cobj_SliceVTMut_iter_mut(cobj_SliceVTMut const *const self, cobj_SliceVTMutIter *const it)
 {
-    SliceVMut_iter_mut(&self->inner, &it->inner, SliceVTMut_elem_ptr);
+    cobj_SliceVMut_iter_mut(&self->inner, &it->inner, cobj_SliceVTMut_elem_ptr);
 }
 
 // ============================================================================
-void SliceVTMutIter_wipe(SliceVTMutIter *const self)
+void cobj_SliceVTMutIter_wipe(cobj_SliceVTMutIter *const self)
 {
     STRUCTWIPE(self);
 }
 
-void SliceVTMutIter_destroy_member(SliceVTMutIter *const self)
+void cobj_SliceVTMutIter_destroy_member(cobj_SliceVTMutIter *const self)
 {
     COBJ_UNUSED_ARG(self);
 }
-void SliceVTMutIter_destroy(SliceVTMutIter *const self)
+void cobj_SliceVTMutIter_destroy(cobj_SliceVTMutIter *const self)
 {
-    SliceVTMutIter_destroy_member(self);
-    SliceVTMutIter_wipe(self);
+    cobj_SliceVTMutIter_destroy_member(self);
+    cobj_SliceVTMutIter_wipe(self);
 }
 
-void SliceVTMutIter_move_member(SliceVTMutIter *const self, SliceVTMutIter *const src)
+void cobj_SliceVTMutIter_move_member(cobj_SliceVTMutIter *const self,
+                                     cobj_SliceVTMutIter *const src)
 {
     *self = *src;
 }
-void SliceVTMutIter_move(SliceVTMutIter *const self, SliceVTMutIter *const src)
+void cobj_SliceVTMutIter_move(cobj_SliceVTMutIter *const self, cobj_SliceVTMutIter *const src)
 {
-    SliceVTMutIter_move_member(self, src);
-    SliceVTMutIter_wipe(src);
+    cobj_SliceVTMutIter_move_member(self, src);
+    cobj_SliceVTMutIter_wipe(src);
 }
 
-bool WARN_UNUSED_RESULT SliceVTMutIter_try_copy(SliceVTMutIter *const self,
-                                                SliceVTMutIter const *const src,
-                                                Error *const err)
+bool WARN_UNUSED_RESULT cobj_SliceVTMutIter_try_copy(cobj_SliceVTMutIter *const self,
+                                                     cobj_SliceVTMutIter const *const src,
+                                                     cobj_Error *const err)
 {
-    return SliceVMutIter_try_copy(&self->inner, &src->inner, err);
+    return cobj_SliceVMutIter_try_copy(&self->inner, &src->inner, err);
 }
 
-T *SliceVTMutIter_next(SliceVTMutIter *const self)
+T *cobj_SliceVTMutIter_next(cobj_SliceVTMutIter *const self)
 {
-    return SliceVMutIter_next(&self->inner, sizeof(T));
+    return cobj_SliceVMutIter_next(&self->inner, sizeof(T));
 }
 
-void SliceVTMutIter_new(SliceVTMutIter *const self, T *const b, T *const e)
+void cobj_SliceVTMutIter_new(cobj_SliceVTMutIter *const self, T *const b, T *const e)
 {
-    SliceVMutIter_new(&self->inner, b, e);
+    cobj_SliceVMutIter_new(&self->inner, b, e);
 }

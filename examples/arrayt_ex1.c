@@ -16,24 +16,23 @@ int main(int argc, char *argv[]) {
     // so either default all elems on create
     // or copy/move from existing array.
     // if move then what happens to src?
-    ArrayTMut arr;
-    ArrayTMut_default(&arr, backing, COBJ_CARRAY_LEN(backing));
+    cobj_ArrayTMut arr;
+    cobj_ArrayTMut_default(&arr, backing, COBJ_CARRAY_LEN(backing));
 
     printf("foo");
 
-    SliceTIter it;
-
-    ArrayTMut_iter(&arr, &it);
-    for (T const *p;  NULL != (p = SliceTIter_next(&it));) {
+    cobj_SliceTIter it;
+    cobj_ArrayTMut_iter(&arr, &it);
+    for (T const *p;  NULL != (p = cobj_SliceTIter_next(&it));) {
         // do something with p
         // p->...
         printf("ham %d", p->dummy);
     }
-    SliceTIter_destroy(&it);
+    cobj_SliceTIter_destroy(&it);
 
     printf("foo");
 
-    ArrayTMut_destroy(&arr);
+    cobj_ArrayTMut_destroy(&arr);
 }
 // good, p is contained in the for-loop scope, pity 'it' isn't.
 // bad 3 compares, one advance, one deref

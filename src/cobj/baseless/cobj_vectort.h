@@ -14,7 +14,7 @@
 // being treated this way.
 
 // forward declares
-typedef struct VectorT_ VectorT;
+typedef struct cobj_VectorT_s cobj_VectorT;
 
 // includes
 #    include <cobj/baseless/cobj_slicet.h>
@@ -25,35 +25,35 @@ typedef struct VectorT_ VectorT;
 typedef size_t cobj_Index;
 
 // maybe vector can take a private heap struct, (if private heap is needed elsewhere)
-// TODO: VectorT_malloc/VectorT_free/VectorT_malloc_new/VectorT_free_destroy.
+// TODO: cobj_VectorT_malloc/cobj_VectorT_free/cobj_VectorT_malloc_new/cobj_VectorT_free_destroy.
 
-struct VectorT_ {
+struct cobj_VectorT_s {
     T *ptr;
     size_t alloc;
     size_t len;
 };
 
-void VectorT_destroy_member(VectorT *const self);
-void VectorT_destroy(VectorT *const self);
-void VectorT_move_member(VectorT *const self, VectorT *const src);
-void VectorT_move(VectorT *const self, VectorT *const src);
-void VectorT_new(VectorT *const self, T *const ptr, size_t alloc);
-void VectorT_clear(VectorT *const self);
-bool VectorT_is_empty(VectorT const *const self);
-size_t VectorT_len(VectorT const *const self);
-size_t VectorT_alloc(VectorT const *const self);
-bool WARN_UNUSED_RESULT VectorT_realloc(VectorT *const self, size_t newalloc);
-bool WARN_UNUSED_RESULT VectorT_push_back(VectorT *const self, T *const item);
-bool WARN_UNUSED_RESULT VectorT_pop_back(VectorT *const self, T *const item);
-T *VectorT_try_get_mut(VectorT const *const self, cobj_Index pos);
-T const *VectorT_try_get(VectorT const *const self, cobj_Index pos);
+void cobj_VectorT_destroy_member(cobj_VectorT *const self);
+void cobj_VectorT_destroy(cobj_VectorT *const self);
+void cobj_VectorT_move_member(cobj_VectorT *const self, cobj_VectorT *const src);
+void cobj_VectorT_move(cobj_VectorT *const self, cobj_VectorT *const src);
+void cobj_VectorT_new(cobj_VectorT *const self, T *const ptr, size_t alloc);
+void cobj_VectorT_clear(cobj_VectorT *const self);
+bool cobj_VectorT_is_empty(cobj_VectorT const *const self);
+size_t cobj_VectorT_len(cobj_VectorT const *const self);
+size_t cobj_VectorT_alloc(cobj_VectorT const *const self);
+bool WARN_UNUSED_RESULT cobj_VectorT_realloc(cobj_VectorT *const self, size_t newalloc);
+bool WARN_UNUSED_RESULT cobj_VectorT_push_back(cobj_VectorT *const self, T *const item);
+bool WARN_UNUSED_RESULT cobj_VectorT_pop_back(cobj_VectorT *const self, T *const item);
+T *cobj_VectorT_try_get_mut(cobj_VectorT const *const self, cobj_Index pos);
+T const *cobj_VectorT_try_get(cobj_VectorT const *const self, cobj_Index pos);
 
-void VectorT_as_SliceT(VectorT const *const self, SliceT *const s);
-void VectorT_as_SliceTMut(VectorT const *const self, SliceTMut *const s);
+void cobj_VectorT_as_cobj_SliceT(cobj_VectorT const *const self, cobj_SliceT *const s);
+void cobj_VectorT_as_cobj_SliceTMut(cobj_VectorT const *const self, cobj_SliceTMut *const s);
 
 // iters can iter over contents of vector WITHOUT needing to bounds check
 // each access (unlike get_item_at) so faster than for looped cobj_Index access.
-void VectorT_iter(VectorT const *const self, SliceTIter *const it);
-void VectorT_iter_mut(VectorT const *const self, SliceTMutIter *const it);
+void cobj_VectorT_iter(cobj_VectorT const *const self, cobj_SliceTIter *const it);
+void cobj_VectorT_iter_mut(cobj_VectorT const *const self, cobj_SliceTMutIter *const it);
 
 #endif //! defined(COBJ_VECTORT_H)

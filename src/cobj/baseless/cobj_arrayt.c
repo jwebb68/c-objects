@@ -2,201 +2,201 @@
 #include <cobj/baseless/cobj_carrayt.h>
 #include <cobj/core/cobj_memory.h> //memwipe
 
-static void ArrayT_wipe(ArrayT *const self)
+static void cobj_ArrayT_wipe(cobj_ArrayT *const self)
 {
     STRUCTWIPE(self);
 }
 
-void ArrayT_destroy_member(ArrayT *const self)
+void cobj_ArrayT_destroy_member(cobj_ArrayT *const self)
 {
     COBJ_UNUSED_ARG(self);
 }
 
-void ArrayT_destroy(ArrayT *const self)
+void cobj_ArrayT_destroy(cobj_ArrayT *const self)
 {
-    ArrayT_destroy_member(self);
-    ArrayT_wipe(self);
+    cobj_ArrayT_destroy_member(self);
+    cobj_ArrayT_wipe(self);
 }
 
-void ArrayT_move(ArrayT *const self, ArrayT *const src)
+void cobj_ArrayT_move(cobj_ArrayT *const self, cobj_ArrayT *const src)
 {
     *self = *src;
-    ArrayT_wipe(src);
+    cobj_ArrayT_wipe(src);
 }
 
-void ArrayT_own(ArrayT *const self, T const *const ptr, size_t len)
+void cobj_ArrayT_own(cobj_ArrayT *const self, T const *const ptr, size_t len)
 {
     self->ptr = ptr;
     self->len = len;
 }
-void ArrayT_disown(ArrayT *const self, T const **const ptr, size_t *const len)
+void cobj_ArrayT_disown(cobj_ArrayT *const self, T const **const ptr, size_t *const len)
 {
     *ptr = self->ptr;
     *len = self->len;
-    ArrayT_wipe(self);
+    cobj_ArrayT_wipe(self);
 }
-void ArrayT_swap(ArrayT *const self, ArrayT *const other)
+void cobj_ArrayT_swap(cobj_ArrayT *const self, cobj_ArrayT *const other)
 {
     ptrswap((void **)&self->ptr, (void **)&other->ptr);
     sizetswap(&self->len, &other->len);
 }
 
-T const *ArrayT_ptr(ArrayT const *const self)
+T const *cobj_ArrayT_ptr(cobj_ArrayT const *const self)
 {
     return self->ptr;
 }
 
-size_t ArrayT_len(ArrayT const *const self)
+size_t cobj_ArrayT_len(cobj_ArrayT const *const self)
 {
     return self->len;
 }
 
-T const *ArrayT_try_get(ArrayT const *const self, cobj_Index pos)
+T const *cobj_ArrayT_try_get(cobj_ArrayT const *const self, cobj_Index pos)
 {
-    return CArrayT_try_get(self->ptr, self->len, pos);
+    return cobj_CArrayT_try_get(self->ptr, self->len, pos);
 }
 
-void ArrayT_as_SliceT(ArrayT const *const self, SliceT *const s)
+void cobj_ArrayT_as_cobj_SliceT(cobj_ArrayT const *const self, cobj_SliceT *const s)
 {
-    CArrayT_as_SliceT(self->ptr, self->len, s);
+    cobj_CArrayT_as_cobj_SliceT(self->ptr, self->len, s);
 }
 
-void ArrayT_iter(ArrayT const *const self, SliceTIter *const it)
+void cobj_ArrayT_iter(cobj_ArrayT const *const self, cobj_SliceTIter *const it)
 {
-    CArrayT_iter(self->ptr, self->len, it);
+    cobj_CArrayT_iter(self->ptr, self->len, it);
 }
 
-void ArrayT_from_ArrayTMut(ArrayT *const self, ArrayTMut *const src)
+void cobj_ArrayT_from_cobj_ArrayTMut(cobj_ArrayT *const self, cobj_ArrayTMut *const src)
 {
-    ArrayTMut_into_ArrayT(src, self);
+    cobj_ArrayTMut_into_cobj_ArrayT(src, self);
 }
 
 // =========================================================================
 
-static void ArrayTMut_wipe(ArrayTMut *const self)
+static void cobj_ArrayTMut_wipe(cobj_ArrayTMut *const self)
 {
     STRUCTWIPE(self);
 }
 
-void ArrayTMut_destroy_member(ArrayTMut *const self)
+void cobj_ArrayTMut_destroy_member(cobj_ArrayTMut *const self)
 {
-    CArrayTMut_destroy_member(self->ptr, self->len);
+    cobj_CArrayTMut_destroy_member(self->ptr, self->len);
 }
-void ArrayTMut_destroy(ArrayTMut *const self)
+void cobj_ArrayTMut_destroy(cobj_ArrayTMut *const self)
 {
-    ArrayTMut_destroy_member(self);
-    ArrayTMut_wipe(self);
+    cobj_ArrayTMut_destroy_member(self);
+    cobj_ArrayTMut_wipe(self);
 }
 
-void ArrayTMut_move_member(ArrayTMut *const self, ArrayTMut *const src)
+void cobj_ArrayTMut_move_member(cobj_ArrayTMut *const self, cobj_ArrayTMut *const src)
 {
     *self = *src;
 }
-void ArrayTMut_move(ArrayTMut *const self, ArrayTMut *const src)
+void cobj_ArrayTMut_move(cobj_ArrayTMut *const self, cobj_ArrayTMut *const src)
 {
-    ArrayTMut_move_member(self, src);
-    ArrayTMut_wipe(src);
+    cobj_ArrayTMut_move_member(self, src);
+    cobj_ArrayTMut_wipe(src);
 }
 
-// bool WARN_UNUSED_RESULT ArrayTMut_try_copy_from(ArrayTMut *const self,
-//                                            ArrayT const *const src,
-//                                            Error *err)
+// bool WARN_UNUSED_RESULT cobj_ArrayTMut_try_copy_from(cobj_ArrayTMut *const self,
+//                                            cobj_ArrayT const *const src,
+//                                            cobj_Error *err)
 // {
-//     if (self->len != src->len) { return ERROR_RAISE(err, Error_EFAIL); }
-//     if (!CArrayTMut_try_copy(self->ptr, self->len, src->ptr, err)) {
-//         ArrayTMut_wipe(self);
+//     if (self->len != src->len) { return COBJ_ERROR_RAISE(err, cobj_ErrorCode_EFAIL); }
+//     if (!cobj_CArrayTMut_try_copy(self->ptr, self->len, src->ptr, err)) {
+//         cobj_ArrayTMut_wipe(self);
 //         return false;
 //     }
 //     return true;
 // }
 
-// bool WARN_UNUSED_RESULT ArrayTMut_try_copy_mut(ArrayTMut *const self,
-//                                                ArrayTMut const *const src,
-//                                                Error *err)
+// bool WARN_UNUSED_RESULT cobj_ArrayTMut_try_copy_mut(cobj_ArrayTMut *const self,
+//                                                cobj_ArrayTMut const *const src,
+//                                                cobj_Error *err)
 // {
-//     if (self->len != src->len) { return ERROR_RAISE(err, Error_EFAIL); }
-//     if (!CArrayTMut_try_copy(self->ptr, self->len, src->ptr, err)) {
-//         ArrayTMut_wipe(self);
+//     if (self->len != src->len) { return COBJ_ERROR_RAISE(err, cobj_ErrorCode_EFAIL); }
+//     if (!cobj_CArrayTMut_try_copy(self->ptr, self->len, src->ptr, err)) {
+//         cobj_ArrayTMut_wipe(self);
 //         return false;
 //     }
 //     return true;
 // }
 
-void ArrayTMut_own(ArrayTMut *const self, T *const arr, size_t len)
+void cobj_ArrayTMut_own(cobj_ArrayTMut *const self, T *const arr, size_t len)
 {
     self->ptr = arr;
     self->len = len;
 }
 
-void ArrayTMut_disown(ArrayTMut *const self, T **const arr, size_t *const len)
+void cobj_ArrayTMut_disown(cobj_ArrayTMut *const self, T **const arr, size_t *const len)
 {
     *arr = self->ptr;
     *len = self->len;
-    ArrayTMut_wipe(self);
+    cobj_ArrayTMut_wipe(self);
 }
-void ArrayTMut_swap(ArrayTMut *const self, ArrayTMut *const other)
+void cobj_ArrayTMut_swap(cobj_ArrayTMut *const self, cobj_ArrayTMut *const other)
 {
     ptrswap((void **)&self->ptr, (void **)&other->ptr);
     sizetswap(&self->len, &other->len);
 }
 
-void ArrayTMut_default(ArrayTMut *const self, T *const arr, size_t len)
+void cobj_ArrayTMut_default(cobj_ArrayTMut *const self, T *const arr, size_t len)
 {
-    ArrayTMut_own(self, arr, len);
-    CArrayTMut_default(arr, len);
+    cobj_ArrayTMut_own(self, arr, len);
+    cobj_CArrayTMut_default(arr, len);
 }
 
-// void ArrayTMut_fill_with(ArrayTMut *const self, T *const arr, size_t len, void (*elem_init)(T
-// *const self))
+// void cobj_ArrayTMut_fill_with(cobj_ArrayTMut *const self, T *const arr, size_t len, void
+// (*elem_init)(T *const self))
 // {
-//     CArrayTMut_fill_with(arr, len, elem_init);
+//     cobj_CArrayTMut_fill_with(arr, len, elem_init);
 // }
 
-T *ArrayTMut_ptr(ArrayTMut const *const self)
+T *cobj_ArrayTMut_ptr(cobj_ArrayTMut const *const self)
 {
     return self->ptr;
 }
 
-size_t ArrayTMut_len(ArrayTMut const *const self)
+size_t cobj_ArrayTMut_len(cobj_ArrayTMut const *const self)
 {
     return self->len;
 }
 
-T *ArrayTMut_try_get(ArrayTMut const *const self, cobj_Index pos)
+T *cobj_ArrayTMut_try_get(cobj_ArrayTMut const *const self, cobj_Index pos)
 {
-    return CArrayTMut_try_get(self->ptr, self->len, pos);
+    return cobj_CArrayTMut_try_get(self->ptr, self->len, pos);
 }
 
-void ArrayTMut_into_ArrayT(ArrayTMut *const self, ArrayT *const arr)
+void cobj_ArrayTMut_into_cobj_ArrayT(cobj_ArrayTMut *const self, cobj_ArrayT *const arr)
 {
     arr->ptr = self->ptr;
     arr->len = self->len;
-    ArrayTMut_wipe(self);
+    cobj_ArrayTMut_wipe(self);
 }
 
 // two structs cannot hold reference to same array!...
-// void ArrayTMut_as_ArrayT(ArrayTMut const *const self, ArrayT *const arr)
+// void cobj_ArrayTMut_as_cobj_ArrayT(cobj_ArrayTMut const *const self, cobj_ArrayT *const arr)
 // {
 //     arr->ptr = self->ptr;
 //     arr->len = self->len;
 // }
 
-void ArrayTMut_as_SliceT(ArrayTMut const *const self, SliceT *const s)
+void cobj_ArrayTMut_as_cobj_SliceT(cobj_ArrayTMut const *const self, cobj_SliceT *const s)
 {
-    CArrayTMut_as_SliceT(self->ptr, self->len, s);
+    cobj_CArrayTMut_as_cobj_SliceT(self->ptr, self->len, s);
 }
 
-void ArrayTMut_as_SliceTMut(ArrayTMut const *const self, SliceTMut *const s)
+void cobj_ArrayTMut_as_cobj_SliceTMut(cobj_ArrayTMut const *const self, cobj_SliceTMut *const s)
 {
-    CArrayTMut_as_SliceTMut(self->ptr, self->len, s);
+    cobj_CArrayTMut_as_cobj_SliceTMut(self->ptr, self->len, s);
 }
 
-void ArrayTMut_iter(ArrayTMut const *const self, SliceTIter *const it)
+void cobj_ArrayTMut_iter(cobj_ArrayTMut const *const self, cobj_SliceTIter *const it)
 {
-    CArrayTMut_iter(self->ptr, self->len, it);
+    cobj_CArrayTMut_iter(self->ptr, self->len, it);
 }
 
-void ArrayTMut_iter_mut(ArrayTMut const *const self, SliceTMutIter *const it)
+void cobj_ArrayTMut_iter_mut(cobj_ArrayTMut const *const self, cobj_SliceTMutIter *const it)
 {
-    CArrayTMut_iter_mut(self->ptr, self->len, it);
+    cobj_CArrayTMut_iter_mut(self->ptr, self->len, it);
 }

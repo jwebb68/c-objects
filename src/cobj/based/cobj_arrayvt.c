@@ -3,97 +3,99 @@
 #include <cobj/based/cobj_carrayvt.h>
 #include <cobj/core/cobj_memory.h> //memwipe
 
-static void ArrayVT_elem_destroy_member(void *const self)
+static void cobj_ArrayVT_elem_destroy_member(void *const self)
 {
     T_destroy_member(self);
 }
 
-static void ArrayVT_elem_default(void *const self)
+static void cobj_ArrayVT_elem_default(void *const self)
 {
     T_default(self);
 }
 
-// static bool WARN_UNUSED_RESULT ArrayVT_elem_try_copy_member(void *const self,
+// static bool WARN_UNUSED_RESULT cobj_ArrayVT_elem_try_copy_member(void *const self,
 //                                                      void const *const src,
-//                                                      Error *const err)
+//                                                      cobj_Error*const err)
 // {
 //     return T_try_copy_member(self, src, err);
 // }
 
-static void const *ArrayVT_get(void const *const arr, size_t idx)
+static void const *cobj_ArrayVT_get(void const *const arr, size_t idx)
 {
-    return CArrayVT_get(arr, idx);
+    return cobj_CArrayVT_get(arr, idx);
 }
 
-static void *ArrayVT_get_mut(void *const arr, size_t idx)
+static void *cobj_ArrayVT_get_mut(void *const arr, size_t idx)
 {
-    return CArrayVT_get_mut(arr, idx);
+    return cobj_CArrayVT_get_mut(arr, idx);
 }
 
-static void ArrayVT_wipe(ArrayVT *const self)
+static void cobj_ArrayVT_wipe(cobj_ArrayVT *const self)
 {
     STRUCTWIPE(self);
 }
 
-void ArrayVT_destroy_member(ArrayVT *const self)
+void cobj_ArrayVT_destroy_member(cobj_ArrayVT *const self)
 {
-    ArrayV_destroy_member(&self->inner, ArrayVT_get_mut, ArrayVT_elem_destroy_member);
+    cobj_ArrayV_destroy_member(&self->inner,
+                               cobj_ArrayVT_get_mut,
+                               cobj_ArrayVT_elem_destroy_member);
 }
-void ArrayVT_destroy(ArrayVT *const self)
+void cobj_ArrayVT_destroy(cobj_ArrayVT *const self)
 {
-    ArrayVT_destroy_member(self);
-    ArrayVT_wipe(self);
+    cobj_ArrayVT_destroy_member(self);
+    cobj_ArrayVT_wipe(self);
 }
 
-void ArrayVT_move(ArrayVT *const self, ArrayVT *const src)
+void cobj_ArrayVT_move(cobj_ArrayVT *const self, cobj_ArrayVT *const src)
 {
     *self = *src;
-    ArrayVT_wipe(src);
+    cobj_ArrayVT_wipe(src);
 }
 
-// bool WARN_UNUSED_RESULT ArrayVT_try_copy(ArrayVT *const self, ArrayVT const *const src, Error
-// *err)
+// bool WARN_UNUSED_RESULT cobj_ArrayVT_try_copy(cobj_ArrayVT *const self, cobj_ArrayVT const *const
+// src, cobj_Error*err)
 // {
-//     return ArrayV_try_copy(&self->inner,
+//     return cobj_ArrayV_try_copy(&self->inner,
 //                            &src->inner,
 //                            err,
-//                            ArrayVT_get,
-//                            ArrayVT_get_mut,
-//                            ArrayVT_elem_try_copy,
-//                            ArrayVT_elem_destroy);
+//                            cobj_ArrayVT_get,
+//                            cobj_ArrayVT_get_mut,
+//                            cobj_ArrayVT_elem_try_copy,
+//                            cobj_ArrayVT_elem_destroy);
 // }
 
-void ArrayVT_default(ArrayVT *const self, T *const arr, size_t len)
+void cobj_ArrayVT_default(cobj_ArrayVT *const self, T *const arr, size_t len)
 {
-    ArrayV_default(&self->inner, arr, len, ArrayVT_get_mut, ArrayVT_elem_default);
+    cobj_ArrayV_default(&self->inner, arr, len, cobj_ArrayVT_get_mut, cobj_ArrayVT_elem_default);
 }
 
-void ArrayVT_own(ArrayVT *const self, T *const arr, size_t len)
+void cobj_ArrayVT_own(cobj_ArrayVT *const self, T *const arr, size_t len)
 {
-    ArrayV_own(&self->inner, arr, len);
+    cobj_ArrayV_own(&self->inner, arr, len);
 }
 
-void ArrayVT_disown(ArrayVT *const self, T **const arr, size_t *const len)
+void cobj_ArrayVT_disown(cobj_ArrayVT *const self, T **const arr, size_t *const len)
 {
-    ArrayV_disown(&self->inner, (void **)arr, len);
+    cobj_ArrayV_disown(&self->inner, (void **)arr, len);
 }
 
-void ArrayVT_as_SliceVT(ArrayVT const *const self, SliceVT *const s)
+void cobj_ArrayVT_as_cobj_SliceVT(cobj_ArrayVT const *const self, cobj_SliceVT *const s)
 {
-    ArrayV_as_SliceV(&self->inner, &s->inner);
+    cobj_ArrayV_as_cobj_SliceV(&self->inner, &s->inner);
 }
 
-void ArrayVT_as_SliceVTMut(ArrayVT *const self, SliceVTMut *const s)
+void cobj_ArrayVT_as_cobj_SliceVTMut(cobj_ArrayVT *const self, cobj_SliceVTMut *const s)
 {
-    ArrayV_as_SliceVMut(&self->inner, &s->inner);
+    cobj_ArrayV_as_cobj_SliceVMut(&self->inner, &s->inner);
 }
 
-void ArrayVT_iter(ArrayVT const *const self, SliceVTIter *const it)
+void cobj_ArrayVT_iter(cobj_ArrayVT const *const self, cobj_SliceVTIter *const it)
 {
-    ArrayV_iter(&self->inner, &it->inner, ArrayVT_get);
+    cobj_ArrayV_iter(&self->inner, &it->inner, cobj_ArrayVT_get);
 }
 
-void ArrayVT_iter_mut(ArrayVT *const self, SliceVTMutIter *const it)
+void cobj_ArrayVT_iter_mut(cobj_ArrayVT *const self, cobj_SliceVTMutIter *const it)
 {
-    ArrayV_iter_mut(&self->inner, &it->inner, ArrayVT_get_mut);
+    cobj_ArrayV_iter_mut(&self->inner, &it->inner, cobj_ArrayVT_get_mut);
 }

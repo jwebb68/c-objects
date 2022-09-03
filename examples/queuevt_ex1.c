@@ -11,27 +11,27 @@ int main(int argc, char *argv[]) {
     ((void)(argv));
 
     T backing[10];
-    QueueVT vec;
-    QueueVT_new(&vec, backing, COBJ_CARRAY_LEN(backing));
+    cobj_QueueVT vec;
+    cobj_QueueVT_new(&vec, backing, COBJ_CARRAY_LEN(backing));
 
     T t1;
     T_default(&t1);
 
     bool ok;
-    ok = QueueVT_put(&vec, &t1);
+    ok = cobj_QueueVT_put(&vec, &t1);
     if (!ok) {}
 
-    ok = QueueVT_get(&vec, &t1);
+    ok = cobj_QueueVT_get(&vec, &t1);
     if (!ok) {}
 
-    ok = QueueVT_put(&vec, &t1);
+    ok = cobj_QueueVT_put(&vec, &t1);
     if (!ok) {}
 
     T_default(&t1);
-    ok = QueueVT_put(&vec, &t1);
+    ok = cobj_QueueVT_put(&vec, &t1);
     if (!ok) {}
 
     printf("foo");
 
-    QueueVT_destroy(&vec);
+    cobj_QueueVT_destroy(&vec);
 }

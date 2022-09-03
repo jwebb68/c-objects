@@ -2,57 +2,57 @@
 #include <cobj/baseless/cobj_queuet.h>
 #include <cobj/core/cobj_memory.h>
 
-static size_t QueueT_advance(QueueT *const self, size_t idx)
+static size_t cobj_QueueT_advance(cobj_QueueT *const self, size_t idx)
 {
     idx += 1;
     if (idx >= self->alloc) { idx = 0; }
     return idx;
 }
 
-static void QueueT_elem_destroy(QueueT *const self)
+static void cobj_QueueT_elem_destroy(cobj_QueueT *const self)
 {
     if (self->wp > self->rp) {
         // not wrapped
-        CArrayTMut_erase(self->ptr, self->rp, self->wp - self->rp);
+        cobj_CArrayTMut_erase(self->ptr, self->rp, self->wp - self->rp);
     } else if (self->wp < self->rp) {
         // wrapped
-        CArrayTMut_erase(self->ptr, self->rp, self->alloc - self->rp);
-        CArrayTMut_erase(self->ptr, 0, self->wp);
+        cobj_CArrayTMut_erase(self->ptr, self->rp, self->alloc - self->rp);
+        cobj_CArrayTMut_erase(self->ptr, 0, self->wp);
     } else if (self->len != 0) {
         // all allocd
-        // CArrayTMut_erase(self->ptr, 0, self->alloc);
-        CArrayTMut_destroy(self->ptr, self->alloc);
+        // cobj_CArrayTMut_erase(self->ptr, 0, self->alloc);
+        cobj_CArrayTMut_destroy(self->ptr, self->alloc);
     } else {
         // none allocd
     }
 }
 
-static void QueueT_wipe(QueueT *const self)
+static void cobj_QueueT_wipe(cobj_QueueT *const self)
 {
     STRUCTWIPE(self);
 }
 
-void QueueT_destroy_member(QueueT *const self)
+void cobj_QueueT_destroy_member(cobj_QueueT *const self)
 {
-    QueueT_elem_destroy(self);
+    cobj_QueueT_elem_destroy(self);
 }
-void QueueT_destroy(QueueT *const self)
+void cobj_QueueT_destroy(cobj_QueueT *const self)
 {
-    QueueT_destroy_member(self);
-    QueueT_wipe(self);
+    cobj_QueueT_destroy_member(self);
+    cobj_QueueT_wipe(self);
 }
 
-void QueueT_move_member(QueueT *const self, QueueT *const src)
+void cobj_QueueT_move_member(cobj_QueueT *const self, cobj_QueueT *const src)
 {
     *self = *src;
 }
-void QueueT_move(QueueT *const self, QueueT *const src)
+void cobj_QueueT_move(cobj_QueueT *const self, cobj_QueueT *const src)
 {
-    QueueT_move_member(self, src);
-    QueueT_wipe(src);
+    cobj_QueueT_move_member(self, src);
+    cobj_QueueT_wipe(src);
 }
 
-void QueueT_new(QueueT *const self, T *const ptr, size_t alloc)
+void cobj_QueueT_new(cobj_QueueT *const self, T *const ptr, size_t alloc)
 {
     self->ptr = ptr;
     self->alloc = alloc;
@@ -61,48 +61,48 @@ void QueueT_new(QueueT *const self, T *const ptr, size_t alloc)
     self->rp = 0;
 }
 
-void QueueT_clear(QueueT *const self)
+void cobj_QueueT_clear(cobj_QueueT *const self)
 {
-    QueueT_elem_destroy(self);
+    cobj_QueueT_elem_destroy(self);
     self->len = 0;
     self->rp = 0;
     self->wp = 0;
 }
 
-bool QueueT_is_empty(QueueT const *const self)
+bool cobj_QueueT_is_empty(cobj_QueueT const *const self)
 {
     return self->len == 0;
 }
 
-static bool QueueT_is_full(QueueT const *const self)
+static bool cobj_QueueT_is_full(cobj_QueueT const *const self)
 {
     return self->len == self->alloc;
 }
 
-size_t QueueT_len(QueueT const *const self)
+size_t cobj_QueueT_len(cobj_QueueT const *const self)
 {
     return self->len;
 }
 
-size_t QueueT_alloc(QueueT const *const self)
+size_t cobj_QueueT_alloc(cobj_QueueT const *const self)
 {
     return self->alloc;
 }
 
-bool WARN_UNUSED_RESULT QueueT_put(QueueT *const self, T *const item)
+bool WARN_UNUSED_RESULT cobj_QueueT_put(cobj_QueueT *const self, T *const item)
 {
-    if (QueueT_is_full(self)) { return false; }
+    if (cobj_QueueT_is_full(self)) { return false; }
     self->len += 1;
     T_move(&self->ptr[self->wp], item);
-    self->wp = QueueT_advance(self, self->wp);
+    self->wp = cobj_QueueT_advance(self, self->wp);
     return true;
 }
 
-bool WARN_UNUSED_RESULT QueueT_get(QueueT *const self, T *const item)
+bool WARN_UNUSED_RESULT cobj_QueueT_get(cobj_QueueT *const self, T *const item)
 {
-    if (QueueT_is_empty(self)) { return false; }
+    if (cobj_QueueT_is_empty(self)) { return false; }
     self->len -= 1;
     T_move(item, &self->ptr[self->rp]);
-    self->rp = QueueT_advance(self, self->rp);
+    self->rp = cobj_QueueT_advance(self, self->rp);
     return true;
 }

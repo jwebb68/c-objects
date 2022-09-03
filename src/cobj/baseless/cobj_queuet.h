@@ -7,8 +7,8 @@
 #    include <stdbool.h>
 #    include <stddef.h> // size_t
 
-typedef struct QueueT_s QueueT;
-struct QueueT_s {
+typedef struct cobj_QueueT_s cobj_QueueT;
+struct cobj_QueueT_s {
     T *ptr;
     size_t alloc;
     size_t len;
@@ -16,20 +16,20 @@ struct QueueT_s {
     size_t rp;
 };
 
-void QueueT_destroy_member(QueueT *const self);
-void QueueT_destroy(QueueT *const self);
+void cobj_QueueT_destroy_member(cobj_QueueT *const self);
+void cobj_QueueT_destroy(cobj_QueueT *const self);
 
-void QueueT_move_member(QueueT *const self, QueueT *const src);
-void QueueT_move(QueueT *const self, QueueT *const src);
+void cobj_QueueT_move_member(cobj_QueueT *const self, cobj_QueueT *const src);
+void cobj_QueueT_move(cobj_QueueT *const self, cobj_QueueT *const src);
 
-void QueueT_new(QueueT *const self, T *const ptr, size_t alloc);
-void QueueT_clear(QueueT *const self);
+void cobj_QueueT_new(cobj_QueueT *const self, T *const ptr, size_t alloc);
+void cobj_QueueT_clear(cobj_QueueT *const self);
 
-bool QueueT_is_empty(QueueT const *const self);
-size_t QueueT_len(QueueT const *const self);
-size_t QueueT_alloc(QueueT const *const self);
+bool cobj_QueueT_is_empty(cobj_QueueT const *const self);
+size_t cobj_QueueT_len(cobj_QueueT const *const self);
+size_t cobj_QueueT_alloc(cobj_QueueT const *const self);
 
-bool WARN_UNUSED_RESULT QueueT_put(QueueT *const self, T *const item);
-bool WARN_UNUSED_RESULT QueueT_get(QueueT *const self, T *const item);
+bool WARN_UNUSED_RESULT cobj_QueueT_put(cobj_QueueT *const self, T *const item);
+bool WARN_UNUSED_RESULT cobj_QueueT_get(cobj_QueueT *const self, T *const item);
 
 #endif // COBJ_QUEUET_H

@@ -2,7 +2,7 @@
 #    define COBJ_VECTORV_H
 
 /**
- * VectorV
+ * cobj_VectorV
  *
  * The underlying implementation for a container of dynamically set initialised Ts.
  *
@@ -10,16 +10,16 @@
  *
  * The Array owns the set values, so when destroyed, will destroy the Ts set into it.
  *
- * This version is the underlying implementation for all VectorV<T> types.
+ * This version is the underlying implementation for all cobj_VectorV<T> types.
  * Used to reduce the code footprint if using it.
  * But when debugging, the value won't be visible in the debugger (it'll be a block of bytes,
  * not deconstructed as most debuggers are able to do).
  * It treats the value as a block of ram, so specialisations of operations
  * operating on T are passed in.
- * This may prevent some optimisations that are available, compared to VectorT.
+ * This may prevent some optimisations that are available, compared to cobj_VectorT.
  */
 
-typedef struct VectorV_ VectorV;
+typedef struct cobj_VectorV_s cobj_VectorV;
 
 #    include <cobj/based/cobj_slicev.h>
 #    include <cobj/core/cobj_defs.h> // WARN_RESULT
@@ -27,51 +27,51 @@ typedef struct VectorV_ VectorV;
 #    include <stdbool.h>
 #    include <stddef.h> // size_t
 
-struct VectorV_ {
+struct cobj_VectorV_s {
     uint8_t *ptr;
     size_t alloc;
     size_t len;
 };
 
-void VectorV_destroy_member(VectorV *const self,
-                            void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                            void (*elem_destroy)(void *const));
-void VectorV_destroy(VectorV *const self,
-                     void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                     void (*elem_destroy)(void *const));
+void cobj_VectorV_destroy_member(cobj_VectorV *const self,
+                                 void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                                 void (*elem_destroy)(void *const));
+void cobj_VectorV_destroy(cobj_VectorV *const self,
+                          void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                          void (*elem_destroy)(void *const));
 
-void VectorV_move_member(VectorV *const self, VectorV *const src);
-void VectorV_move(VectorV *const self, VectorV *const src);
+void cobj_VectorV_move_member(cobj_VectorV *const self, cobj_VectorV *const src);
+void cobj_VectorV_move(cobj_VectorV *const self, cobj_VectorV *const src);
 
-void VectorV_new(VectorV *const self, void *const ptr, size_t alloc);
-bool VectorV_is_empty(VectorV const *const self);
-void VectorV_clear(VectorV *const self,
-                   void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                   void (*elem_destroy)(void *const));
-size_t VectorV_len(VectorV const *const self);
-bool WARN_UNUSED_RESULT VectorV_push_back(VectorV *const self,
-                                          void *const elem,
-                                          void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                                          void (*elem_move)(void *const, void *const));
-bool WARN_UNUSED_RESULT VectorV_pop_back(VectorV *const self,
-                                         void *const elem,
-                                         void *(*elem_ptr_mut)(void *const arr, size_t idx),
-                                         void (*elem_move)(void *const, void *const));
-void *VectorV_try_get_mut(VectorV const *const self,
-                          cobj_Index pos,
-                          void *(*elem_ptr_mut)(void *const arr, size_t idx));
-void const *VectorV_try_get(VectorV const *const self,
-                            cobj_Index pos,
-                            void const *(*elem_ptr)(void const *const arr, size_t idx));
+void cobj_VectorV_new(cobj_VectorV *const self, void *const ptr, size_t alloc);
+bool cobj_VectorV_is_empty(cobj_VectorV const *const self);
+void cobj_VectorV_clear(cobj_VectorV *const self,
+                        void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                        void (*elem_destroy)(void *const));
+size_t cobj_VectorV_len(cobj_VectorV const *const self);
+bool WARN_UNUSED_RESULT cobj_VectorV_push_back(cobj_VectorV *const self,
+                                               void *const elem,
+                                               void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                                               void (*elem_move)(void *const, void *const));
+bool WARN_UNUSED_RESULT cobj_VectorV_pop_back(cobj_VectorV *const self,
+                                              void *const elem,
+                                              void *(*elem_ptr_mut)(void *const arr, size_t idx),
+                                              void (*elem_move)(void *const, void *const));
+void *cobj_VectorV_try_get_mut(cobj_VectorV const *const self,
+                               cobj_Index pos,
+                               void *(*elem_ptr_mut)(void *const arr, size_t idx));
+void const *cobj_VectorV_try_get(cobj_VectorV const *const self,
+                                 cobj_Index pos,
+                                 void const *(*elem_ptr)(void const *const arr, size_t idx));
 
-void VectorV_as_SliceV(VectorV const *const self, SliceV *const s);
-void VectorV_as_SliceVMut(VectorV const *const self, SliceVMut *const s);
+void cobj_VectorV_as_cobj_SliceV(cobj_VectorV const *const self, cobj_SliceV *const s);
+void cobj_VectorV_as_cobj_SliceVMut(cobj_VectorV const *const self, cobj_SliceVMut *const s);
 
-void VectorV_iter(VectorV const *const self,
-                  SliceVIter *const it,
-                  void const *(*elem_ptr)(void const *const arr, size_t idx));
-void VectorV_iter_mut(VectorV const *const self,
-                      SliceVMutIter *const it,
-                      void *(*elem_ptr_mut)(void *const arr, size_t idx));
+void cobj_VectorV_iter(cobj_VectorV const *const self,
+                       cobj_SliceVIter *const it,
+                       void const *(*elem_ptr)(void const *const arr, size_t idx));
+void cobj_VectorV_iter_mut(cobj_VectorV const *const self,
+                           cobj_SliceVMutIter *const it,
+                           void *(*elem_ptr_mut)(void *const arr, size_t idx));
 
 #endif // ! defined(COBJ_VECTORV_H)

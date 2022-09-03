@@ -8,128 +8,130 @@
 // RCNode or SharedBox
 // vs AutoBox/UniqueBox ?
 
-typedef struct RCNodeV_ RCNodeV;
-struct RCNodeV_ {
+typedef struct cobj_RCNodeV_s cobj_RCNodeV;
+struct cobj_RCNodeV_s {
     size_t alloc;
     size_t rc;
     uint8_t val[];
 };
 
-void RCNodeV_wipe(RCNodeV *const self)
+void cobj_RCNodeV_wipe(cobj_RCNodeV *const self)
 {
     memwipe(self, sizeof(size_t) + self->alloc);
 }
 
-void RCNodeV_destroy(RCNodeV *const self, void (*elem_destroy)(void *const elem))
+void cobj_RCNodeV_destroy(cobj_RCNodeV *const self, void (*elem_destroy)(void *const elem))
 {
     elem_destroy(self->val);
-    RCNodeV_wipe(self);
+    cobj_RCNodeV_wipe(self);
 }
 
-void RCNodeV_grab(RCNodeV *const self)
+void cobj_RCNodeV_grab(cobj_RCNodeV *const self)
 {
     self->rc += 1;
 }
 
-size_t WARN_UNUSED_RESULT RCNodeV_release(RCNodeV *const self)
+size_t WARN_UNUSED_RESULT cobj_RCNodeV_release(cobj_RCNodeV *const self)
 {
     self->rc -= 1;
     return self->rc;
 }
 
-void const *RCNodeV_deref(RCNodeV const *const self)
+void const *cobj_RCNodeV_deref(cobj_RCNodeV const *const self)
 {
     return self->val;
 }
 
-void *RCNodeV_deref_mut(RCNodeV *const self)
+void *cobj_RCNodeV_deref_mut(cobj_RCNodeV *const self)
 {
     return self->val;
 }
 
-static RCNodeV *RCNodeV_try_malloc(size_t elem_size, Error *const err)
+static cobj_RCNodeV *cobj_RCNodeV_cobj_try_malloc(size_t elem_size, cobj_Error *const err)
 {
     size_t size = sizeof(size_t) + sizeof(size_t) + elem_size;
-    return try_malloc(size, err);
+    return cobj_try_malloc(size, err);
 }
 
 // ==========================================================================
 
-static void RCBoxV_wipe(RCBoxV *const self)
+static void cobj_RCBoxV_wipe(cobj_RCBoxV *const self)
 {
     STRUCTWIPE(self);
 }
 
-void RCBoxV_destroy_member(RCBoxV *const self, void (*elem_destroy)(void *const elem))
+void cobj_RCBoxV_destroy_member(cobj_RCBoxV *const self, void (*elem_destroy)(void *const elem))
 {
-    if (RCNodeV_release(self->node) == 0) { RCNodeV_destroy(self->node, elem_destroy); }
-    RCBoxV_wipe(self);
+    if (cobj_RCNodeV_release(self->node) == 0) { cobj_RCNodeV_destroy(self->node, elem_destroy); }
+    cobj_RCBoxV_wipe(self);
 }
 
-void RCBoxV_destroy(RCBoxV *const self, void (*elem_destroy)(void *const elem))
+void cobj_RCBoxV_destroy(cobj_RCBoxV *const self, void (*elem_destroy)(void *const elem))
 {
-    RCBoxV_destroy_member(self, elem_destroy);
-    RCBoxV_wipe(self);
+    cobj_RCBoxV_destroy_member(self, elem_destroy);
+    cobj_RCBoxV_wipe(self);
 }
 
-void RCBoxV_move_member(RCBoxV *const self, RCBoxV *const src)
+void cobj_RCBoxV_move_member(cobj_RCBoxV *const self, cobj_RCBoxV *const src)
 {
     *self = *src;
 }
 
-void RCBoxV_move(RCBoxV *const self, RCBoxV *const src)
+void cobj_RCBoxV_move(cobj_RCBoxV *const self, cobj_RCBoxV *const src)
 {
-    RCBoxV_move_member(self, src);
-    RCBoxV_wipe(src);
+    cobj_RCBoxV_move_member(self, src);
+    cobj_RCBoxV_wipe(src);
 }
 
-bool RCBoxV_try_copy(RCBoxV *const self, RCBoxV const *const src, Error *const err)
+bool cobj_RCBoxV_try_copy(cobj_RCBoxV *const self,
+                          cobj_RCBoxV const *const src,
+                          cobj_Error *const err)
 {
     COBJ_UNUSED_ARG(err);
     *self = *src;
-    RCNodeV_grab(self->node);
+    cobj_RCNodeV_grab(self->node);
     return true;
 }
 
-void const *RCBoxV_deref(RCBoxV const *const self)
+void const *cobj_RCBoxV_deref(cobj_RCBoxV const *const self)
 {
-    return RCNodeV_deref(self->node);
+    return cobj_RCNodeV_deref(self->node);
 }
 
-void *RCBoxV_deref_mut(RCBoxV *const self)
+void *cobj_RCBoxV_deref_mut(cobj_RCBoxV *const self)
 {
-    return RCNodeV_deref_mut(self->node);
+    return cobj_RCNodeV_deref_mut(self->node);
 }
 
-bool WARN_UNUSED_RESULT RCBoxV_try_from_V(RCBoxV *const self,
-                                          void *const v,
-                                          Error *const err,
-                                          size_t elem_size,
-                                          void (*elem_move)(void *const self, void *const src))
+bool WARN_UNUSED_RESULT cobj_RCBoxV_try_from_V(cobj_RCBoxV *const self,
+                                               void *const v,
+                                               cobj_Error *const err,
+                                               size_t elem_size,
+                                               void (*elem_move)(void *const self, void *const src))
 {
-    RCNodeV *p = RCNodeV_try_malloc(elem_size, err);
+    cobj_RCNodeV *p = cobj_RCNodeV_cobj_try_malloc(elem_size, err);
     if (p == NULL) { return false; }
 
-    elem_move(RCNodeV_deref_mut(p), v);
+    elem_move(cobj_RCNodeV_deref_mut(p), v);
 
-    RCNodeV_grab(p);
+    cobj_RCNodeV_grab(p);
     self->node = p;
     return true;
 }
 
-bool WARN_UNUSED_RESULT RCBoxV_try_copy_V(RCBoxV *const self,
-                                          void const *const v,
-                                          Error *const err,
-                                          size_t elem_size,
-                                          bool (*elem_try_copy)(void *const elem,
-                                                                void const *const src,
-                                                                Error *const err))
+bool WARN_UNUSED_RESULT cobj_RCBoxV_try_copy_V(cobj_RCBoxV *const self,
+                                               void const *const v,
+                                               cobj_Error *const err,
+                                               size_t elem_size,
+                                               bool (*elem_try_copy)(void *const elem,
+                                                                     void const *const src,
+                                                                     cobj_Error *const err))
 {
-    RCNodeV *p = RCNodeV_try_malloc(elem_size, err);
+    cobj_RCNodeV *p = cobj_RCNodeV_cobj_try_malloc(elem_size, err);
     if (p == NULL) { return false; }
 
     bool ok;
-    ok = elem_try_copy(RCNodeV_deref_mut(p), v, err);
+    ok = elem_try_copy(cobj_RCNodeV_deref_mut(p), v, err);
     if (!ok) {
         // no destroy as node is not initialised and destroy wants it
         // initialised.
@@ -137,7 +139,7 @@ bool WARN_UNUSED_RESULT RCBoxV_try_copy_V(RCBoxV *const self,
         return false;
     }
 
-    RCNodeV_grab(p);
+    cobj_RCNodeV_grab(p);
     self->node = p;
     return true;
 }

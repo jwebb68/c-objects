@@ -6,62 +6,62 @@
 // RCNode or SharedBox
 // vs AutoBox/UniqueBox ?
 
-typedef struct RCNodeT_ RCNodeT;
-struct RCNodeT_ {
+typedef struct cobj_RCNodeT_s cobj_RCNodeT;
+struct cobj_RCNodeT_s {
     T val;
     size_t rc;
 };
 
-void RCNodeT_wipe(RCNodeT *const self)
+void cobj_RCNodeT_wipe(cobj_RCNodeT *const self)
 {
     STRUCTWIPE(self);
 }
 
-void RCNodeT_destroy(RCNodeT *const self)
+void cobj_RCNodeT_destroy(cobj_RCNodeT *const self)
 {
     T_destroy(&self->val);
-    RCNodeT_wipe(self);
+    cobj_RCNodeT_wipe(self);
 }
 
-void RCNodeT_grab(RCNodeT *const self)
+void cobj_RCNodeT_grab(cobj_RCNodeT *const self)
 {
     self->rc += 1;
 }
 
-size_t RCNodeT_release(RCNodeT *const self)
+size_t cobj_RCNodeT_release(cobj_RCNodeT *const self)
 {
     self->rc -= 1;
     return self->rc;
 }
 
-T const *RCNodeT_deref(RCNodeT const *const self)
+T const *cobj_RCNodeT_deref(cobj_RCNodeT const *const self)
 {
     return &self->val;
 }
 
-T *RCNodeT_deref_mut(RCNodeT *const self)
+T *cobj_RCNodeT_deref_mut(cobj_RCNodeT *const self)
 {
     return &self->val;
 }
 
-static RCNodeT *RCNodeT_try_malloc(Error *const err)
+static cobj_RCNodeT *cobj_RCNodeT_cobj_try_malloc(cobj_Error *const err)
 {
-    return try_malloc(sizeof(RCNodeT), err);
+    return cobj_try_malloc(sizeof(cobj_RCNodeT), err);
 }
 
-void RCNodeT_new(RCNodeT *const self, int v)
+void cobj_RCNodeT_new(cobj_RCNodeT *const self, int v)
 {
     self->rc = 0;
     T_new(&self->val, v);
 }
 
-void RCNodeT_from_T(RCNodeT *const self, T *const src)
+void cobj_RCNodeT_from_T(cobj_RCNodeT *const self, T *const src)
 {
     self->rc = 0;
     T_move(&self->val, src);
 }
 
-bool RCNodeT_try_copy_T(RCNodeT *const self, T const *const src, Error *const err)
+bool cobj_RCNodeT_try_copy_T(cobj_RCNodeT *const self, T const *const src, cobj_Error *const err)
 {
     self->rc = 0;
     return T_try_copy(&self->val, src, err);
@@ -69,120 +69,124 @@ bool RCNodeT_try_copy_T(RCNodeT *const self, T const *const src, Error *const er
 
 // ==========================================================================
 
-static void RCBoxT_wipe(RCBoxT *const self)
+static void cobj_RCBoxT_wipe(cobj_RCBoxT *const self)
 {
     STRUCTWIPE(self);
 }
 
-void RCBoxT_destroy_member(RCBoxT *const self)
+void cobj_RCBoxT_destroy_member(cobj_RCBoxT *const self)
 {
-    if (RCNodeT_release(self->node) == 0) { RCNodeT_destroy(self->node); }
-    RCBoxT_wipe(self);
+    if (cobj_RCNodeT_release(self->node) == 0) { cobj_RCNodeT_destroy(self->node); }
+    cobj_RCBoxT_wipe(self);
 }
-void RCBoxT_destroy(RCBoxT *const self)
+void cobj_RCBoxT_destroy(cobj_RCBoxT *const self)
 {
-    RCBoxT_destroy_member(self);
-    RCBoxT_wipe(self);
+    cobj_RCBoxT_destroy_member(self);
+    cobj_RCBoxT_wipe(self);
 }
 
-void RCBoxT_move_member(RCBoxT *const self, RCBoxT *const src)
+void cobj_RCBoxT_move_member(cobj_RCBoxT *const self, cobj_RCBoxT *const src)
 {
     *self = *src;
 }
 
-void RCBoxT_move(RCBoxT *const self, RCBoxT *const src)
+void cobj_RCBoxT_move(cobj_RCBoxT *const self, cobj_RCBoxT *const src)
 {
-    RCBoxT_move_member(self, src);
-    RCBoxT_wipe(src);
+    cobj_RCBoxT_move_member(self, src);
+    cobj_RCBoxT_wipe(src);
 }
 
-bool RCBoxT_try_copy(RCBoxT *const self, RCBoxT const *const src)
+bool cobj_RCBoxT_try_copy(cobj_RCBoxT *const self, cobj_RCBoxT const *const src)
 {
     *self = *src;
-    RCNodeT_grab(self->node);
+    cobj_RCNodeT_grab(self->node);
     return true;
 }
 
-T const *RCBoxT_deref(RCBoxT const *const self)
+T const *cobj_RCBoxT_deref(cobj_RCBoxT const *const self)
 {
-    return RCNodeT_deref(self->node);
+    return cobj_RCNodeT_deref(self->node);
 }
 
-T *RCBoxT_deref_mut(RCBoxT *const self)
+T *cobj_RCBoxT_deref_mut(cobj_RCBoxT *const self)
 {
-    return RCNodeT_deref_mut(self->node);
+    return cobj_RCNodeT_deref_mut(self->node);
 }
 
 #if 0
-bool WARN_UNUSED_RESULT RCBoxT_try_new(RCBoxT *const self, int v, Error *const err)
+bool WARN_UNUSED_RESULT cobj_RCBoxT_try_new(cobj_RCBoxT *const self, int v, cobj_Error *const err)
 {
-    RCNodeT *p = RCNodeT_try_malloc(err);
+    cobj_RCNodeT *p = cobj_RCNodeT_cobj_try_malloc(err);
     if (p == NULL) { return false; }
 
-    RCNodeT_new(p, v);
-    RCNodeT_grab(p);
+    cobj_RCNodeT_new(p, v);
+    cobj_RCNodeT_grab(p);
     self->node = p;
     return true;
 }
 #endif
 
-bool WARN_UNUSED_RESULT RCBoxT_try_from_T(RCBoxT *const self, T *const v, Error *const err)
+bool WARN_UNUSED_RESULT cobj_RCBoxT_try_from_T(cobj_RCBoxT *const self,
+                                               T *const v,
+                                               cobj_Error *const err)
 {
-    RCNodeT *p = RCNodeT_try_malloc(err);
+    cobj_RCNodeT *p = cobj_RCNodeT_cobj_try_malloc(err);
     if (p == NULL) { return false; }
 
-    T_move(RCNodeT_deref_mut(p), v);
-    RCNodeT_grab(p);
+    T_move(cobj_RCNodeT_deref_mut(p), v);
+    cobj_RCNodeT_grab(p);
     self->node = p;
     return true;
 }
 
 // copy variant: copy direct into dest without intermed storage?
-bool WARN_UNUSED_RESULT RCBoxT_try_copy_T(RCBoxT *const self, T const *const v, Error *const err)
+bool WARN_UNUSED_RESULT cobj_RCBoxT_try_copy_T(cobj_RCBoxT *const self,
+                                               T const *const v,
+                                               cobj_Error *const err)
 {
-    RCNodeT *p = RCNodeT_try_malloc(err);
+    cobj_RCNodeT *p = cobj_RCNodeT_cobj_try_malloc(err);
     if (p == NULL) { return false; }
 
     bool ok;
-    ok = T_try_copy(RCNodeT_deref_mut(p), v, err);
+    ok = T_try_copy(cobj_RCNodeT_deref_mut(p), v, err);
     if (!ok) {
         free(p);
         return false;
     }
 
-    RCNodeT_grab(p);
+    cobj_RCNodeT_grab(p);
     self->node = p;
     return true;
 }
 
-bool RCBoxT_is_eq(RCBoxT const *const self, RCBoxT const *const b)
+bool cobj_RCBoxT_is_eq(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b)
 {
-    return T_is_eq(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
+    return T_is_eq(cobj_RCNodeT_deref(self->node), cobj_RCNodeT_deref(b->node));
 }
 
-bool RCBoxT_is_lt(RCBoxT const *const self, RCBoxT const *const b)
+bool cobj_RCBoxT_is_lt(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b)
 {
-    return T_is_lt(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
+    return T_is_lt(cobj_RCNodeT_deref(self->node), cobj_RCNodeT_deref(b->node));
 }
 
-bool RCBoxT_is_gt(RCBoxT const *const self, RCBoxT const *const b)
+bool cobj_RCBoxT_is_gt(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b)
 {
-    return T_is_gt(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
+    return T_is_gt(cobj_RCNodeT_deref(self->node), cobj_RCNodeT_deref(b->node));
 }
 
-bool RCBoxT_is_le(RCBoxT const *const self, RCBoxT const *const b)
+bool cobj_RCBoxT_is_le(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b)
 {
-    return T_is_le(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
+    return T_is_le(cobj_RCNodeT_deref(self->node), cobj_RCNodeT_deref(b->node));
 }
 
-bool RCBoxT_is_ge(RCBoxT const *const self, RCBoxT const *const b)
+bool cobj_RCBoxT_is_ge(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b)
 {
-    return T_is_ge(RCNodeT_deref(self->node), RCNodeT_deref(b->node));
+    return T_is_ge(cobj_RCNodeT_deref(self->node), cobj_RCNodeT_deref(b->node));
 }
 
-bool RCBoxT_contains(RCBoxT const *const self, T const *const v)
+bool cobj_RCBoxT_contains(cobj_RCBoxT const *const self, T const *const v)
 {
-    return T_is_eq(RCNodeT_deref(self->node), v);
+    return T_is_eq(cobj_RCNodeT_deref(self->node), v);
 }
 
 // no own of just a ptr: that leads to heap fragmentation

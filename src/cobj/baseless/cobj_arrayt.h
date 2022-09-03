@@ -1,5 +1,5 @@
-#if !defined(COBJ_ARRAYT_H)
-#    define COBJ_ARRAYT_H
+#if !defined(COBJ_cobj_ArrayT_H)
+#    define COBJ_cobj_ArrayT_H
 
 /**
  * Array<T>
@@ -15,8 +15,8 @@
 // because it's C there is no template mechanism, so this needs to be repeated for each type
 // being treated this way.
 
-typedef struct ArrayT_s ArrayT;
-typedef struct ArrayTMut_s ArrayTMut;
+typedef struct cobj_ArrayT_s cobj_ArrayT;
+typedef struct cobj_ArrayTMut_s cobj_ArrayTMut;
 
 #    include <cobj/baseless/cobj_slicet.h>
 #    include <cobj/core/cobj_defs.h> // WARN_UNUSED_RESULT
@@ -25,18 +25,18 @@ typedef struct ArrayTMut_s ArrayTMut;
 #    include <stdbool.h>
 #    include <stddef.h> // size_t
 
-struct ArrayT_s {
+struct cobj_ArrayT_s {
     T const *ptr;
     size_t len;
 };
 
 // const array does not own the referred
-void ArrayT_destroy(ArrayT *const self);
-void ArrayT_destroy_member(ArrayT *const self);
+void cobj_ArrayT_destroy(cobj_ArrayT *const self);
+void cobj_ArrayT_destroy_member(cobj_ArrayT *const self);
 
 // can move the obj, ownership of the referred moved. referred not moved.
-void ArrayT_move(ArrayT *const self, ArrayT *const src);
-void ArrayT_move_member(ArrayT *const self, ArrayT *const src);
+void cobj_ArrayT_move(cobj_ArrayT *const self, cobj_ArrayT *const src);
+void cobj_ArrayT_move_member(cobj_ArrayT *const self, cobj_ArrayT *const src);
 
 // copying a const array?
 // requires memory to copy to (if copying content).
@@ -44,83 +44,83 @@ void ArrayT_move_member(ArrayT *const self, ArrayT *const src);
 // so no copy of const array.
 // copy const array into const array?
 
-void ArrayT_own(ArrayT *const self, T const *const p, size_t len);
-void ArrayT_disown(ArrayT *const self, T const **const p, size_t *const len);
+void cobj_ArrayT_own(cobj_ArrayT *const self, T const *const p, size_t len);
+void cobj_ArrayT_disown(cobj_ArrayT *const self, T const **const p, size_t *const len);
 
-void ArrayT_swap(ArrayT *const self, ArrayT *const other);
+void cobj_ArrayT_swap(cobj_ArrayT *const self, cobj_ArrayT *const other);
 
-T const *ArrayT_ptr(ArrayT const *const self);
+T const *cobj_ArrayT_ptr(cobj_ArrayT const *const self);
 
-size_t ArrayT_len(ArrayT const *const self);
+size_t cobj_ArrayT_len(cobj_ArrayT const *const self);
 
 // checked get..
-T const *ArrayT_try_get(ArrayT const *const self, cobj_Index pos);
+T const *cobj_ArrayT_try_get(cobj_ArrayT const *const self, cobj_Index pos);
 
 // slices don't own referred i.e shared.
-void ArrayT_as_SliceT(ArrayT const *const self, SliceT *const s);
+void cobj_ArrayT_as_cobj_SliceT(cobj_ArrayT const *const self, cobj_SliceT *const s);
 
 // iters don't own referred i.e shared.
-void ArrayT_iter(ArrayT const *const self, SliceTIter *const it);
+void cobj_ArrayT_iter(cobj_ArrayT const *const self, cobj_SliceTIter *const it);
 
 // transfer of ownership?
-void ArrayT_from_ArrayTMut(ArrayT *const self, ArrayTMut *const src);
+void cobj_ArrayT_from_cobj_ArrayTMut(cobj_ArrayT *const self, cobj_ArrayTMut *const src);
 
 // ============================================================================
 
 // Does array own the referred?
 // If so then it destroys the referred on destroy.
 // then how can a mutable be cast to non-mutable?
-struct ArrayTMut_s {
+struct cobj_ArrayTMut_s {
     T *ptr;
     size_t len;
 };
 
-void ArrayTMut_destroy_member(ArrayTMut *const self);
-void ArrayTMut_destroy(ArrayTMut *const self);
+void cobj_ArrayTMut_destroy_member(cobj_ArrayTMut *const self);
+void cobj_ArrayTMut_destroy(cobj_ArrayTMut *const self);
 
-void ArrayTMut_move(ArrayTMut *const self, ArrayTMut *const src);
+void cobj_ArrayTMut_move(cobj_ArrayTMut *const self, cobj_ArrayTMut *const src);
 
 // content copy.
 // [in]self uninitialised, [out]self initialised.
 // cannot do, copy requires location to write to.. and unintialised self does not hold this,
-// bool WARN_UNUSED_RESULT ArrayTMut_try_copy_from(ArrayTMut *const self,
-//                                            ArrayT const *const src,
-//                                            Error *err);
-// bool WARN_UNUSED_RESULT ArrayTMut_try_copy_from_mut(ArrayTMut *const self,
-//                                                ArrayTMut const *const src,
-//                                                Error *err);
+// bool WARN_UNUSED_RESULT cobj_ArrayTMut_try_copy_from(cobj_ArrayTMut *const self,
+//                                            cobj_ArrayT const *const src,
+//                                            cobj_Error *err);
+// bool WARN_UNUSED_RESULT cobj_ArrayTMut_try_copy_from_mut(cobj_ArrayTMut *const self,
+//                                                cobj_ArrayTMut const *const src,
+//                                                cobj_Error *err);
 
 // array i
 // own an already initialised carray
-void ArrayTMut_own(ArrayTMut *const self, T *const arr, size_t len);
+void cobj_ArrayTMut_own(cobj_ArrayTMut *const self, T *const arr, size_t len);
 // disown the owned carray, carray no longer managed, self uninitialised.
-void ArrayTMut_disown(ArrayTMut *const self, T **const arr, size_t *const len);
+void cobj_ArrayTMut_disown(cobj_ArrayTMut *const self, T **const arr, size_t *const len);
 
-void ArrayTMut_swap(ArrayTMut *const self, ArrayTMut *const other);
+void cobj_ArrayTMut_swap(cobj_ArrayTMut *const self, cobj_ArrayTMut *const other);
 
 // own an uninitialised carray and initialise with the init fn.
-void ArrayTMut_default(ArrayTMut *const self, T *const arr, size_t len);
+void cobj_ArrayTMut_default(cobj_ArrayTMut *const self, T *const arr, size_t len);
 
-// void ArrayTMut_fill_with(ArrayTMut *const self, T *const arr, size_t len, void (*elem_init)(T
-// *const self));
+// void cobj_ArrayTMut_fill_with(cobj_ArrayTMut *const self, T *const arr, size_t len, void
+// (*elem_init)(T *const self));
 
-T *ArrayTMut_ptr(ArrayTMut const *const self);
-size_t ArrayTMut_len(ArrayTMut const *const self);
+T *cobj_ArrayTMut_ptr(cobj_ArrayTMut const *const self);
+size_t cobj_ArrayTMut_len(cobj_ArrayTMut const *const self);
 
 // cast to const without copying?
 // what owns the referred?
-// what happens when ArrayT is destroyed..?
+// what happens when cobj_ArrayT is destroyed..?
 // array can be mutated underneath arr..
 // cast or convert?
-void ArrayTMut_into_ArrayT(ArrayTMut *const self, ArrayT *const arr);
-// void ArrayTMut_as_ArrayT(ArrayTMut const *const self, ArrayT *const arr);
+void cobj_ArrayTMut_into_cobj_ArrayT(cobj_ArrayTMut *const self, cobj_ArrayT *const arr);
+// void cobj_ArrayTMut_as_cobj_ArrayT(cobj_ArrayTMut const *const self, cobj_ArrayT *const arr);
 
 // slices never own the referred.
-void ArrayTMut_as_SliceT(ArrayTMut const *const self, SliceT *const s);
-void ArrayTMut_as_SliceTMut(ArrayTMut const *const self, SliceTMut *const s);
+void cobj_ArrayTMut_as_cobj_SliceT(cobj_ArrayTMut const *const self, cobj_SliceT *const s);
+void cobj_ArrayTMut_as_cobj_SliceTMut(cobj_ArrayTMut const *const self, cobj_SliceTMut *const s);
 
 // iters never own the referred.
-void ArrayTMut_iter(ArrayTMut const *const self, SliceTIter *const it);
-void ArrayTMut_iter_mut(ArrayTMut const *const self, SliceTMutIter *const it);
+void cobj_ArrayTMut_iter(cobj_ArrayTMut const *const self, cobj_SliceTIter *const it);
+void cobj_ArrayTMut_iter_mut(cobj_ArrayTMut const *const self, cobj_SliceTMutIter *const it);
 
-#endif //! defined(COBJ_ARRAYT_H)
+#endif //! defined(COBJ_cobj_ArrayT_H)

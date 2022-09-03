@@ -74,7 +74,7 @@
  * Copying/Cloning
  * ---------------
  * Can fail as the copy/clone may not get the resources it need in the copy.
- * So, must always be a try_ and return a worked/failed return value and have an Error outparam.
+ * So, must always be a try_ and return a worked/failed return value and have an cobj_Erroroutparam.
  * Copy is considered expensive, so should not be used if not needed.
  *
  * Care must also be taken when copying into a struct that is already initialised,
@@ -182,8 +182,8 @@ void T_move_member(T *const self, T *const src);
  * @warning UB if err is NULL.
  * @warning UB if err is initialised.
  */
-bool WARN_UNUSED_RESULT T_try_copy_member(T *const self, T const *const src, Error *const err);
-bool WARN_UNUSED_RESULT T_try_copy(T *const self, T const *const src, Error *const err);
+bool WARN_UNUSED_RESULT T_try_copy_member(T *const self, T const *const src, cobj_Error *const err);
+bool WARN_UNUSED_RESULT T_try_copy(T *const self, T const *const src, cobj_Error *const err);
 // using WARN_RESULT for force callers to handle the status.
 
 /**
@@ -285,7 +285,7 @@ void T_new(T *const self, int v);
  */
 void T_default(T *const self);
 
-// // needed for BoxT/BoxVT
+// // needed for cobj_BoxT/cobj_BoxVT
 // /**
 //  * Allocate but don't initialise a struct on the main system heap.
 //  *
@@ -299,9 +299,10 @@ void T_default(T *const self);
 //  *          not-NULL if allocated ok.
 //  *
 //  *
-//  * @note Consider using BoxT instead of direct heap usage, BoxT calls destroy as needed.
+//  * @note Consider using cobj_BoxT instead of direct heap usage, cobj_BoxT calls destroy as
+//  needed.
 //  */
-// T *T_try_malloc(Error *const err);
+// T *T_cobj_try_malloc(cobj_Error*const err);
 
 // /**
 //  * free heap allocated struct.
@@ -309,7 +310,8 @@ void T_default(T *const self);
 //  * self MUST be deinitialised first e.g.  with call to T_destroy();
 //  * or by T_move().
 //  *
-//  * @note Consider using BoxT instead of direct heap usage, BoxT calls destroy as needed.
+//  * @note Consider using cobj_BoxT instead of direct heap usage, cobj_BoxT calls destroy as
+//  needed.
 //  *
 //  */
 // void T_free(T *const self);

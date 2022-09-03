@@ -2,14 +2,14 @@
 #    define COBJ_ERROR_H
 
 // forward declares
-typedef enum ErrCode_ {
-    Error_None = 0,
-    Error_EFAIL,
-    Error_ENOMEM,
-    Error_ENOTIMPL,
-} ErrorCode;
+typedef enum cobj_ErrCode_e {
+    cobj_ErrorCode_None = 0,
+    cobj_ErrorCode_EFAIL,
+    cobj_ErrorCode_ENOMEM,
+    cobj_ErrorCode_ENOTIMPL,
+} cobj_ErrorCode;
 
-typedef struct Error_ Error;
+typedef struct cobj_Error_s cobj_Error;
 
 // includes
 #    include <cobj/core/cobj_defs.h> // WARN_UNUSED_RESULT
@@ -17,19 +17,22 @@ typedef struct Error_ Error;
 #    include <stddef.h> // size_t
 
 // defines
-struct Error_ {
-    ErrorCode code;
+struct cobj_Error_s {
+    cobj_ErrorCode code;
     size_t line;
     char const *filen;
 };
 
-void Error_destroy(Error *const self);
-void Error_new(Error *const self, ErrorCode code, size_t line, char const *const filen);
-bool WARN_UNUSED_RESULT Error_raise(Error *const self,
-                                    ErrorCode code,
-                                    size_t line,
-                                    char const *const filen);
+void cobj_Error_destroy(cobj_Error *const self);
+void cobj_Error_new(cobj_Error *const self,
+                    cobj_ErrorCode code,
+                    size_t line,
+                    char const *const filen);
+bool WARN_UNUSED_RESULT cobj_Error_raise(cobj_Error *const self,
+                                         cobj_ErrorCode code,
+                                         size_t line,
+                                         char const *const filen);
 
-#    define ERROR_RAISE(self, code) Error_raise(self, code, __LINE__, __FILE__)
+#    define COBJ_ERROR_RAISE(self, code) cobj_Error_raise(self, code, __LINE__, __FILE__)
 
 #endif //! defined(COBJ_ERROR_H)

@@ -12,8 +12,8 @@
 // being treated this way.
 
 // forward declares
-typedef struct RCNodeT_ RCNodeT;
-typedef struct RCBoxT_ RCBoxT;
+typedef struct cobj_RCNodeT_s cobj_RCNodeT;
+typedef struct cobj_RCBoxT_s cobj_RCBoxT;
 
 // includes
 #    include <cobj/core/cobj_error.h>
@@ -21,37 +21,41 @@ typedef struct RCBoxT_ RCBoxT;
 #    include <stdbool.h>
 
 // defines
-struct RCBoxT_ {
-    RCNodeT *node;
+struct cobj_RCBoxT_s {
+    cobj_RCNodeT *node;
 };
 
-void RCBoxT_destroy_member(RCBoxT *const self);
-void RCBoxT_destroy(RCBoxT *const self);
+void cobj_RCBoxT_destroy_member(cobj_RCBoxT *const self);
+void cobj_RCBoxT_destroy(cobj_RCBoxT *const self);
 
-void RCBoxT_move_member(RCBoxT *const self, RCBoxT *const src);
-void RCBoxT_move(RCBoxT *const self, RCBoxT *const src);
+void cobj_RCBoxT_move_member(cobj_RCBoxT *const self, cobj_RCBoxT *const src);
+void cobj_RCBoxT_move(cobj_RCBoxT *const self, cobj_RCBoxT *const src);
 
-bool WARN_UNUSED_RESULT RCBoxT_try_copy(RCBoxT *const self, RCBoxT const *const src);
+bool WARN_UNUSED_RESULT cobj_RCBoxT_try_copy(cobj_RCBoxT *const self, cobj_RCBoxT const *const src);
 
-T const *RCBoxT_deref(RCBoxT const *const self);
-T *RCBoxT_deref_mut(RCBoxT *const self);
+T const *cobj_RCBoxT_deref(cobj_RCBoxT const *const self);
+T *cobj_RCBoxT_deref_mut(cobj_RCBoxT *const self);
 
-bool RCBoxT_is_eq(RCBoxT const *const self, RCBoxT const *const b);
-bool RCBoxT_is_lt(RCBoxT const *const self, RCBoxT const *const b);
-bool RCBoxT_is_gt(RCBoxT const *const self, RCBoxT const *const b);
-bool RCBoxT_is_le(RCBoxT const *const self, RCBoxT const *const b);
-bool RCBoxT_is_ge(RCBoxT const *const self, RCBoxT const *const b);
+bool cobj_RCBoxT_is_eq(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b);
+bool cobj_RCBoxT_is_lt(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b);
+bool cobj_RCBoxT_is_gt(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b);
+bool cobj_RCBoxT_is_le(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b);
+bool cobj_RCBoxT_is_ge(cobj_RCBoxT const *const self, cobj_RCBoxT const *const b);
 
-bool RCBoxT_contains(RCBoxT const *const self, T const *const v);
+bool cobj_RCBoxT_contains(cobj_RCBoxT const *const self, T const *const v);
 
-bool WARN_UNUSED_RESULT RCBoxT_try_from_T(RCBoxT *const self, T *const v, Error *const err);
+bool WARN_UNUSED_RESULT cobj_RCBoxT_try_from_T(cobj_RCBoxT *const self,
+                                               T *const v,
+                                               cobj_Error *const err);
 
 // copy variant: copy direct into dest without intermed storage?
-bool WARN_UNUSED_RESULT RCBoxT_try_copy_T(RCBoxT *const self, T const *const v, Error *const err);
+bool WARN_UNUSED_RESULT cobj_RCBoxT_try_copy_T(cobj_RCBoxT *const self,
+                                               T const *const v,
+                                               cobj_Error *const err);
 
 #    if 0
     // inplace new, but don't know various funcs on T
-    bool WARN_UNUSED_RESULT RCBoxT_try_new(RCBoxT *const self, int v, Error *const err);
+    bool WARN_UNUSED_RESULT cobj_RCBoxT_try_new(cobj_RCBoxT *const self, int v, cobj_Error *const err);
 #    endif
 
 // no own of a ptr: that leads to heap fragmentation

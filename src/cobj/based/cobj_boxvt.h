@@ -2,25 +2,25 @@
 #    define COBJ_BOXVT_H
 
 /**
- * BoxV<T>: object created and managed on the heap, without sharing.
+ * cobj_BoxV<T>: object created and managed on the heap, without sharing.
  *
  * Box contents owned by the box and are not shared (use RCT for shared objects).
  * inherently a Mut; cannot move a const value into it, cannot copy into into a const box.
  *
- * This version is the veneer layer for when using BoxV as the actual implementation.
+ * This version is the veneer layer for when using cobj_BoxV as the actual implementation.
  * Used to reduce the code footprint if using it.
  * But when debugging, the value won't be visible in the debugger (it'll be a block of bytes,
  * not deconstructed as most debuggers are able to do).
  * It treats the value as a block of ram, so specialisations of operations
  * operating on T are passed in.
- * This may prevent some optimisations that are available, compared to BoxT.
+ * This may prevent some optimisations that are available, compared to cobj_BoxT.
  *
  * Warning: some of the  new functions may prevent this being a viable pattern.
- * As I've yet to find a solution that is a single func call to BoxV (as the rest of them are).
+ * As I've yet to find a solution that is a single func call to cobj_BoxV (as the rest of them are).
  */
 
 // forward declares
-typedef struct BoxVT_ BoxVT;
+typedef struct cobj_BoxVT_ cobj_BoxVT;
 
 // includes
 #    include <cobj/based/cobj_boxv.h>
@@ -30,44 +30,50 @@ typedef struct BoxVT_ BoxVT;
 #    include <stddef.h> // size_t
 
 // defines
-struct BoxVT_ {
-    BoxV inner;
+struct cobj_BoxVT_ {
+    cobj_BoxV inner;
 };
 
-void BoxVT_destroy_member(BoxVT *const self);
-void BoxVT_destroy(BoxVT *const self);
+void cobj_BoxVT_destroy_member(cobj_BoxVT *const self);
+void cobj_BoxVT_destroy(cobj_BoxVT *const self);
 
-void BoxVT_move_member(BoxVT *const self, BoxVT *const src);
-void BoxVT_move(BoxVT *const self, BoxVT *const src);
+void cobj_BoxVT_move_member(cobj_BoxVT *const self, cobj_BoxVT *const src);
+void cobj_BoxVT_move(cobj_BoxVT *const self, cobj_BoxVT *const src);
 
-bool WARN_UNUSED_RESULT BoxVT_try_copy_member(BoxVT *const self,
-                                              BoxVT const *const v,
-                                              Error *const err);
-bool WARN_UNUSED_RESULT BoxVT_try_copy(BoxVT *const self, BoxVT const *const v, Error *const err);
+bool WARN_UNUSED_RESULT cobj_BoxVT_try_copy_member(cobj_BoxVT *const self,
+                                                   cobj_BoxVT const *const v,
+                                                   cobj_Error *const err);
+bool WARN_UNUSED_RESULT cobj_BoxVT_try_copy(cobj_BoxVT *const self,
+                                            cobj_BoxVT const *const v,
+                                            cobj_Error *const err);
 
-T const *BoxVT_deref(BoxVT const *const self);
-T *BoxVT_deref_mut(BoxVT *const self);
+T const *cobj_BoxVT_deref(cobj_BoxVT const *const self);
+T *cobj_BoxVT_deref_mut(cobj_BoxVT *const self);
 
 // comparisons
-bool BoxVT_is_eq(BoxVT const *const self, BoxVT const *const b);
-bool BoxVT_is_ne(BoxVT const *const self, BoxVT const *const b);
-bool BoxVT_is_lt(BoxVT const *const self, BoxVT const *const b);
-bool BoxVT_is_gt(BoxVT const *const self, BoxVT const *const b);
-bool BoxVT_is_le(BoxVT const *const self, BoxVT const *const b);
-bool BoxVT_is_ge(BoxVT const *const self, BoxVT const *const b);
+bool cobj_BoxVT_is_eq(cobj_BoxVT const *const self, cobj_BoxVT const *const b);
+bool cobj_BoxVT_is_ne(cobj_BoxVT const *const self, cobj_BoxVT const *const b);
+bool cobj_BoxVT_is_lt(cobj_BoxVT const *const self, cobj_BoxVT const *const b);
+bool cobj_BoxVT_is_gt(cobj_BoxVT const *const self, cobj_BoxVT const *const b);
+bool cobj_BoxVT_is_le(cobj_BoxVT const *const self, cobj_BoxVT const *const b);
+bool cobj_BoxVT_is_ge(cobj_BoxVT const *const self, cobj_BoxVT const *const b);
 
 // does box contain value..
-bool BoxVT_contains(BoxVT const *const self, T const *const v);
+bool cobj_BoxVT_contains(cobj_BoxVT const *const self, T const *const v);
 
-void BoxVT_own(BoxVT *const self, T *const p);
-T *BoxVT_disown(BoxVT *const self);
+void cobj_BoxVT_own(cobj_BoxVT *const self, T *const p);
+T *cobj_BoxVT_disown(cobj_BoxVT *const self);
 
-bool WARN_UNUSED_RESULT BoxVT_try_from_T(BoxVT *const self, T *const v, Error *const err);
-void BoxVT_into_T(BoxVT *const self, T *const v);
+bool WARN_UNUSED_RESULT cobj_BoxVT_try_from_T(cobj_BoxVT *const self,
+                                              T *const v,
+                                              cobj_Error *const err);
+void cobj_BoxVT_into_T(cobj_BoxVT *const self, T *const v);
 
-bool WARN_UNUSED_RESULT BoxVT_try_copy_T(BoxVT *const self, T const *const v, Error *const err);
+bool WARN_UNUSED_RESULT cobj_BoxVT_try_copy_T(cobj_BoxVT *const self,
+                                              T const *const v,
+                                              cobj_Error *const err);
 
 // developer needs to add own inplace new functions per type.
-// void BoxVT_new...(BoxVT_ *const self, ...);
+// void cobj_BoxVT_new...(cobj_BoxVT_ *const self, ...);
 
 #endif //! defined(COBJ_BOXVT_H)
