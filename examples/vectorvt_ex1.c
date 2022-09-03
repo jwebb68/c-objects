@@ -1,6 +1,6 @@
 #include <cobj/t.h>
-#include <cobj/cobj_vectorvt.h>
-#include <cobj/cobj_carray.h>
+#include <cobj/based/cobj_vectorvt.h>
+#include <cobj/core/cobj_carray.h>
 
 #include <stdio.h>
 #include <assert.h>
@@ -35,14 +35,14 @@ int main(int argc, char *argv[]) {
 
     //etc
 
-    SliceTIter it;
+    SliceVTIter it;
     VectorVT_iter(&vec, &it);
-    for (T const *p;  NULL != (p = SliceTIter_next(&it));) {
+    for (T const *p;  NULL != (p = SliceVTIter_next(&it));) {
         // do something with p
         // p->...
         printf("foo %d", p->dummy);
     }
-    SliceTIter_destroy(&it);
+    SliceVTIter_destroy(&it);
 
     printf("foo");
 

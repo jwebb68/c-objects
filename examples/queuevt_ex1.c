@@ -1,6 +1,6 @@
 #include <cobj/t.h>
-#include <cobj/cobj_queuevt.h>
-#include <cobj/cobj_carray.h>
+#include <cobj/based/cobj_queuevt.h>
+#include <cobj/core/cobj_carray.h>
 
 #include <stdio.h>
 #include <assert.h>

@@ -99,9 +99,8 @@
 typedef struct T_ T;
 
 // includes
-#    include "cobj_defs.h" // WARN_RESULT
-#    include "cobj_error.h"
-
+#    include <cobj/core/cobj_defs.h> // WARN_RESULT
+#    include <cobj/core/cobj_error.h>
 #    include <stdbool.h>
 #    include <stddef.h> //size_t
 

@@ -1,8 +1,6 @@
-#include "t.h"
-
-#include "cobj_defs.h" // UNUSED_ARG
-#include "cobj_memory.h" // STRUCTWIPE
-
+#include <cobj/core/cobj_defs.h> // COBJ_UNUSED_ARG
+#include <cobj/core/cobj_memory.h> // STRUCTWIPE
+#include <cobj/t.h>
 #include <stdlib.h> // malloc/free
 
 static void T_wipe(T *const self)
@@ -12,7 +10,7 @@ static void T_wipe(T *const self)
 
 void T_destroy_member(T *const self)
 {
-    UNUSED_ARG(self);
+    COBJ_UNUSED_ARG(self);
 }
 void T_destroy(T *const self)
 {
@@ -35,7 +33,7 @@ bool WARN_UNUSED_RESULT T_try_copy_member(T *const self, T const *const src, Err
     *self = *src;
     // and/or copy any members in a by-member fashion,
     // mainly those that have special copy semantics and a simple bit-copy won't do.
-    UNUSED_ARG(err);
+    COBJ_UNUSED_ARG(err);
     return true;
     // or
     // return ERROR_RAISE(err, Error_ENOTIMPL);
@@ -91,8 +89,10 @@ void T_default(T *const self)
 
 // /*
 //  * not sure about malloc/free functions.
-//  * Do want the T_malloc to just alloc the memory, with T_free to free it (even though it's a call to
-//  * free()); Then it's: T *p = T_malloc(); T_new(p, ...); i.e. in-place initialise, with malloc NOT
+//  * Do want the T_malloc to just alloc the memory, with T_free to free it (even though it's a call
+//  to
+//  * free()); Then it's: T *p = T_malloc(); T_new(p, ...); i.e. in-place initialise, with malloc
+//  NOT
 //  * zapping memory to 0 as it's going to be fully initialised in the new()
 //  * - no point wasting cycles (there's enough of that going on anyway).
 //  * then later
