@@ -13,5 +13,6 @@ typedef size_t cobj_Index;
         } while (0)
 
 #    define WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+#    define NO_RETURN __attribute__((noreturn))
 
 #endif //! defined(COBJ_DEFS_H)
