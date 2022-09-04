@@ -3,6 +3,7 @@ C-objects
 
 A library of code that shows how to use structs in a way that mimics C++ or
 Rust, but in a very manual way (e.g YOU control lifetimes).
+(A C++ dev guide to surviving C).
 
 As such it's got plenty of footguns in it (probably about the same as any C project then).
 
