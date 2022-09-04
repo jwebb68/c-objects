@@ -21,10 +21,10 @@ void cobj_Error_new(cobj_Error *const self,
     self->filen = filen;
 }
 
-bool WARN_UNUSED_RESULT cobj_Error_raise(cobj_Error *const self,
-                                         cobj_ErrorCode code,
-                                         size_t line,
-                                         char const *const filen)
+bool WARN_UNUSED_RESULT cobj_Error_raise_(cobj_Error *const self,
+                                          cobj_ErrorCode code,
+                                          size_t line,
+                                          char const *const filen)
 {
     cobj_Error_new(self, code, line, filen);
     return false;
