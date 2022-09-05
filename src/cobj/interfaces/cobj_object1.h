@@ -6,7 +6,7 @@ struct cobj_Object1_s;
 
 #    include <cobj/interfaces/cobj_interface.h>
 #    include <cobj/interfaces/cobj_interface1.h>
-//#include "cobj/interfaces/cobj_interface3.h"
+#    include <cobj/interfaces/cobj_interface2.h>
 
 struct cobj_Object1_s {
     // cobj_Value value1;
@@ -15,8 +15,8 @@ struct cobj_Object1_s {
 
     // interface members, can go anywhere..
     cobj_Interface1 iface1;
-    // cobj_Interface3 iface3;
-    //  TODO: maybe wrap interface members in a DECLARE_INTERFACE(ifacecls) macro..
+
+    COBJ_INTERFACE_DECL_FOR(cobj_Object1, cobj_Interface2)
 };
 
 void cobj_Object1_destroy(cobj_Object1 *const self);

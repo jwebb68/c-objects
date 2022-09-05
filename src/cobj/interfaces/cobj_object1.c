@@ -7,9 +7,8 @@
 
 static cobj_InterfaceLookup const cobj_Object1_ifaces[] = {
     {&cobj_Interface1_ID, offsetof(cobj_Object1, iface1)},
-    //{&cobj_Interface3_ID, offsetof(cobj_Object1, iface3)},
+    {&cobj_Interface2_id, offsetof(cobj_Object1, _cobj_Interface2)},
 };
-// TODO maybe wrap this in DEFINE_INTERFACEMAP(cls)/INTERFACE()/END_INTERFACEMAP macros
 
 bool WARN_UNUSED_RESULT cobj_Object1_query_interface(cobj_Object1 const *const self,
                                                      cobj_InterfaceID const *const iid,
@@ -112,6 +111,19 @@ static cobj_Interface1Vtbl const cobj_Object1_Interface1_vtbl = {
 };
 
 // ===========================================================================
+
+void cobj_Object1_cobj_Interface2_spam(cobj_Interface2 *const self)
+{
+    cobj_Object1 *const oself = COBJ_INTERFACE_GET_OBJPTR_MUT(cobj_Object1, self);
+    cobj_Object1_foo(oself);
+}
+
+COBJ_INTERFACE_IMPL_FOR(cobj_Object1, cobj_Interface2)
+COBJ_INTERFACE_IMPL_FOR_ENTRY(cobj_Object1_cobj_Interface2_spam)
+COBJ_INTERFACE_IMPL_ENDFOR()
+
+// ===========================================================================
+
 #if 0
 static cobj_Object1 const *cobj_Object1_Interface3_get_objptr(
     cobj_Interface3 const *const self)
