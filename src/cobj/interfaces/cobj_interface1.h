@@ -37,14 +37,14 @@ struct cobj_Interface1Vtbl_s {
     // nice although that is, it adds an extra struct + funcs to maintain
     // and results is manual generics expansion..
     bool WARN_UNUSED_RESULT (*query_interface)(cobj_Interface1 const *const self,
-                                               cobj_Error *const err,
                                                cobj_InterfaceID const *const iid,
-                                               void const **const val);
+                                               void const **const val,
+                                               cobj_Error *const err);
 
     bool WARN_UNUSED_RESULT (*query_interface_mut)(cobj_Interface1 *const self,
-                                                   cobj_Error *const err,
                                                    cobj_InterfaceID const *const iid,
-                                                   void **const val);
+                                                   void **const val,
+                                                   cobj_Error *const err);
 
     ////
     // example of some 'methods' that are implemented in this interface.
@@ -81,15 +81,15 @@ void cobj_Interface1_new(cobj_Interface1 *const self, cobj_Interface1Vtbl const 
 // if does not exist or on error, return Err().
 // pub
 bool WARN_UNUSED_RESULT cobj_Interface1_query_interface(cobj_Interface1 const *const self,
-                                                        cobj_Error *const err,
                                                         cobj_InterfaceID const *const iid,
-                                                        void const **const value);
+                                                        void const **const value,
+                                                        cobj_Error *const err);
 
 // pub
 bool WARN_UNUSED_RESULT cobj_Interface1_query_interface_mut(cobj_Interface1 *const self,
-                                                            cobj_Error *const err,
                                                             cobj_InterfaceID const *const iid,
-                                                            void **const value);
+                                                            void **const value,
+                                                            cobj_Error *const err);
 
 // pub
 void cobj_Interface1_foo(cobj_Interface1 *const self);

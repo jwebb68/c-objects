@@ -33,16 +33,16 @@ struct cobj_InterfaceLookup_s {
 };
 
 bool WARN_UNUSED_RESULT cobj_Interface_query_interface(void const *inst,
-                                                       cobj_Error *const err,
                                                        cobj_InterfaceID const *const iid,
                                                        void const **const val,
+                                                       cobj_Error *const err,
                                                        cobj_InterfaceLookup const *begin,
                                                        cobj_InterfaceLookup const *end);
 
 bool WARN_UNUSED_RESULT cobj_Interface_query_interface_mut(void *inst,
-                                                           cobj_Error *const err,
                                                            cobj_InterfaceID const *const iid,
                                                            void **const val,
+                                                           cobj_Error *const err,
                                                            cobj_InterfaceLookup const *begin,
                                                            cobj_InterfaceLookup const *end);
 

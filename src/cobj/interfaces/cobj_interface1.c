@@ -20,19 +20,19 @@ static cobj_Interface1Vtbl const *cobj_Interface1_get_vtbl(cobj_Interface1 const
 }
 
 bool WARN_UNUSED_RESULT cobj_Interface1_query_interface(cobj_Interface1 const *const self,
-                                                        cobj_Error *const err,
                                                         cobj_InterfaceID const *const iid,
-                                                        void const **const val)
+                                                        void const **const val,
+                                                        cobj_Error *const err)
 {
-    return cobj_Interface1_get_vtbl(self)->query_interface(self, err, iid, val);
+    return cobj_Interface1_get_vtbl(self)->query_interface(self, iid, val, err);
 }
 
 bool WARN_UNUSED_RESULT cobj_Interface1_query_interface_mut(cobj_Interface1 *const self,
-                                                            cobj_Error *const err,
                                                             cobj_InterfaceID const *const iid,
-                                                            void **const val)
+                                                            void **const val,
+                                                            cobj_Error *const err)
 {
-    return cobj_Interface1_get_vtbl(self)->query_interface_mut(self, err, iid, val);
+    return cobj_Interface1_get_vtbl(self)->query_interface_mut(self, iid, val, err);
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -26,14 +26,14 @@ void cobj_Object1_destroy(cobj_Object1 *const self);
 void cobj_Object1_new(cobj_Object1 *const self);
 
 bool cobj_Object1_query_interface(cobj_Object1 const *const self,
-                                  cobj_Error *const ret,
                                   cobj_InterfaceID const *const iid,
-                                  void const **const out);
+                                  void const **const out,
+                                  cobj_Error *const err);
 
 bool cobj_Object1_query_interface_mut(cobj_Object1 *const self,
-                                      cobj_Error *const err,
                                       cobj_InterfaceID const *const iid,
-                                      void **const out);
+                                      void **const out,
+                                      cobj_Error *const err);
 
 void cobj_Object1_foo(cobj_Object1 *const self);
 bool cobj_Object1_foo2(cobj_Object1 *const self, cobj_Error *const err);

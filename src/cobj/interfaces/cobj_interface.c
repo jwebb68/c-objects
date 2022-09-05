@@ -2,9 +2,9 @@
 #include <cobj/interfaces/cobj_interface.h>
 
 bool cobj_Interface_query_interface(void const *inst,
-                                    cobj_Error *const err,
                                     cobj_InterfaceID const *const iid,
                                     void const **val,
+                                    cobj_Error *const err,
                                     cobj_InterfaceLookup const *begin,
                                     cobj_InterfaceLookup const *end)
 {
@@ -21,9 +21,9 @@ bool cobj_Interface_query_interface(void const *inst,
 }
 
 bool cobj_Interface_query_interface_mut(void *inst,
-                                        cobj_Error *const err,
                                         cobj_InterfaceID const *const iid,
                                         void **val,
+                                        cobj_Error *const err,
                                         cobj_InterfaceLookup const *begin,
                                         cobj_InterfaceLookup const *end)
 {

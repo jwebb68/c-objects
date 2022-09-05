@@ -12,31 +12,31 @@ static cobj_InterfaceLookup const cobj_Object1_ifaces[] = {
 // TODO maybe wrap this in DEFINE_INTERFACEMAP(cls)/INTERFACE()/END_INTERFACEMAP macros
 
 bool WARN_UNUSED_RESULT cobj_Object1_query_interface(cobj_Object1 const *const self,
-                                                     cobj_Error *const err,
                                                      cobj_InterfaceID const *const iid,
-                                                     void const **const val)
+                                                     void const **const val,
+                                                     cobj_Error *const err)
 {
     // no guard needed here as not relying on values in the object struct instance.
     // although a guard could be added to verify it's an instance of the expected type.
     return cobj_Interface_query_interface(self,
-                                          err,
                                           iid,
                                           val,
+                                          err,
                                           COBJ_CARRAY_BEGIN(cobj_Object1_ifaces),
                                           COBJ_CARRAY_END(cobj_Object1_ifaces));
 }
 
 bool WARN_UNUSED_RESULT cobj_Object1_query_interface_mut(cobj_Object1 *const self,
-                                                         cobj_Error *const err,
                                                          cobj_InterfaceID const *const iid,
-                                                         void **const val)
+                                                         void **const val,
+                                                         cobj_Error *const err)
 {
     // no guard needed here as not relying on values in the object struct instance.
     // although a guard could be added to verify it's an instance of the expected type.
     return cobj_Interface_query_interface_mut(self,
-                                              err,
                                               iid,
                                               val,
+                                              err,
                                               COBJ_CARRAY_BEGIN(cobj_Object1_ifaces),
                                               COBJ_CARRAY_END(cobj_Object1_ifaces));
 }
@@ -61,42 +61,44 @@ static cobj_Object1 *cobj_Object1_Interface1_get_objptr_mut(cobj_Interface1 *con
 
 static bool WARN_UNUSED_RESULT
 cobj_Object1_Interface1_query_interface(cobj_Interface1 const *const self,
-                                        cobj_Error *const err,
                                         cobj_InterfaceID const *const iid,
-                                        void const **const val)
+                                        void const **const val,
+                                        cobj_Error *const err)
 {
-    return cobj_Object1_query_interface(cobj_Object1_Interface1_get_objptr(self), err, iid, val);
+    cobj_Object1 const *const oself = cobj_Object1_Interface1_get_objptr(self);
+    return cobj_Object1_query_interface(oself, iid, val, err);
 }
 
 static bool WARN_UNUSED_RESULT
 cobj_Object1_Interface1_query_interface_mut(cobj_Interface1 *const self,
-                                            cobj_Error *const err,
                                             cobj_InterfaceID const *const iid,
-                                            void **const val)
+                                            void **const val,
+                                            cobj_Error *const err)
 {
-    return cobj_Object1_query_interface_mut(cobj_Object1_Interface1_get_objptr_mut(self),
-                                            err,
-                                            iid,
-                                            val);
+    cobj_Object1 *const oself = cobj_Object1_Interface1_get_objptr_mut(self);
+    return cobj_Object1_query_interface_mut(oself, iid, val, err);
 }
 
 // ===========================================================================
 
 static void cobj_Object1_Interface1_foo(cobj_Interface1 *const self)
 {
-    cobj_Object1_foo(cobj_Object1_Interface1_get_objptr_mut(self));
+    cobj_Object1 *const oself = cobj_Object1_Interface1_get_objptr_mut(self);
+    cobj_Object1_foo(oself);
 }
 
 static bool WARN_UNUSED_RESULT cobj_Object1_Interface1_foo2(cobj_Interface1 *const self,
                                                             cobj_Error *const err)
 {
-    return cobj_Object1_foo2(cobj_Object1_Interface1_get_objptr_mut(self), err);
+    cobj_Object1 *const oself = cobj_Object1_Interface1_get_objptr_mut(self);
+    return cobj_Object1_foo2(oself, err);
 }
 
 static bool WARN_UNUSED_RESULT cobj_Object1_Interface1_foo3(cobj_Error *const err,
                                                             cobj_Interface1 *const self)
 {
-    return cobj_Object1_foo3(err, cobj_Object1_Interface1_get_objptr_mut(self));
+    cobj_Object1 *const oself = cobj_Object1_Interface1_get_objptr_mut(self);
+    return cobj_Object1_foo3(err, oself);
 }
 
 static cobj_Interface1Vtbl const cobj_Object1_Interface1_vtbl = {
